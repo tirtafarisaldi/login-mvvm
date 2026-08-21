@@ -1,0 +1,149 @@
+.filter-date .react-datepicker {
+  font-family: 'Lato', "Helvetica Neue", helvetica, arial, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  background-color: #fff;
+  color: #14171A;
+  border: none;
+  border-radius: 0;
+  display: inline-block;
+  position: relative;
+}
+
+.filter-date .react-datepicker__current-month,
+.filter-date .react-datepicker-time__header,
+.filter-date .react-datepicker-year-header {
+  font-family: 'Lato', "Helvetica Neue", helvetica, arial, sans-serif;
+  margin-top: 0;
+  color: #14171A;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  padding: 12px 0;
+}
+
+.filter-date .react-datepicker__day-names {
+  background-color: #F2F4F6;
+}
+
+.filter-date .react-datepicker__header {
+  text-align: center;
+  background-color: #ffffff;
+  border-bottom: none;
+  border-top-left-radius: 0.3rem;
+  padding: 8px 0;
+  position: relative;
+}
+
+.filter-date .react-datepicker__year-read-view--down-arrow,
+.filter-date .react-datepicker__month-read-view--down-arrow,
+.filter-date .react-datepicker__month-year-read-view--down-arrow,
+.filter-date .react-datepicker__navigation-icon::before {
+  color: #14171A;
+  border: none;
+  content: "";
+  display: block;
+  height: 24px;
+  position: absolute;
+  top: 4px;
+  width: 24px;
+  background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cg id='ic_chevron_down' transform='translate(24) rotate(90)'%3E%3Cg id='Surface'%3E%3Cg id='Artboard'%3E%3Crect id='Rectangle_5033' data-name='Rectangle 5033' width='24' height='24' fill='%2314171a' opacity='0'/%3E%3C/g%3E%3C/g%3E%3Cg id='Icon' transform='translate(7.001 9.5)'%3E%3Cpath id='Path_5451' data-name='Path 5451' d='M12,13.086l3.293-3.293a1,1,0,0,1,1.414,1.414l-4,4a1,1,0,0,1-1.414,0l-4-4A1,1,0,0,1,8.707,9.793L12,13.086Z' transform='translate(-7.001 -9.5)' fill='%2314171a'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+}
+
+.filter-date .react-datepicker__navigation-icon--previous::before {
+  transform: none;
+  right: -7px;
+}
+
+.filter-date .react-datepicker__navigation-icon--next::before {
+  transform: rotate(180deg);
+  right: -7px;
+}
+
+.filter-date .react-datepicker__navigation {
+  align-items: center;
+  background: none;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  position: absolute;
+  top: 6px;
+  padding: 0;
+  border: none;
+  z-index: 1;
+  height: 32px;
+  width: 32px;
+  text-indent: -999em;
+  overflow: hidden;
+  outline: none;
+}
+
+.filter-date .react-datepicker__day--selected,
+.filter-date .react-datepicker__day--in-selecting-range,
+.filter-date .react-datepicker__day--in-range,
+.filter-date .react-datepicker__month-text--selected,
+.filter-date .react-datepicker__month-text--in-selecting-range,
+.filter-date .react-datepicker__month-text--in-range,
+.filter-date .react-datepicker__quarter-text--selected,
+.filter-date .react-datepicker__quarter-text--in-selecting-range,
+.filter-date .react-datepicker__quarter-text--in-range,
+.filter-date .react-datepicker__year-text--selected,
+.filter-date .react-datepicker__year-text--in-selecting-range,
+.filter-date .react-datepicker__year-text--in-range {
+  border-radius: 100%;
+  background-color: #ED2227;
+  color: #fff;
+}
+
+.filter-date .react-datepicker__day--in-selecting-range:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range),
+.filter-date .react-datepicker__month-text--in-selecting-range:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range),
+.filter-date .react-datepicker__quarter-text--in-selecting-range:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range),
+.filter-date .react-datepicker__year-text--in-selecting-range:not(.react-datepicker__day--in-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--in-range) {
+  background-color: rgba(237, 34, 39, 0.5)
+}
+
+.filter-date .react-datepicker__day:hover,
+.filter-date .react-datepicker__month-text:hover,
+.filter-date .react-datepicker__quarter-text:hover,
+.filter-date .react-datepicker__year-text:hover {
+  border-radius: 100%;
+}
+
+.filter-date .react-datepicker__day--keyboard-selected,
+.filter-date .react-datepicker__month-text--keyboard-selected,
+.filter-date .react-datepicker__quarter-text--keyboard-selected,
+.filter-date .react-datepicker__year-text--keyboard-selected {
+  border-radius: 100%;
+  background-color: #ED2227;
+  color: #fff;
+}
+
+.filter-date .react-datepicker__day--keyboard-selected:hover,
+.filter-date .react-datepicker__month-text--keyboard-selected:hover,
+.filter-date .react-datepicker__quarter-text--keyboard-selected:hover,
+.filter-date .react-datepicker__year-text--keyboard-selected:hover {
+  background-color: #ED2227;
+}
+
+.filter-date .react-datepicker__day--selected:hover,
+.filter-date .react-datepicker__day--in-selecting-range:hover,
+.filter-date .react-datepicker__day--in-range:hover,
+.filter-date .react-datepicker__month-text--selected:hover,
+.filter-date .react-datepicker__month-text--in-selecting-range:hover,
+.filter-date .react-datepicker__month-text--in-range:hover,
+.filter-date .react-datepicker__quarter-text--selected:hover,
+.filter-date .react-datepicker__quarter-text--in-selecting-range:hover,
+.filter-date .react-datepicker__quarter-text--in-range:hover,
+.filter-date .react-datepicker__year-text--selected:hover,
+.filter-date .react-datepicker__year-text--in-selecting-range:hover,
+.filter-date .react-datepicker__year-text--in-range:hover {
+  background-color: #ED2227;
+}
+
+.filter-date .react-datepicker__day--today,
+.filter-date .react-datepicker__month-text--today,
+.filter-date .react-datepicker__quarter-text--today,
+.filter-date .react-datepicker__year-text--today {
+  font-weight: 900;
+}

@@ -1,0 +1,40 @@
+export const colors = {
+  callaLily: '#E5E9EC',
+  flashWhite: '#F2F4F6',
+  doctorWhite: '#FAFAFA',
+  darkWillow: '#14171A',
+  tarnishedSilver: '#797D7F',
+  silverCharm: '#ADB1B4',
+  blackLead: '#484C4E',
+  ottomanRed: '#ED2227',
+  ottomanRedDark: '#D81E21',
+  sunScarlet: '#BE1B1F',
+  maryRose: '#FBD2D4',
+  deepSkyblue: '#1B78EB',
+  deepSkyblueDark: '#1668CC',
+  grassCourt: '#0A8B41',
+  ottoIce: '#CEE8D9',
+  squash: '#F4A511',
+  sleepLamp: '#FDEDCF',
+  circumorbital: '#6654C0',
+  chineseSilver: '#6654C0',
+  burningTrail: '#F49522',
+  cloudless: '#D0E4FB',
+  deepSkyBlue: '#1B78EB',
+  amnesiaBlue: '#1760BC',
+  oldTrail: '#C3840D',
+  jordanJazz: '#0C7D3B',
+  white: '#FFF',
+  bastille: '#2C2E31',
+  dairyMade: '#F6B741',
+  greenish: '#3DA267'
+};
+
+export const breakpoints = {
+  sm: '320px',
+  md: '768px',
+  lg: '960px',
+  xl: '1200px',
+  '2xl': '1536px',
+  sm2: '525px'
+};
