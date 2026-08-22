@@ -70,7 +70,14 @@ export const withLoginPageHandler = (WrappedComponent: FC) => {
       } else if (isAutoLogout) {
         Auth.signOut();
       }
-    }, [isAuthenticated, isAutoLogin, isAutoLogout, isLoading, latestPage, router]);
+    }, [
+      isAuthenticated,
+      isAutoLogin,
+      isAutoLogout,
+      isLoading,
+      latestPage,
+      router,
+    ]);
 
     if (isLoading || isAuthenticated || isAutoLogin || isAutoLogout) {
       return <LoadingPage />;

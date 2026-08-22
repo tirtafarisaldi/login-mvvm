@@ -35,12 +35,11 @@ export default function Login() {
   const toast = useToast();
 
   const pageBg =
-    "linear-gradient(180deg, rgba(79, 38, 136, 0.92), rgba(34, 11, 66, 0.96)), url('/img/studio-pertunjukan.jpg')";
-  const leftBg = 'linear(to-br, purple.600, pink.500)';
-  const cardBg = 'rgba(255,255,255,0.16)';
-  const inputBg = 'rgba(255,255,255,0.10)';
+    'radial-gradient(circle at 86% 10%, rgba(14, 165, 233, 0.16), transparent 26%), radial-gradient(circle at 12% 88%, rgba(14, 165, 233, 0.12), transparent 32%), radial-gradient(circle at 52% 48%, rgba(8, 47, 73, 0.32), transparent 54%), linear-gradient(135deg, #020617 0%, #030b1c 48%, #00030a 100%)';
+  const cardBg = 'rgba(8, 29, 52, 0.72)';
+  const inputBg = 'rgba(255,255,255,0.08)';
   const textColor = 'whiteAlpha.900';
-  const mutedText = 'purple.200';
+  const mutedText = 'cyan.100';
 
   const onLoginSuccess = () => {
     router.push('/');
@@ -145,10 +144,7 @@ export default function Login() {
     <Flex
       minH="100vh"
       bgImage={pageBg}
-      bgSize="cover"
-      bgPos="center"
-      bgRepeat="no-repeat"
-      bgColor="purple.950"
+      bgColor="#020617"
       position="relative"
       overflow="hidden"
       px={{ base: 4, md: 8 }}
@@ -159,10 +155,11 @@ export default function Login() {
         left={0}
         top={0}
         h="100%"
-        w={{ base: '100%', lg: '45%' }}
-        bgGradient={leftBg}
-        opacity={0.24}
-        filter="blur(80px)"
+        w={{ base: '100%', lg: '52%' }}
+        bgImage="linear-gradient(90deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.88) 92%), linear-gradient(180deg, rgba(8, 47, 73, 0.22), rgba(2, 6, 23, 0.68)), url('/img/studio-pertunjukan.png')"
+        bgSize="cover"
+        bgPos="left center"
+        opacity={0.5}
         zIndex={0}
       />
       <MotionBox
@@ -172,8 +169,8 @@ export default function Login() {
         w="420px"
         h="420px"
         borderRadius="50%"
-        bg="pink.400"
-        opacity={0.16}
+        bg="cyan.400"
+        opacity={0.12}
         filter="blur(90px)"
         animate={{ y: [0, 20, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
@@ -185,8 +182,8 @@ export default function Login() {
         w="520px"
         h="520px"
         borderRadius="50%"
-        bg="purple.500"
-        opacity={0.18}
+        bg="cyan.600"
+        opacity={0.12}
         filter="blur(100px)"
       />
 
@@ -215,7 +212,7 @@ export default function Login() {
             fontWeight="bold"
             letterSpacing="widest"
             textTransform="uppercase"
-            color="pink.200"
+            color="cyan.300"
             mb={4}
           >
             Laboratorium Studio Pertunjukan
@@ -232,7 +229,7 @@ export default function Login() {
             Kelola aktivitas studio dengan mudah.
           </Heading>
 
-          <Text fontSize="lg" maxW="2xl" color="purple.100">
+          <Text fontSize="lg" maxW="2xl" color="whiteAlpha.700">
             Temukan informasi peralatan, lakukan peminjaman, cek jadwal, dan
             akses berbagai layanan Laboratorium Studio Pertunjukan dengan lebih
             cepat dan mudah.
@@ -240,20 +237,20 @@ export default function Login() {
 
           <Stack spacing={4} mt={10} maxW="2xl">
             <Flex gap={3} align="center">
-              <Box w={3} h={3} borderRadius="full" bg="pink.300" />
-              <Text fontWeight="medium" color="purple.100">
+              <Box w={3} h={3} borderRadius="full" bg="cyan.300" />
+              <Text fontWeight="medium" color="whiteAlpha.800">
                 List peralatan studio lengkap
               </Text>
             </Flex>
             <Flex gap={3} align="center">
-              <Box w={3} h={3} borderRadius="full" bg="pink.300" />
-              <Text fontWeight="medium" color="purple.100">
+              <Box w={3} h={3} borderRadius="full" bg="cyan.300" />
+              <Text fontWeight="medium" color="whiteAlpha.800">
                 Proses peminjaman inventaris yang cepat
               </Text>
             </Flex>
             <Flex gap={3} align="center">
-              <Box w={3} h={3} borderRadius="full" bg="pink.300" />
-              <Text fontWeight="medium" color="purple.100">
+              <Box w={3} h={3} borderRadius="full" bg="cyan.300" />
+              <Text fontWeight="medium" color="whiteAlpha.800">
                 Jadwal ruangan dan latihan terintegrasi
               </Text>
             </Flex>
@@ -278,14 +275,14 @@ export default function Login() {
               fontSize="sm"
               fontWeight="semibold"
               letterSpacing="widest"
-              color="purple.200"
+              color="cyan.200"
             >
               Selamat datang di Studio Pertunjukan
             </Text>
             <Heading size="lg" color={textColor}>
               {isRegister ? 'Buat akun baru' : 'Masuk untuk melanjutkan'}
             </Heading>
-            <Text fontSize="sm" color="purple.200">
+            <Text fontSize="sm" color="whiteAlpha.700">
               {isRegister
                 ? 'Daftarkan akun Anda untuk mulai mengakses fitur studio.'
                 : 'Gunakan akun Anda untuk mengakses informasi peralatan, peminjaman, jadwal, dan layanan laboratorium.'}
@@ -399,7 +396,7 @@ export default function Login() {
                   type="button"
                   fontSize="sm"
                   color={mutedText}
-                  _hover={{ color: 'purple.300' }}
+                  _hover={{ color: 'cyan.200' }}
                   cursor="pointer"
                   onClick={toggleMode}
                   textAlign="right"
@@ -416,8 +413,9 @@ export default function Login() {
                 w="full"
                 size="lg"
                 borderRadius="2xl"
-                color="white"
-                bgGradient="linear(to-r, purple.500, pink.500)"
+                bg="cyan.300"
+                color="gray.900"
+                _hover={{ bg: 'cyan.200' }}
                 isLoading={isRegister ? registerLoading : loginLoading}
                 loadingText={isRegister ? 'Mendaftar' : 'Masuk'}
               >
