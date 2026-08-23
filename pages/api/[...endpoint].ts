@@ -10,17 +10,21 @@ export default async function handler(
   const URI = url?.replace(/\/api*/, '') || '';
 
   try {
-    const { data } = await axios({
+    const upstreamResponse = await axios({
       method,
       url: process.env.restapiEndpoint + URI,
       headers: {
         'x-api-key': process.env.restapiKey || 'secret',
         Authorization: `${headers.authorization}`,
+        Cookie: headers.cookie || '',
       },
       data: body,
     });
 
-    res.status(200).json(data);
+    const setCookie = upstreamResponse.headers['set-cookie'];
+    if (setCookie) res.setHeader('Set-Cookie', setCookie);
+
+    res.status(200).json(upstreamResponse.data);
   } catch (error) {
     if (error instanceof AxiosError) {
       res.status(Number(error?.response?.status)).json(

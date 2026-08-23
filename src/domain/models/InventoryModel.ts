@@ -1,4 +1,5 @@
 import { BaseModel } from './BaseModel';
+import type { IPaginationResponse } from '../vo/Pagination';
 
 export type InventoryStatus = 'Tersedia' | 'Dipinjam' | 'Perlu Perawatan';
 
@@ -23,6 +24,19 @@ export interface InventoryInput {
   status: InventoryStatus;
   information?: string;
   image: string;
+}
+
+export interface InventoryFilters {
+  name?: string;
+  category?: string;
+  location?: string;
+  status?: InventoryStatus;
+  page: number;
+  limit: number;
+}
+
+export interface IInventoryPaginationResponse extends IPaginationResponse {
+  inventories: IInventory[];
 }
 
 export class InventoryModel extends BaseModel {

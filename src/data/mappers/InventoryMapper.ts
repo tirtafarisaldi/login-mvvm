@@ -12,19 +12,20 @@ const getStatus = (value: unknown): InventoryStatus => {
 };
 
 export const mapToInventoryModel = (
-  payload: InventoryPayload
+  payload: InventoryPayload | IInventory
 ): InventoryModel => {
+  const raw = payload as InventoryPayload;
   const inventory: IInventory = {
-    id: String(payload.id ?? payload.uuid ?? payload.inventory_id ?? ''),
-    name: String(payload.name ?? payload.item_name ?? ''),
-    description: String(payload.description ?? payload.item_description ?? ''),
-    category: String(payload.category ?? ''),
-    stock: Number(payload.stock ?? payload.quantity ?? 0),
-    location: String(payload.location ?? ''),
-    status: getStatus(payload.status),
+    id: String(raw.id ?? raw.uuid ?? raw.inventory_id ?? ''),
+    name: String(raw.name ?? raw.item_name ?? ''),
+    description: String(raw.description ?? raw.item_description ?? ''),
+    category: String(raw.category ?? ''),
+    stock: Number(raw.stock ?? raw.quantity ?? 0),
+    location: String(raw.location ?? ''),
+    status: getStatus(raw.status),
     information:
-      typeof payload.information === 'string' ? payload.information : undefined,
-    image: String(payload.image ?? payload.image_url ?? ''),
+      typeof raw.information === 'string' ? raw.information : undefined,
+    image: String(raw.image ?? raw.image_url ?? ''),
   };
 
   return new InventoryModel(inventory);

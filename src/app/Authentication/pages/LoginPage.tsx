@@ -155,10 +155,10 @@ export default function Login() {
         left={0}
         top={0}
         h="100%"
-        w={{ base: '100%', lg: '52%' }}
+        w={{ base: '100%', lg: '100%' }}
         bgImage="linear-gradient(90deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.88) 92%), linear-gradient(180deg, rgba(8, 47, 73, 0.22), rgba(2, 6, 23, 0.68)), url('/img/studio-pertunjukan.png')"
         bgSize="cover"
-        bgPos="left center"
+        bgPos="center"
         opacity={0.5}
         zIndex={0}
       />

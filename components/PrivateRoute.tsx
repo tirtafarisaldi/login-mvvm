@@ -26,7 +26,7 @@ export const withProtected = (WrappedComponent: FC<any>) => {
       } else if (isAutoLogin) {
         Auth.federatedSignIn();
       } else if (isAutoLogout) {
-        Auth.signOut();
+        router.replace('/login');
       }
     }, [isAuthenticated, isAutoLogin, isAutoLogout, isLoading, router]);
 
@@ -68,7 +68,7 @@ export const withLoginPageHandler = (WrappedComponent: FC) => {
       } else if (isAutoLogin) {
         Auth.federatedSignIn();
       } else if (isAutoLogout) {
-        Auth.signOut();
+        router.replace('/login');
       }
     }, [
       isAuthenticated,
@@ -79,7 +79,7 @@ export const withLoginPageHandler = (WrappedComponent: FC) => {
       router,
     ]);
 
-    if (isLoading || isAuthenticated || isAutoLogin || isAutoLogout) {
+    if (isLoading || isAuthenticated || isAutoLogin) {
       return <LoadingPage />;
     }
 

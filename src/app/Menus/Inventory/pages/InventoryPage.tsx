@@ -30,10 +30,19 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useState, type FormEvent } from 'react';
+import FilterBar, {
+  type FilterField,
+} from '../../../../../components/DataTable/FilterBar';
+import DataTablePagination from '../../../../../components/DataTable/Pagination';
 import MenuLayout from '../../components/MenuLayout';
-import { useInventoryViewModel } from '../viewModels/InventoryViewModel';
+import { useCreateInventoryViewModel } from '../viewModels/createInventoryViewModel';
+import { useDeleteInventoryViewModel } from '../viewModels/deleteInventoryViewModel';
+import { useGetInventoriesViewModel } from '../viewModels/getInventoriesViewModel';
+import { useGetInventoryByIdViewModel } from '../viewModels/getInventoryByIdViewModel';
+import { useUpdateInventoryViewModel } from '../viewModels/updateInventoryViewModel';
 import type {
   InventoryInput,
+  InventoryFilters,
   InventoryModel,
   InventoryStatus,
 } from '../../../../domain/models/InventoryModel';
@@ -45,6 +54,17 @@ const locations = [
   'Gudang Peralatan',
   'Ruang Studio',
 ];
+const filterFields: FilterField[] = [
+  { key: 'name', label: 'Cari nama barang' },
+  { key: 'category', label: 'Semua kategori', options: categories },
+  { key: 'location', label: 'Semua lokasi', options: locations },
+  {
+    key: 'status',
+    label: 'Semua status',
+    options: ['Tersedia', 'Dipinjam', 'Perlu Perawatan'],
+  },
+];
+const initialFilters: InventoryFilters = { page: 1, limit: 10 };
 const emptyInventory: InventoryInput = {
   name: '',
   description: '',
@@ -75,16 +95,60 @@ export default function InventoryPage() {
   const toast = useToast();
   const formModal = useDisclosure();
   const imageModal = useDisclosure();
+  const [filters, setFilters] = useState<InventoryFilters>(initialFilters);
   const {
     inventories,
-    isLoading,
+    pagination,
+    loading: isLoading,
     error,
-    getInventoryById,
-    saveInventory,
-    deleteInventory,
-    isSaving,
-    isDeleting,
-  } = useInventoryViewModel();
+  } = useGetInventoriesViewModel(filters);
+  const { getInventoryById } = useGetInventoryByIdViewModel();
+  const { createInventory, loading: isCreating } = useCreateInventoryViewModel({
+    onSuccess: () => {
+      toast({
+        status: 'success',
+        title: 'Inventaris ditambahkan',
+        position: 'top',
+      });
+      formModal.onClose();
+    },
+    onFailure: () =>
+      toast({
+        status: 'error',
+        title: 'Gagal menyimpan inventaris',
+        position: 'top',
+      }),
+  });
+  const { updateInventory, loading: isUpdating } = useUpdateInventoryViewModel({
+    onSuccess: () => {
+      toast({
+        status: 'success',
+        title: 'Inventaris diperbarui',
+        position: 'top',
+      });
+      formModal.onClose();
+    },
+    onFailure: () =>
+      toast({
+        status: 'error',
+        title: 'Gagal menyimpan inventaris',
+        position: 'top',
+      }),
+  });
+  const { deleteInventory, loading: isDeleting } = useDeleteInventoryViewModel({
+    onSuccess: () =>
+      toast({
+        status: 'success',
+        title: 'Inventaris dihapus',
+        position: 'top',
+      }),
+    onFailure: () =>
+      toast({
+        status: 'error',
+        title: 'Gagal menghapus inventaris',
+        position: 'top',
+      }),
+  });
   const [selectedInventory, setSelectedInventory] =
     useState<InventoryModel | null>(null);
   const [previewImage, setPreviewImage] = useState<InventoryModel | null>(null);
@@ -111,42 +175,23 @@ export default function InventoryPage() {
     setPreviewImage(inventory);
     imageModal.onOpen();
   };
+  const updateFilters = (key: string, value: string) => {
+    setFilters((current) => ({
+      ...current,
+      [key]: value || undefined,
+      page: 1,
+    }));
+  };
+  const changePage = (page: number) =>
+    setFilters((current) => ({ ...current, page }));
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    try {
-      await saveInventory(form, selectedInventory?.id);
-      toast({
-        status: 'success',
-        title: selectedInventory
-          ? 'Inventaris diperbarui'
-          : 'Inventaris ditambahkan',
-        position: 'top',
-      });
-      formModal.onClose();
-    } catch {
-      toast({
-        status: 'error',
-        title: 'Gagal menyimpan inventaris',
-        position: 'top',
-      });
-    }
+    if (selectedInventory) await updateInventory(selectedInventory.id, form);
+    else await createInventory(form);
   };
   const remove = async (inventory: InventoryModel) => {
     if (!window.confirm(`Hapus ${inventory.name}?`)) return;
-    try {
-      await deleteInventory(inventory.id);
-      toast({
-        status: 'success',
-        title: 'Inventaris dihapus',
-        position: 'top',
-      });
-    } catch {
-      toast({
-        status: 'error',
-        title: 'Gagal menghapus inventaris',
-        position: 'top',
-      });
-    }
+    await deleteInventory(inventory.id);
   };
 
   return (
@@ -192,6 +237,12 @@ export default function InventoryPage() {
               API belum tersedia — menampilkan data contoh.
             </Text>
           )}
+          <FilterBar
+            fields={filterFields}
+            filters={filters}
+            onChange={updateFilters}
+            onReset={() => setFilters(initialFilters)}
+          />
           {isLoading ? (
             <Flex minH="300px" justify="center" align="center">
               <Spinner thickness="3px" color="cyan.300" />
@@ -288,6 +339,12 @@ export default function InventoryPage() {
               </Table>
             </Box>
           )}
+          <DataTablePagination
+            currentPage={pagination.current}
+            totalPages={pagination.total}
+            totalItems={pagination.total_data}
+            onPageChange={changePage}
+          />
           <Modal
             isOpen={formModal.isOpen}
             onClose={formModal.onClose}
@@ -437,7 +494,7 @@ export default function InventoryPage() {
                   bg="cyan.300"
                   color="gray.900"
                   _hover={{ bg: 'cyan.200' }}
-                  isLoading={isSaving}
+                  isLoading={isCreating || isUpdating}
                 >
                   Simpan
                 </Button>

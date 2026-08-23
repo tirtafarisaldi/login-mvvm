@@ -1,5 +1,11 @@
 import http from 'service/http';
-import type { InventoryInput } from '../../../domain/models/InventoryModel';
+import type {
+  IInventory,
+  InventoryInput,
+} from '../../../domain/models/InventoryModel';
 
-export const updateInventory = async (id: string, input: InventoryInput) =>
-  http.put(`/inventory/${id}`, input);
+export const updateInventory = async (
+  id: string,
+  input: InventoryInput
+): Promise<IInventory> =>
+  http.put(`/inventory/${id}`, input) as Promise<IInventory>;

@@ -18,8 +18,6 @@ import { When } from 'react-if';
 import { shallow } from 'zustand/shallow';
 
 import useLoadedInIframeStore from 'hooks/useLoadedInIframeStore';
-import http from './http';
-
 import type { AuthContextValue } from './types';
 import { useCheckUser } from 'src/data/repositories/UserRepositoryImpl';
 
@@ -46,7 +44,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     (s) => [s.loadedInIframe],
     shallow
   );
-  const { error } = useCheckUser();
+  const [hasAccessToken, setHasAccessToken] = useState(false);
+  const { error } = useCheckUser(hasAccessToken);
 
   const handleAuth = useCallback(async () => {
     setIsLoading(true);
@@ -59,6 +58,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     try {
       const accessToken = localStorage.getItem('accessToken');
+      setHasAccessToken(Boolean(accessToken));
       if (accessToken) {
         authState.isAuthenticated = true;
       }
@@ -66,11 +66,13 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (error?.data?.error?.message === 'Unauthorized') {
         authState.isAutoLogout = true;
         localStorage.removeItem('accessToken');
+        setHasAccessToken(false);
       }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log('Error validating auth: ', err);
       localStorage.removeItem('accessToken');
+      setHasAccessToken(false);
     }
 
     setIsAuthenticated(authState.isAuthenticated);
@@ -83,6 +85,20 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     handleAuth();
   }, [handleAuth]);
+
+  useEffect(() => {
+    const handleAutoLogout = () => {
+      setIsAuthenticated(false);
+      setIsAutoLogout(true);
+      setUser(null);
+      setHasAccessToken(false);
+      router.replace('/login');
+    };
+
+    window.addEventListener('auth-auto-logout', handleAutoLogout);
+    return () =>
+      window.removeEventListener('auth-auto-logout', handleAutoLogout);
+  }, [router]);
 
   useEffect(() => {
     const refreshAuth = () => {
