@@ -10,14 +10,18 @@ export default async function handler(
   const URI = url?.replace(/\/api*/, '') || '';
 
   try {
+    const upstreamHeaders: Record<string, string> = {
+      'x-api-key': process.env.restapiKey || 'secret',
+      Cookie: headers.cookie || '',
+    };
+    if (headers.authorization) {
+      upstreamHeaders.Authorization = headers.authorization;
+    }
+
     const upstreamResponse = await axios({
       method,
       url: process.env.restapiEndpoint + URI,
-      headers: {
-        'x-api-key': process.env.restapiKey || 'secret',
-        Authorization: `${headers.authorization}`,
-        Cookie: headers.cookie || '',
-      },
+      headers: upstreamHeaders,
       data: body,
     });
 

@@ -23,6 +23,45 @@ import { useRegisterViewModel } from '../viewModels/RegisterViewModel';
 
 const MotionBox = motion(Box);
 
+function StudioOrnaments() {
+  return (
+    <Box
+      aria-hidden="true"
+      display={{ base: 'none', lg: 'block' }}
+      position="absolute"
+      inset={0}
+      overflow="hidden"
+      pointerEvents="none"
+    >
+      {[6, 31, 56].map((left, index) => (
+        <MotionBox
+          key={left}
+          position="absolute"
+          top="-34px"
+          left={`${left}%`}
+          w="250px"
+          h="790px"
+          transformOrigin="top center"
+          bgGradient="linear(to-b, rgba(103, 232, 249, 0.18), rgba(14, 165, 233, 0.07) 46%, transparent 82%)"
+          clipPath="polygon(36% 0, 64% 0, 100% 100%, 0 100%)"
+          filter="blur(1px)"
+          opacity={0.5}
+          animate={{
+            rotate: [-10 + index * 7, 8 - index * 5, -10 + index * 7],
+            opacity: [0.32, 0.56, 0.32],
+          }}
+          transition={{
+            duration: 11 + index * 1.8,
+            delay: index * 0.7,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+    </Box>
+  );
+}
+
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -175,6 +214,7 @@ export default function Login() {
         animate={{ y: [0, 20, 0] }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
       />
+      <StudioOrnaments />
       <MotionBox
         position="absolute"
         bottom="-100px"
@@ -207,26 +247,48 @@ export default function Login() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <Text
-            fontSize="sm"
-            fontWeight="bold"
-            letterSpacing="widest"
-            textTransform="uppercase"
-            color="cyan.300"
-            mb={4}
-          >
-            Laboratorium Studio Pertunjukan
-          </Text>
+          {/* <Flex align="center" gap={3} mb={4}>
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              letterSpacing="widest"
+              textTransform="uppercase"
+              color="cyan.300"
+            >
+              Laboratorium Studio Pertunjukan
+            </Text>
+          </Flex> */}
 
           <Heading
             as="h1"
-            size="2xl"
-            lineHeight="1.05"
+            fontSize={{ base: '4xl', md: '6xl', xl: '7xl' }}
+            fontWeight="black"
+            letterSpacing="tight"
+            lineHeight="0.95"
             maxW="3xl"
             mb={6}
-            color={textColor}
           >
-            Kelola aktivitas studio dengan mudah.
+            <MotionBox
+              as="span"
+              display="inline-block"
+              bgGradient="linear(to-b, white 16%, cyan.100 54%, cyan.300 100%)"
+              bgClip="text"
+              // animate={{
+              //   textShadow: [
+              //     '0 0 10px rgba(103, 232, 249, 0.16)',
+              //     '0 0 20px rgba(103, 232, 249, 0.52), 0 0 56px rgba(6, 182, 212, 0.28)',
+              //     '0 0 10px rgba(103, 232, 249, 0.16)',
+              //   ],
+              //   filter: ['brightness(1)', 'brightness(1.18)', 'brightness(1)'],
+              // }}
+              // transition={{
+              //   duration: 5.5,
+              //   repeat: Infinity,
+              //   ease: 'easeInOut',
+              // }}
+            >
+              Studio Pertunjukan
+            </MotionBox>
           </Heading>
 
           <Text fontSize="lg" maxW="2xl" color="whiteAlpha.700">
@@ -271,12 +333,7 @@ export default function Login() {
           maxH={{ base: 'auto', md: '700px' }}
         >
           <Stack spacing={4} textAlign="center" mb={6}>
-            <Text
-              fontSize="sm"
-              fontWeight="semibold"
-              letterSpacing="widest"
-              color="cyan.200"
-            >
+            <Text fontSize="sm" fontWeight="semibold" color="cyan.200">
               Selamat datang di Studio Pertunjukan
             </Text>
             <Heading size="lg" color={textColor}>

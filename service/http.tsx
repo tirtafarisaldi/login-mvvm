@@ -16,7 +16,11 @@ const getAccessToken = (payload: unknown): string | null => {
   if (typeof payload !== 'object' || payload === null) return null;
   const data = payload as Record<string, unknown>;
   const token = data.accessToken ?? data.access_token ?? data.token;
-  return typeof token === 'string' && token.length > 0 ? token : null;
+  if (typeof token === 'string' && token.length > 0) return token;
+
+  return typeof data.data === 'object' && data.data !== null
+    ? getAccessToken(data.data)
+    : null;
 };
 
 const isExpiredAccessTokenError = (error: unknown): boolean => {
@@ -49,6 +53,14 @@ const http = axios.create({
   },
   // Refresh token yang HTTP-only tidak dapat dibaca JavaScript; browser akan
   // mengirimkannya otomatis pada request ini.
+  withCredentials: true,
+});
+
+// Client terpisah agar refresh tidak pernah mewarisi interceptor atau header
+// Authorization access token yang sudah kedaluwarsa.
+const refreshHttp = axios.create({
+  baseURL: `${process.env.nextApiPublicDomain}/api`,
+  headers: { 'Content-type': 'application/json' },
   withCredentials: true,
 });
 
@@ -85,21 +97,18 @@ http.interceptors.response.use(
     const isExpiredAccessToken = isExpiredAccessTokenError(error);
     const originalRequest = (error?.config ?? error?.response?.config) as
       RetryableRequest | undefined;
-
     if (
       isExpiredAccessToken &&
       originalRequest &&
       !originalRequest._retry &&
-      originalRequest.url !== refreshTokenPath &&
-      typeof window !== 'undefined' &&
-      Boolean(localStorage.getItem('accessToken'))
+      originalRequest.url !== refreshTokenPath
     ) {
       originalRequest._retry = true;
 
       try {
-        refreshRequest ??= http.post(refreshTokenPath, undefined, {
-          _skipAuth: true,
-        } as AxiosRequestConfig);
+        refreshRequest ??= refreshHttp
+          .get(refreshTokenPath)
+          .then((response) => response.data);
         const refreshResponse = await refreshRequest;
         const accessToken = getAccessToken(refreshResponse);
 
@@ -117,8 +126,6 @@ http.interceptors.response.use(
       } finally {
         refreshRequest = null;
       }
-    } else if (isExpiredAccessToken) {
-      notifyAutoLogout();
     }
     // if (window && window.growl) {
     //   // see primereact growl for documentations
