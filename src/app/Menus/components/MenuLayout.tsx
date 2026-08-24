@@ -9,6 +9,7 @@ import { Box, Button, Flex, Icon, Stack, Text } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
+import { useLogout } from '../../../data/repositories/AuthRepositoryImpl';
 
 const menuItems = [
   { label: 'Dashboard', href: '/', icon: ViewIcon },
@@ -19,7 +20,13 @@ const menuItems = [
 
 export default function MenuLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const handleLogout = () => {
+  const { logout } = useLogout();
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      // Sesi lokal tetap dibersihkan bila API logout tidak dapat diakses.
+    }
     localStorage.removeItem('accessToken');
     window.dispatchEvent(new Event('auth-change'));
     router.replace('/login');

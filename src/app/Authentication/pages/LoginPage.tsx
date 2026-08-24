@@ -51,8 +51,8 @@ function StudioOrnaments() {
             opacity: [0.32, 0.56, 0.32],
           }}
           transition={{
-            duration: 11 + index * 1.8,
-            delay: index * 0.7,
+            duration: 8,
+            delay: index * 0.3,
             repeat: Infinity,
             ease: 'easeInOut',
           }}

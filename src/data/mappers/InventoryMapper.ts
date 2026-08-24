@@ -18,7 +18,6 @@ export const mapToInventoryModel = (
   const inventory: IInventory = {
     id: String(raw.id ?? raw.uuid ?? raw.inventory_id ?? ''),
     name: String(raw.name ?? raw.item_name ?? ''),
-    description: String(raw.description ?? raw.item_description ?? ''),
     category: String(raw.category ?? ''),
     stock: Number(raw.stock ?? raw.quantity ?? 0),
     location: String(raw.location ?? ''),

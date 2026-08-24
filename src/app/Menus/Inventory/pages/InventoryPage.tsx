@@ -67,7 +67,6 @@ const filterFields: FilterField[] = [
 const initialFilters: InventoryFilters = { page: 1, limit: 10 };
 const emptyInventory: InventoryInput = {
   name: '',
-  description: '',
   category: '',
   stock: 0,
   location: '',
@@ -82,7 +81,6 @@ const statusColor = {
 } as const;
 const toInput = (inventory: InventoryModel): InventoryInput => ({
   name: inventory.name,
-  description: inventory.description,
   category: inventory.category,
   stock: inventory.stock,
   location: inventory.location,

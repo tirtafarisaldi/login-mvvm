@@ -6,7 +6,6 @@ export type InventoryStatus = 'Tersedia' | 'Dipinjam' | 'Perlu Perawatan';
 export interface IInventory {
   id: string;
   name: string;
-  description: string;
   category: string;
   stock: number;
   location: string;
@@ -17,7 +16,6 @@ export interface IInventory {
 
 export interface InventoryInput {
   name: string;
-  description: string;
   category: string;
   stock: number;
   location: string;
@@ -41,7 +39,6 @@ export interface IInventoryPaginationResponse extends IPaginationResponse {
 
 export class InventoryModel extends BaseModel {
   name: string;
-  description: string;
   category: string;
   stock: number;
   location: string;
@@ -52,7 +49,6 @@ export class InventoryModel extends BaseModel {
   constructor(data: IInventory) {
     super(data.id);
     this.name = data.name;
-    this.description = data.description;
     this.category = data.category;
     this.stock = data.stock;
     this.location = data.location;
