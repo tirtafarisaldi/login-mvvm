@@ -401,11 +401,16 @@ export default function InventoryPage() {
                     <Input
                       type="number"
                       min={0}
-                      value={form.stock}
+                      value={form.stock === 0 ? '' : form.stock}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
                       onChange={(event) =>
-                        updateForm({ stock: Number(event.target.value) })
+                        updateForm({
+                          stock:
+                            event.target.value === ''
+                              ? 0
+                              : Number(event.target.value),
+                        })
                       }
                     />
                   </FormControl>
