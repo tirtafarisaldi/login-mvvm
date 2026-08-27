@@ -1,6 +1,11 @@
 import { withProtected } from 'components/PrivateRoute';
 import type { NextPage } from 'next';
-import InventoryPage from 'src/app/Menus/Inventory/pages/InventoryPage';
+import dynamic from 'next/dynamic';
+
+const InventoryPage = dynamic(
+  () => import('src/app/Menus/Inventory/pages/InventoryPage'),
+  { ssr: false },
+);
 
 const InventoryMenuPage: NextPage = () => <InventoryPage />;
 

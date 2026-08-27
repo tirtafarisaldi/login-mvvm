@@ -6,6 +6,7 @@ import {
   FormLabel,
   Heading,
   IconButton,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
@@ -27,37 +28,20 @@ function StudioOrnaments() {
   return (
     <Box
       aria-hidden="true"
-      display={{ base: 'none', lg: 'block' }}
       position="absolute"
-      inset={0}
-      overflow="hidden"
-      pointerEvents="none"
+      top={{ base: 4, md: 6 }}
+      left={{ base: 4, md: 90 }}
+      zIndex={2}
     >
-      {[6, 31, 56].map((left, index) => (
-        <MotionBox
-          key={left}
-          position="absolute"
-          top="-34px"
-          left={`${left}%`}
-          w="250px"
-          h="790px"
-          transformOrigin="top center"
-          bgGradient="linear(to-b, rgba(103, 232, 249, 0.18), rgba(14, 165, 233, 0.07) 46%, transparent 82%)"
-          clipPath="polygon(36% 0, 64% 0, 100% 100%, 0 100%)"
-          filter="blur(1px)"
-          opacity={0.5}
-          animate={{
-            rotate: [-10 + index * 7, 8 - index * 5, -10 + index * 7],
-            opacity: [0.32, 0.56, 0.32],
-          }}
-          transition={{
-            duration: 8,
-            delay: index * 0.3,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
+      <Image
+        src="/img/logommb.png"
+        alt="Logo MMB"
+        h={{ base: '30px', md: '40px' }}
+        w="auto"
+        opacity={0.85}
+        _hover={{ opacity: 1 }}
+        transition="opacity 0.3s"
+      />
     </Box>
   );
 }
@@ -189,13 +173,14 @@ export default function Login() {
       px={{ base: 4, md: 8 }}
       py={{ base: 8, md: 12 }}
     >
+      <StudioOrnaments />
       <Box
         position="absolute"
         left={0}
         top={0}
         h="100%"
         w={{ base: '100%', lg: '100%' }}
-        bgImage="linear-gradient(90deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.88) 92%), linear-gradient(180deg, rgba(8, 47, 73, 0.22), rgba(2, 6, 23, 0.68)), url('/img/studio-pertunjukan.png')"
+        bgImage="linear-gradient(90deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.88) 92%), linear-gradient(180deg, rgba(8, 47, 73, 0.22), rgba(2, 6, 23, 0.68)), url('/img/studio-pertunjukan.jpg')"
         bgSize="cover"
         bgPos="center"
         opacity={0.5}
@@ -211,10 +196,8 @@ export default function Login() {
         bg="cyan.400"
         opacity={0.12}
         filter="blur(90px)"
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        animation="gentleBounce 14s ease-in-out infinite"
       />
-      <StudioOrnaments />
       <MotionBox
         position="absolute"
         bottom="-100px"
@@ -261,7 +244,7 @@ export default function Login() {
 
           <Heading
             as="h1"
-            fontSize={{ base: '4xl', md: '6xl', xl: '7xl' }}
+            fontSize={{ base: '5xl', md: '8xl', xl: '8xl' }}
             fontWeight="black"
             letterSpacing="tight"
             lineHeight="0.95"
@@ -296,27 +279,6 @@ export default function Login() {
             akses berbagai layanan Laboratorium Studio Pertunjukan dengan lebih
             cepat dan mudah.
           </Text>
-
-          <Stack spacing={4} mt={10} maxW="2xl">
-            <Flex gap={3} align="center">
-              <Box w={3} h={3} borderRadius="full" bg="cyan.300" />
-              <Text fontWeight="medium" color="whiteAlpha.800">
-                List peralatan studio lengkap
-              </Text>
-            </Flex>
-            <Flex gap={3} align="center">
-              <Box w={3} h={3} borderRadius="full" bg="cyan.300" />
-              <Text fontWeight="medium" color="whiteAlpha.800">
-                Proses peminjaman inventaris yang cepat
-              </Text>
-            </Flex>
-            <Flex gap={3} align="center">
-              <Box w={3} h={3} borderRadius="full" bg="cyan.300" />
-              <Text fontWeight="medium" color="whiteAlpha.800">
-                Jadwal ruangan dan latihan terintegrasi
-              </Text>
-            </Flex>
-          </Stack>
         </MotionBox>
 
         <MotionBox

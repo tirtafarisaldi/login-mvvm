@@ -59,7 +59,6 @@ export const withLoginPageHandler = (WrappedComponent: FC) => {
     useEffect(() => {
       if (!router.isReady) return;
       if (!isLoading && isAuthenticated && !isAutoLogin && !isAutoLogout) {
-        // Redirect to latest page if provided
         if (latestPage) {
           router.push(latestPage);
         } else {
@@ -79,7 +78,9 @@ export const withLoginPageHandler = (WrappedComponent: FC) => {
       router,
     ]);
 
-    if (isLoading || isAuthenticated || isAutoLogin) {
+    // Halaman login langsung ditampilkan tanpa menunggu auth check,
+    // supaya LCP tidak di-block oleh API call.
+    if (isAuthenticated && !isLoading) {
       return <LoadingPage />;
     }
 

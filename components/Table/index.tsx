@@ -10,7 +10,7 @@ import { indonesianDateTime } from 'utility/date';
 import { Box, Flex, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import TableWrapper from 'components/Table/TableWrapper';
 import Pagination from './Pagination';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import PlusMinusNumber from './PlusMinusNumber';
 import Link from 'next/link';
 import type { Symbol } from './PlusMinusNumber/types';

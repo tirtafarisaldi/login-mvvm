@@ -1,26 +1,30 @@
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'styles/tailwind.css';
 import 'styles/index.css';
 import 'styles/filter-date-datepicker.css';
 
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import type { FC } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { createRoot } from 'react-dom/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from 'styles/theme';
 import { NextComponentType, NextPageContext } from 'next/types';
-import { Amplify } from 'aws-amplify';
 import { AuthProvider } from 'service/auth';
 import SidebarLayout from 'layouts';
 
 import type { DehydratedState } from 'react-query';
-import { dehydrate, Hydrate, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { Hydrate, QueryClientProvider } from 'react-query';
 import { client } from 'service/http';
+
+import dynamic from 'next/dynamic';
+
+const ReactQueryDevtools = dynamic(
+  () =>
+    import('react-query/devtools').then((mod) => mod.ReactQueryDevtools),
+  { ssr: false }
+);
 
 type AppPropsWithLayout<P> = AppProps<P> & {
   Component: NextComponentType<NextPageContext, any, any> & {
