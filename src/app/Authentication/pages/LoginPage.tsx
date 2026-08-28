@@ -62,7 +62,7 @@ export default function Login() {
   const cardBg = 'rgba(8, 29, 52, 0.72)';
   const inputBg = 'rgba(255,255,255,0.08)';
   const textColor = 'whiteAlpha.900';
-  const mutedText = 'cyan.100';
+  const mutedText = 'blue.200';
 
   const onLoginSuccess = () => {
     router.push('/');
@@ -193,8 +193,8 @@ export default function Login() {
         w="420px"
         h="420px"
         borderRadius="50%"
-        bg="cyan.400"
-        opacity={0.12}
+        bg="blue.500"
+        opacity={0.1}
         filter="blur(90px)"
         animation="gentleBounce 14s ease-in-out infinite"
       />
@@ -205,8 +205,8 @@ export default function Login() {
         w="520px"
         h="520px"
         borderRadius="50%"
-        bg="cyan.600"
-        opacity={0.12}
+        bg="blue.700"
+        opacity={0.1}
         filter="blur(100px)"
       />
 
@@ -236,7 +236,7 @@ export default function Login() {
               fontWeight="bold"
               letterSpacing="widest"
               textTransform="uppercase"
-              color="cyan.300"
+              color="blue.400"
             >
               Laboratorium Studio Pertunjukan
             </Text>
@@ -254,7 +254,7 @@ export default function Login() {
             <MotionBox
               as="span"
               display="inline-block"
-              bgGradient="linear(to-b, white 16%, cyan.100 54%, cyan.300 100%)"
+              bgGradient="linear(to-b, white 16%, blue.100 54%, blue.300 100%)"
               bgClip="text"
               // animate={{
               //   textShadow: [
@@ -284,7 +284,7 @@ export default function Login() {
         <MotionBox
           flex="0 0 380px"
           bg={cardBg}
-          borderRadius="3xl"
+          borderRadius="4xl"
           p={{ base: 6, md: 10 }}
           boxShadow="0 40px 80px rgba(0, 0, 0, 0.28)"
           border="1px solid rgba(255,255,255,0.22)"
@@ -295,7 +295,7 @@ export default function Login() {
           maxH={{ base: 'auto', md: '700px' }}
         >
           <Stack spacing={4} textAlign="center" mb={6}>
-            <Text fontSize="sm" fontWeight="semibold" color="cyan.200">
+            <Text fontSize="sm" fontWeight="semibold" color="blue.300">
               Selamat datang di Studio Pertunjukan
             </Text>
             <Heading size="lg" color={textColor}>
@@ -415,7 +415,7 @@ export default function Login() {
                   type="button"
                   fontSize="sm"
                   color={mutedText}
-                  _hover={{ color: 'cyan.200' }}
+                  _hover={{ color: 'blue.300' }}
                   cursor="pointer"
                   onClick={toggleMode}
                   textAlign="right"
@@ -431,10 +431,10 @@ export default function Login() {
                 type="submit"
                 w="full"
                 size="lg"
-                borderRadius="2xl"
-                bg="cyan.300"
-                color="gray.900"
-                _hover={{ bg: 'cyan.200' }}
+                borderRadius="full"
+                bg="blue.600"
+                color="white"
+                _hover={{ bg: 'blue.500' }}
                 isLoading={isRegister ? registerLoading : loginLoading}
                 loadingText={isRegister ? 'Mendaftar' : 'Masuk'}
               >

@@ -32,6 +32,7 @@ export default function DataTablePagination({
       <Flex gap={2}>
         <Button
           size="sm"
+          borderRadius="full"
           onClick={() => onPageChange(currentPage - 1)}
           isDisabled={currentPage === 1}
         >
@@ -51,10 +52,11 @@ export default function DataTablePagination({
             <Button
               size="sm"
               minW="36px"
-              bg={page === currentPage ? 'cyan.300' : 'whiteAlpha.100'}
-              color={page === currentPage ? 'gray.900' : 'white'}
+              borderRadius="full"
+              bg={page === currentPage ? 'blue.600' : 'whiteAlpha.100'}
+              color={page === currentPage ? 'white' : 'white'}
               _hover={{
-                bg: page === currentPage ? 'cyan.200' : 'whiteAlpha.200',
+                bg: page === currentPage ? 'blue.500' : 'whiteAlpha.200',
               }}
               onClick={() => onPageChange(page)}
             >
@@ -64,6 +66,7 @@ export default function DataTablePagination({
         ))}
         <Button
           size="sm"
+          borderRadius="full"
           onClick={() => onPageChange(currentPage + 1)}
           isDisabled={currentPage === totalPages}
         >

@@ -21,8 +21,7 @@ import { client } from 'service/http';
 import dynamic from 'next/dynamic';
 
 const ReactQueryDevtools = dynamic(
-  () =>
-    import('react-query/devtools').then((mod) => mod.ReactQueryDevtools),
+  () => import('react-query/devtools').then((mod) => mod.ReactQueryDevtools),
   { ssr: false }
 );
 
@@ -52,7 +51,7 @@ function MyApp({
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
               />
-              <title>Login Page MVVM</title>
+              <title>Studio Pertunjukan</title>
             </Head>
             <React.StrictMode>
               <Layout>

@@ -7,8 +7,8 @@ import Switch from 'components/Switch/styleConfig';
 
 const theme = extendTheme({
   fonts: {
-    lato: 'Lato',
-    body: 'Lato, sans-serif'
+    poppins: 'Poppins',
+    body: 'Poppins, sans-serif'
   },
   components: {
     CustomAlert: Alert,

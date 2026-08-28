@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 const InventoryPage = dynamic(
   () => import('src/app/Menus/Inventory/pages/InventoryPage'),
-  { ssr: false },
+  { ssr: true }
 );
 
 const InventoryMenuPage: NextPage = () => <InventoryPage />;

@@ -204,26 +204,33 @@ export default function InventoryPage() {
             direction={{ base: 'column', md: 'row' }}
           >
             <Box>
-              <Text
-                color="cyan.300"
-                fontSize="sm"
-                fontWeight="bold"
-                letterSpacing="widest"
-              >
-                INVENTORY MANAGEMENT
+              <Text color="blue.400" fontWeight="semibold" mb={2}>
+                Inventory Management
               </Text>
-              <Heading color="white" mt={2}>
-                Koleksi Peralatan
+              <Heading size="md" color="white">
+                Kelola Perlaatan Studio Pertunjukan
               </Heading>
-              <Text color="whiteAlpha.700" mt={2}>
+              <Text color="whiteAlpha.700" mt={2} fontSize="sm">
                 Kelola aset Laboratorium Studio Pertunjukan dalam satu ruang
                 kerja.
               </Text>
             </Box>
             <Button
-              color="gray.900"
-              bg="cyan.300"
-              _hover={{ bg: 'cyan.200' }}
+              color="white"
+              bg="rgba(37, 99, 235, 0.25)"
+              borderWidth="1px"
+              borderColor="rgba(59, 130, 246, 0.5)"
+              backdropFilter="blur(12px)"
+              fontSize="sm"
+              borderRadius="full"
+              _hover={{
+                bg: 'rgba(37, 99, 235, 0.45)',
+                borderColor: 'rgba(59, 130, 246, 0.75)',
+                boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
+              }}
+              _active={{
+                bg: 'rgba(37, 99, 235, 0.6)',
+              }}
               leftIcon={<AddIcon />}
               onClick={openCreate}
             >
@@ -243,28 +250,28 @@ export default function InventoryPage() {
           />
           {isLoading ? (
             <Flex minH="300px" justify="center" align="center">
-              <Spinner thickness="3px" color="cyan.300" />
+              <Spinner thickness="3px" color="blue.400" />
             </Flex>
           ) : (
             <Box
               overflowX="auto"
-              borderRadius="2xl"
-              bg="whiteAlpha.070"
+              borderRadius="3xl"
+              bg="rgba(255,255,255,0.05)"
               borderWidth="1px"
-              borderColor="rgba(103, 232, 249, 0.24)"
+              borderColor="rgba(255,255,255,0.1)"
               backdropFilter="blur(18px)"
             >
               <Table variant="simple" minW="920px">
                 <Thead bg="whiteAlpha.100">
                   <Tr>
-                    <Th color="cyan.200">ID</Th>
-                    <Th color="cyan.200">Nama Barang</Th>
-                    <Th color="cyan.200">Kategori</Th>
-                    <Th color="cyan.200">Stok</Th>
-                    <Th color="cyan.200">Lokasi</Th>
-                    <Th color="cyan.200">Status</Th>
-                    <Th color="cyan.200">Gambar</Th>
-                    <Th color="cyan.200" textAlign="right">
+                    <Th color="blue.300">ID</Th>
+                    <Th color="blue.300">Nama Barang</Th>
+                    <Th color="blue.300">Kategori</Th>
+                    <Th color="blue.300">Stok</Th>
+                    <Th color="blue.300">Lokasi</Th>
+                    <Th color="blue.300">Status</Th>
+                    <Th color="blue.300">Gambar</Th>
+                    <Th color="blue.300" textAlign="right">
                       Aksi
                     </Th>
                   </Tr>
@@ -272,7 +279,7 @@ export default function InventoryPage() {
                 <Tbody>
                   {inventories.map((item) => (
                     <Tr key={item.id} _hover={{ bg: 'whiteAlpha.100' }}>
-                      <Td color="cyan.200" fontSize="sm" fontWeight="bold">
+                      <Td color="blue.300" fontSize="sm" fontWeight="bold">
                         {item.id}
                       </Td>
                       <Td color="white" fontWeight="semibold">
@@ -298,7 +305,7 @@ export default function InventoryPage() {
                       <Td>
                         <Button
                           variant="link"
-                          color="cyan.200"
+                          color="blue.300"
                           size="sm"
                           onClick={() => openImage(item)}
                           isDisabled={!item.image}
@@ -494,9 +501,10 @@ export default function InventoryPage() {
                 </Button>
                 <Button
                   type="submit"
-                  bg="cyan.300"
-                  color="gray.900"
-                  _hover={{ bg: 'cyan.200' }}
+                  bg="blue.600"
+                  color="white"
+                  borderRadius="full"
+                  _hover={{ bg: 'blue.500' }}
                   isLoading={isCreating || isUpdating}
                 >
                   Simpan

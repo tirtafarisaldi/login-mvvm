@@ -52,7 +52,13 @@ export default function FilterBar<TFilters extends object>({
           />
         )
       )}
-      <Button variant="outline" colorScheme="cyan" onClick={onReset}>
+      <Button
+        variant="outline"
+        colorScheme="blue"
+        fontSize="sm"
+        borderRadius="full"
+        onClick={onReset}
+      >
         Reset Filter
       </Button>
     </Flex>
