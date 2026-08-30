@@ -12,8 +12,8 @@ interface GlassCardProps {
 
 export default function GlassCard({
   children,
-  radius = '4xl',
-  depth = 26,
+  radius = '2xl',
+  depth = 22,
   maxTilt = 8,
   className,
 }: GlassCardProps) {
@@ -57,11 +57,11 @@ export default function GlassCard({
         position="absolute"
         inset={0}
         borderRadius={radius}
-        bg="rgba(8, 10, 14, 0.6)"
+        bg="rgba(255,255,255,0.045)"
         borderWidth="1px"
-        borderColor="rgba(255, 255, 255, 0.07)"
-        backdropFilter="blur(20px)"
-        boxShadow="0 16px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)"
+        borderColor="rgba(255,255,255,0.09)"
+        backdropFilter="blur(10px)"
+        boxShadow="0 1px 2px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03)"
       />
       <Box
         position="relative"

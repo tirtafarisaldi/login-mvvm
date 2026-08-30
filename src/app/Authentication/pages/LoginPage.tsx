@@ -58,9 +58,9 @@ export default function Login() {
   const toast = useToast();
 
   const pageBg =
-    'radial-gradient(circle at 86% 10%, rgba(14, 165, 233, 0.16), transparent 26%), radial-gradient(circle at 12% 88%, rgba(14, 165, 233, 0.12), transparent 32%), radial-gradient(circle at 52% 48%, rgba(8, 47, 73, 0.32), transparent 54%), linear-gradient(135deg, #020617 0%, #030b1c 48%, #00030a 100%)';
-  const cardBg = 'rgba(8, 29, 52, 0.72)';
-  const inputBg = 'rgba(255,255,255,0.08)';
+    'radial-gradient(circle at 86% 10%, rgba(94, 106, 210, 0.14), transparent 26%), radial-gradient(circle at 12% 88%, rgba(94, 106, 210, 0.08), transparent 32%), radial-gradient(circle at 52% 48%, rgba(8, 11, 15, 0.4), transparent 54%), linear-gradient(135deg, #0A0B0D 0%, #08090B 48%, #060708 100%)';
+  const cardBg = 'rgba(255,255,255,0.045)';
+  const inputBg = 'rgba(255,255,255,0.06)';
   const textColor = 'whiteAlpha.900';
   const mutedText = 'blue.200';
 
@@ -284,11 +284,11 @@ export default function Login() {
         <MotionBox
           flex="0 0 380px"
           bg={cardBg}
-          borderRadius="4xl"
+          borderRadius="2xl"
           p={{ base: 6, md: 10 }}
           boxShadow="0 40px 80px rgba(0, 0, 0, 0.28)"
-          border="1px solid rgba(255,255,255,0.22)"
-          backdropFilter="blur(24px)"
+          border="1px solid rgba(255,255,255,0.1)"
+          backdropFilter="blur(12px)"
           initial={{ opacity: 0, x: 40, scale: 0.96 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.8 }}

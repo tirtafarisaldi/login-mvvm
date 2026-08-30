@@ -1,3 +1,9 @@
+import {
+  buildSampleEvents,
+  toDateKey,
+} from '../../Menus/Calendar/domain/events';
+import { useGetInventoriesViewModel } from '../../Menus/Inventory/viewModels/getInventoriesViewModel';
+
 export interface CmsFeature {
   id: string;
   label: string;
@@ -5,8 +11,19 @@ export interface CmsFeature {
   href?: string;
 }
 
+export type HomeStatId = 'equipment' | 'loans' | 'schedules';
+
+export interface HomeStat {
+  id: HomeStatId;
+  label: string;
+  value: number;
+  hint: string;
+}
+
 interface HomeViewModel {
   features: CmsFeature[];
+  stats: HomeStat[];
+  statsLoading: boolean;
 }
 
 const features: CmsFeature[] = [
@@ -25,6 +42,7 @@ const features: CmsFeature[] = [
     id: 'schedules',
     label: 'Jadwal Ruangan',
     description: 'Atur agenda penggunaan ruangan studio.',
+    href: '/calendar',
   },
   {
     id: 'users',
@@ -33,6 +51,51 @@ const features: CmsFeature[] = [
   },
 ];
 
-export const useHomeViewModel = (): HomeViewModel => ({
-  features,
-});
+export const useHomeViewModel = (): HomeViewModel => {
+  const { inventories, loading } = useGetInventoriesViewModel({
+    page: 1,
+    limit: 100,
+  });
+
+  const now = new Date();
+  const todayKey = toDateKey(now);
+  const eventsByDate = buildSampleEvents(now.getFullYear(), now.getMonth());
+  const upcomingSchedules = Object.values(eventsByDate)
+    .flat()
+    .filter((event) => event.dateKey >= todayKey).length;
+
+  const totalEquipment = inventories.reduce(
+    (sum, inventory) => sum + inventory.stock,
+    0
+  );
+  const activeLoans = inventories.filter(
+    (inventory) => inventory.status === 'Dipinjam'
+  ).length;
+
+  const stats: HomeStat[] = [
+    {
+      id: 'equipment',
+      label: 'Jumlah Peralatan',
+      value: totalEquipment,
+      hint: 'unit peralatan terdaftar',
+    },
+    {
+      id: 'loans',
+      label: 'Peminjaman Aktif',
+      value: activeLoans,
+      hint: 'barang sedang dipinjam',
+    },
+    {
+      id: 'schedules',
+      label: 'Jadwal Ruangan',
+      value: upcomingSchedules,
+      hint: 'agenda tersisa bulan ini',
+    },
+  ];
+
+  return {
+    features,
+    stats,
+    statsLoading: loading,
+  };
+};

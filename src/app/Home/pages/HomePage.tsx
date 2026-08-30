@@ -3,9 +3,6 @@ import {
   CalendarIcon,
   InfoIcon,
   RepeatIcon,
-  SmallAddIcon,
-  StarIcon,
-  TimeIcon,
   ViewIcon,
 } from '@chakra-ui/icons';
 import {
@@ -24,48 +21,26 @@ import MenuLayout from '../../Menus/components/MenuLayout';
 import { useHomeViewModel } from '../viewModels/HomeViewModel';
 
 const featureStyles = [
-  { icon: InfoIcon, color: '#93c5fd' },
-  { icon: RepeatIcon, color: '#60a5fa' },
-  { icon: CalendarIcon, color: '#3b82f6' },
-  { icon: ViewIcon, color: '#7dd3fc' },
+  { icon: InfoIcon, color: '#60a5fa' },
+  { icon: RepeatIcon, color: '#a78bfa' },
+  { icon: CalendarIcon, color: '#22d3ee' },
+  { icon: ViewIcon, color: '#34d399' },
+];
+
+const statStyles = [
+  { icon: ViewIcon, color: '#93c5fd' },
+  { icon: RepeatIcon, color: '#fbbf24' },
+  { icon: CalendarIcon, color: '#60a5fa' },
 ];
 
 export default function HomePage() {
-  const { features } = useHomeViewModel();
-  const available = features.filter((feature) => feature.href).length;
-  const soon = features.length - available;
+  const { features, stats, statsLoading } = useHomeViewModel();
   const today = new Intl.DateTimeFormat('id-ID', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   }).format(new Date());
-
-  const stats: Array<{
-    label: string;
-    value: number;
-    icon: typeof InfoIcon;
-    color: string;
-  }> = [
-    {
-      label: 'Total Modul',
-      value: features.length,
-      icon: SmallAddIcon,
-      color: '#93c5fd',
-    },
-    {
-      label: 'Akses Cepat',
-      value: available,
-      icon: StarIcon,
-      color: '#60a5fa',
-    },
-    {
-      label: 'Segera Hadir',
-      value: soon,
-      icon: TimeIcon,
-      color: '#3b82f6',
-    },
-  ];
 
   return (
     <MenuLayout>
@@ -77,26 +52,16 @@ export default function HomePage() {
         direction={{ base: 'column', md: 'row' }}
       >
         <Box>
-          <Text
-            color="blue.400"
-            fontSize="xs"
-            fontWeight="bold"
-            letterSpacing="widest"
-            textTransform="uppercase"
-            mb={3}
-          >
-            Dashboard
-          </Text>
           <Heading
             as="h1"
-            size={{ base: '2xl', md: '3xl' }}
+            size={{ base: '2xl', md: '4xl' }}
             fontWeight="black"
             letterSpacing="tight"
             lineHeight="shorter"
-            bgGradient="linear(to-r, white 28%, blue.300)"
-            bgClip="text"
+            color="white"
+            fontFamily="sans-serif"
           >
-            Studio Pertunjukan
+            Overview
           </Heading>
           <Text color="whiteAlpha.600" mt={4} fontSize="sm" maxW="lg">
             Pilih menu untuk mulai mengelola aktivitas laboratorium, inventaris,
@@ -119,77 +84,144 @@ export default function HomePage() {
         </GlassCard>
       </Flex>
 
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-        {features.map((feature, index) => {
-          const style = featureStyles[index % featureStyles.length];
+      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={6} mb={8}>
+        {stats.map((stat, index) => {
+          const style = statStyles[index % statStyles.length];
           return (
-            <GlassCard key={feature.id} radius="3rem" depth={34}>
-              <Stack
-                spacing={5}
-                p={6}
-                minH="200px"
-                h="full"
-                justify="space-between"
-              >
-                <Flex align="center" justify="space-between">
+            <GlassCard key={stat.id} radius="2xl" depth={20}>
+              <Flex align="center" gap={5} p={6}>
+                <Box position="relative" flexShrink={0}>
+                  <Box
+                    position="absolute"
+                    inset={-3}
+                    borderRadius="full"
+                    bg={style.color}
+                    opacity={0.14}
+                    filter="blur(18px)"
+                  />
                   <Flex
                     w={12}
                     h={12}
                     align="center"
                     justify="center"
+                    position="relative"
                     borderRadius="2xl"
-                    bg="rgba(255,255,255,0.08)"
+                    bg="rgba(255,255,255,0.06)"
                     borderWidth="1px"
-                    borderColor="rgba(255,255,255,0.14)"
+                    borderColor="rgba(255,255,255,0.12)"
                     color={style.color}
-                    backdropFilter="blur(12px)"
-                    boxShadow="inset 0 1px 0 rgba(255,255,255,0.1)"
                   >
                     <Icon as={style.icon} boxSize={6} />
                   </Flex>
-                </Flex>
+                </Box>
                 <Box>
-                  <Heading size="sm" color="white" letterSpacing="tight">
-                    {feature.label}
-                  </Heading>
-                  <Text color="whiteAlpha.600" mt={2} fontSize="xs">
-                    {feature.description}
+                  <Text
+                    color="whiteAlpha.500"
+                    fontSize="xs"
+                    fontWeight="semibold"
+                    letterSpacing="wide"
+                    textTransform="uppercase"
+                  >
+                    {stat.label}
                   </Text>
+                  <Text
+                    color="white"
+                    fontSize={{ base: '2xl', md: '3xl' }}
+                    fontWeight="black"
+                    letterSpacing="tight"
+                    lineHeight="shorter"
+                    mt={0.5}
+                  >
+                    {statsLoading ? '…' : stat.value.toLocaleString('id-ID')}
+                  </Text>
+                  <Text color="whiteAlpha.600" fontSize="xs" mt={1}>
+                    {stat.hint}
+                  </Text>
+                </Box>
+              </Flex>
+            </GlassCard>
+          );
+        })}
+      </SimpleGrid>
+
+      <SimpleGrid columns={{ base: 1, sm: 2, xl: 4 }} spacing={6}>
+        {features.map((feature, index) => {
+          const style = featureStyles[index % featureStyles.length];
+          return (
+            <GlassCard key={feature.id} radius="2xl" depth={26}>
+              <Stack
+                spacing={4}
+                p={6}
+                minH="220px"
+                h="full"
+                justify="space-between"
+              >
+                <Box>
+                  <Flex align="flex-start" gap={4}>
+                    <Box position="relative" flexShrink={0}>
+                      <Box
+                        position="absolute"
+                        inset={-3}
+                        borderRadius="full"
+                        bg={style.color}
+                        opacity={0.14}
+                        filter="blur(18px)"
+                      />
+                      <Flex
+                        w={12}
+                        h={12}
+                        align="center"
+                        justify="center"
+                        position="relative"
+                        borderRadius="2xl"
+                        bg="rgba(255,255,255,0.06)"
+                        borderWidth="1px"
+                        borderColor="rgba(255,255,255,0.12)"
+                        color={style.color}
+                      >
+                        <Icon as={style.icon} boxSize={6} />
+                      </Flex>
+                    </Box>
+                    <Box>
+                      <Heading size="sm" color="white" letterSpacing="tight">
+                        {feature.label}
+                      </Heading>
+                      <Text
+                        color="whiteAlpha.600"
+                        mt={1}
+                        fontSize="xs"
+                        lineHeight="tall"
+                      >
+                        {feature.description}
+                      </Text>
+                    </Box>
+                  </Flex>
                 </Box>
                 {feature.href ? (
                   <NextLink href={feature.href} passHref>
                     <Button
                       as="a"
                       alignSelf="flex-start"
-                      size="md"
-                      fontSize="sm"
-                      bg="blue.600"
-                      color="white"
+                      size="sm"
+                      fontSize="xs"
+                      fontWeight="semibold"
+                      px={4}
+                      bg="rgba(37, 99, 235, 0.18)"
+                      borderWidth="1px"
+                      borderColor="rgba(59, 130, 246, 0.45)"
+                      color="blue.100"
                       borderRadius="full"
-                      rightIcon={<ArrowForwardIcon />}
+                      rightIcon={<ArrowForwardIcon boxSize={3} />}
                       _hover={{
-                        bg: 'blue.500',
-                        boxShadow: '0 0 24px rgba(59,130,246,.4)',
+                        bg: 'rgba(37, 99, 235, 0.32)',
+                        borderColor: 'rgba(59, 130, 246, 0.7)',
+                        boxShadow: '0 0 18px rgba(59,130,246,.25)',
                       }}
                     >
-                      Buka menu
+                      Buka Menu
                     </Button>
                   </NextLink>
-                ) : (
-                  <Text
-                    fontSize="xs"
-                    color="whiteAlpha.400"
-                    bg="rgba(255,255,255,0.05)"
-                    borderWidth="1px"
-                    borderColor="rgba(255,255,255,0.08)"
-                    borderRadius="full"
-                    px={4}
-                    py={2}
-                    w="max-content"
-                  >
-                    Segera hadir
-                  </Text>
-                )}
+                ) : null}
               </Stack>
             </GlassCard>
           );

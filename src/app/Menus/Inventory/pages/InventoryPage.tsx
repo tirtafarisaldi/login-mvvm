@@ -204,10 +204,12 @@ export default function InventoryPage() {
             direction={{ base: 'column', md: 'row' }}
           >
             <Box>
-              <Text color="blue.400" fontWeight="semibold" mb={2}>
-                Inventory Management
-              </Text>
-              <Heading size="md" color="white">
+              <Heading
+                as="h1"
+                size={{ base: 'xl', md: '2xl' }}
+                color="white"
+                letterSpacing="tight"
+              >
                 Kelola Perlaatan Studio Pertunjukan
               </Heading>
               <Text color="whiteAlpha.700" mt={2} fontSize="sm">
@@ -228,9 +230,7 @@ export default function InventoryPage() {
                 borderColor: 'rgba(59, 130, 246, 0.75)',
                 boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
               }}
-              _active={{
-                bg: 'rgba(37, 99, 235, 0.6)',
-              }}
+              _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
               leftIcon={<AddIcon />}
               onClick={openCreate}
             >
@@ -255,11 +255,11 @@ export default function InventoryPage() {
           ) : (
             <Box
               overflowX="auto"
-              borderRadius="3xl"
-              bg="rgba(255,255,255,0.05)"
+              borderRadius="2xl"
+              bg="rgba(255,255,255,0.03)"
               borderWidth="1px"
-              borderColor="rgba(255,255,255,0.1)"
-              backdropFilter="blur(18px)"
+              borderColor="rgba(255,255,255,0.08)"
+              backdropFilter="blur(8px)"
             >
               <Table variant="simple" minW="920px">
                 <Thead bg="whiteAlpha.100">
@@ -359,35 +359,44 @@ export default function InventoryPage() {
             <ModalContent
               as="form"
               onSubmit={submit}
-              bg="gray.900"
+              bg="rgba(255,255,255,0.14)"
+              backdropFilter="blur(20px)"
               color="white"
               borderWidth="1px"
-              borderColor="whiteAlpha.300"
-              boxShadow="0 24px 80px rgba(0,0,0,.55)"
+              borderColor="rgba(255,255,255,0.14)"
+              boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
             >
-              <ModalHeader>
+              <ModalHeader fontSize="lg">
                 {selectedInventory ? 'Ubah Inventaris' : 'Tambah Inventaris'}
               </ModalHeader>
               <ModalBody>
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
                   <FormControl isRequired>
-                    <FormLabel>Nama Barang</FormLabel>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Nama Barang
+                    </FormLabel>
                     <Input
+                      size="sm"
                       value={form.name}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
+                      borderRadius="xl"
                       onChange={(event) =>
                         updateForm({ name: event.target.value })
                       }
                     />
                   </FormControl>
                   <FormControl isRequired>
-                    <FormLabel>Kategori</FormLabel>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Kategori
+                    </FormLabel>
                     <Select
+                      size="sm"
                       placeholder="Pilih kategori"
                       value={form.category}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
+                      borderRadius="xl"
                       onChange={(event) =>
                         updateForm({ category: event.target.value })
                       }
@@ -404,13 +413,17 @@ export default function InventoryPage() {
                     </Select>
                   </FormControl>
                   <FormControl isRequired>
-                    <FormLabel>Stok</FormLabel>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Stok
+                    </FormLabel>
                     <Input
+                      size="sm"
                       type="number"
                       min={0}
                       value={form.stock === 0 ? '' : form.stock}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
+                      borderRadius="xl"
                       onChange={(event) =>
                         updateForm({
                           stock:
@@ -422,12 +435,16 @@ export default function InventoryPage() {
                     />
                   </FormControl>
                   <FormControl isRequired>
-                    <FormLabel>Lokasi</FormLabel>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Lokasi
+                    </FormLabel>
                     <Select
+                      size="sm"
                       placeholder="Pilih lokasi"
                       value={form.location}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
+                      borderRadius="xl"
                       onChange={(event) =>
                         updateForm({ location: event.target.value })
                       }
@@ -444,11 +461,15 @@ export default function InventoryPage() {
                     </Select>
                   </FormControl>
                   <FormControl isRequired>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Status
+                    </FormLabel>
                     <Select
+                      size="sm"
                       value={form.status}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
+                      borderRadius="xl"
                       onChange={(event) =>
                         updateForm({
                           status: event.target.value as InventoryStatus,
@@ -470,25 +491,33 @@ export default function InventoryPage() {
                     </Select>
                   </FormControl>
                   <FormControl isRequired>
-                    <FormLabel>Link / Path Gambar</FormLabel>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Link / Path Gambar
+                    </FormLabel>
                     <Input
+                      size="sm"
                       type="url"
                       placeholder="https://... atau /img/barang.jpg"
                       value={form.image}
                       bg="whiteAlpha.100"
                       borderColor="whiteAlpha.300"
+                      borderRadius="xl"
                       onChange={(event) =>
                         updateForm({ image: event.target.value })
                       }
                     />
                   </FormControl>
                 </SimpleGrid>
-                <FormControl mt={4}>
-                  <FormLabel>Informasi</FormLabel>
+                <FormControl mt={3}>
+                  <FormLabel fontSize="xs" letterSpacing="wide">
+                    Informasi
+                  </FormLabel>
                   <Textarea
+                    size="sm"
                     value={form.information}
                     bg="whiteAlpha.100"
                     borderColor="whiteAlpha.300"
+                    borderRadius="xl"
                     onChange={(event) =>
                       updateForm({ information: event.target.value })
                     }
@@ -496,15 +525,33 @@ export default function InventoryPage() {
                 </FormControl>
               </ModalBody>
               <ModalFooter>
-                <Button mr={3} variant="ghost" onClick={formModal.onClose}>
+                <Button
+                  mr={3}
+                  variant="ghost"
+                  color="whiteAlpha.700"
+                  borderWidth="1px"
+                  borderColor="rgba(255,255,255,0.1)"
+                  borderRadius="full"
+                  _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
+                  onClick={formModal.onClose}
+                >
                   Batal
                 </Button>
                 <Button
                   type="submit"
-                  bg="blue.600"
                   color="white"
+                  bg="rgba(37, 99, 235, 0.25)"
+                  borderWidth="1px"
+                  borderColor="rgba(59, 130, 246, 0.5)"
+                  backdropFilter="blur(12px)"
+                  fontSize="sm"
                   borderRadius="full"
-                  _hover={{ bg: 'blue.500' }}
+                  _hover={{
+                    bg: 'rgba(37, 99, 235, 0.45)',
+                    borderColor: 'rgba(59, 130, 246, 0.75)',
+                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
+                  }}
+                  _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
                   isLoading={isCreating || isUpdating}
                 >
                   Simpan
@@ -519,13 +566,15 @@ export default function InventoryPage() {
           >
             <ModalOverlay backdropFilter="blur(10px)" bg="blackAlpha.700" />
             <ModalContent
-              bg="gray.900"
+              bg="rgba(255,255,255,0.14)"
+              backdropFilter="blur(20px)"
               color="white"
               overflow="hidden"
               borderWidth="1px"
-              borderColor="whiteAlpha.300"
+              borderColor="rgba(255,255,255,0.14)"
+              boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
             >
-              <ModalHeader>{previewImage?.name}</ModalHeader>
+              <ModalHeader fontSize="lg">{previewImage?.name}</ModalHeader>
               <ModalBody pb={6}>
                 {previewImage?.image && (
                   <Image
