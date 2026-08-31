@@ -8,17 +8,11 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-// import {
-//   browserName,
-//   browserVersion,
-//   osName,
-//   osVersion,
-// } from 'react-device-detect';
 import { When } from 'react-if';
 import { shallow } from 'zustand/shallow';
 
 import useLoadedInIframeStore from 'hooks/useLoadedInIframeStore';
-import type { AuthContextValue } from './types';
+import type { AuthContextValue, AuthUser } from './types';
 import { useCheckUser } from 'src/data/repositories/UserRepositoryImpl';
 
 const AuthContext = createContext<AuthContextValue>({
@@ -30,8 +24,32 @@ const AuthContext = createContext<AuthContextValue>({
   refreshAuth: async () => undefined,
 });
 
+const getStoredToken = (): string | null => {
+  try {
+    return localStorage.getItem('accessToken');
+  } catch {
+    return null;
+  }
+};
+
+const getStoredUser = (): AuthUser | null => {
+  try {
+    const raw = localStorage.getItem('authUser');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<AuthUser>;
+    if (!parsed.name || !parsed.email) return null;
+    return {
+      name: parsed.name,
+      email: parsed.email,
+      role: parsed.role === 'admin' ? 'admin' : 'member',
+    };
+  } catch {
+    return null;
+  }
+};
+
 const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<AuthUser | null>(getStoredUser);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,67 +62,81 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     (s) => [s.loadedInIframe],
     shallow
   );
-  const [hasAccessToken, setHasAccessToken] = useState(false);
-  const { error } = useCheckUser(hasAccessToken);
+  const [hasAccessToken, setHasAccessToken] = useState(() =>
+    Boolean(getStoredToken())
+  );
+  const { data: checkUserData, error: checkUserError } =
+    useCheckUser(hasAccessToken);
 
-  const handleAuth = useCallback(async () => {
-    setIsLoading(true);
-
-    const authState = {
-      isAuthenticated: false,
-      isAutoLogout: false,
-      user: null,
-    };
-
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      setHasAccessToken(Boolean(accessToken));
-      if (accessToken) {
-        authState.isAuthenticated = true;
-      }
-
-      if (error?.data?.error?.message === 'Unauthorized') {
-        authState.isAutoLogout = true;
-        localStorage.removeItem('accessToken');
-        setHasAccessToken(false);
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log('Error validating auth: ', err);
-      localStorage.removeItem('accessToken');
-      setHasAccessToken(false);
-    }
-
-    setIsAuthenticated(authState.isAuthenticated);
-    setIsAutoLogout(authState.isAutoLogout);
-    setUser(authState.user);
-
-    setIsLoading(false);
-  }, [error]);
-
-  useEffect(() => {
-    handleAuth();
-  }, [handleAuth]);
-
-  useEffect(() => {
-    const handleAutoLogout = () => {
-      setIsAuthenticated(false);
-      setIsAutoLogout(true);
+  const applyTokenState = useCallback((token: string | null) => {
+    setHasAccessToken(Boolean(token));
+    setIsAuthenticated(Boolean(token));
+    if (token) {
+      const stored = getStoredUser();
+      if (stored) setUser(stored);
+    } else {
       setUser(null);
-      setHasAccessToken(false);
-      router.replace('/login');
-    };
+    }
+  }, []);
+
+  useEffect(() => {
+    applyTokenState(getStoredToken());
+    setIsLoading(false);
+  }, [applyTokenState]);
+
+  useEffect(() => {
+    if (checkUserData) {
+      const nextUser: AuthUser = {
+        name: checkUserData.name || 'Pengguna',
+        email: checkUserData.email || '',
+        role: checkUserData.role === 'admin' ? 'admin' : 'member',
+      };
+      setUser(nextUser);
+      setIsAuthenticated(true);
+      try {
+        localStorage.setItem('authUser', JSON.stringify(nextUser));
+      } catch {
+        // ignore storage errors
+      }
+    }
+  }, [checkUserData]);
+
+  const forceLogout = useCallback(() => {
+    setIsAuthenticated(false);
+    setIsAutoLogout(true);
+    setUser(null);
+    setHasAccessToken(false);
+    try {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('authUser');
+    } catch {
+      // ignore storage errors
+    }
+    router.replace('/login');
+  }, [router]);
+
+  useEffect(() => {
+    const status =
+      (checkUserError as any)?.status ??
+      (checkUserError as any)?.response?.status;
+    if (status === 401 || status === 403) forceLogout();
+  }, [checkUserError, forceLogout]);
+
+  useEffect(() => {
+    const handleAutoLogout = () => forceLogout();
 
     window.addEventListener('auth-auto-logout', handleAutoLogout);
     return () =>
       window.removeEventListener('auth-auto-logout', handleAutoLogout);
-  }, [router]);
+  }, [forceLogout]);
+
+  const refreshAuth = useCallback(async () => {
+    setIsLoading(true);
+    applyTokenState(getStoredToken());
+    setIsLoading(false);
+  }, [applyTokenState]);
 
   useEffect(() => {
-    const refreshAuth = () => {
-      handleAuth();
-    };
-
     window.addEventListener('auth-change', refreshAuth);
     window.addEventListener('storage', refreshAuth);
 
@@ -112,7 +144,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       window.removeEventListener('auth-change', refreshAuth);
       window.removeEventListener('storage', refreshAuth);
     };
-  }, [handleAuth]);
+  }, [refreshAuth]);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && router.pathname === '/login') {
@@ -128,7 +160,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         isAutoLogin,
         isAutoLogout,
         isLoading,
-        refreshAuth: handleAuth,
+        refreshAuth,
       }}
     >
       <When condition={isAuthenticated && loadedInIframe === false}>

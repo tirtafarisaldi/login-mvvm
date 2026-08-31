@@ -6,5 +6,6 @@ export const mapToUserModel = (user: IUser): UserModel =>
     email: user.email,
     name: user.name,
     bio_description: user.bio_description,
-    avatar: user.avatar
+    avatar: user.avatar,
+    role: user.role,
   });

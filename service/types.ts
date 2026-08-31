@@ -1,6 +1,12 @@
+export type AuthUser = {
+  name: string;
+  email: string;
+  role: 'member' | 'admin';
+};
+
 export interface AuthContextValue {
   isAuthenticated: boolean;
-  user: unknown | null;
+  user: AuthUser | null;
   isAutoLogin: boolean;
   isAutoLogout: boolean;
   isLoading: boolean;

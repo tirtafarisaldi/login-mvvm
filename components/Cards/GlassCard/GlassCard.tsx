@@ -57,7 +57,7 @@ export default function GlassCard({
         position="absolute"
         inset={0}
         borderRadius={radius}
-        bg="rgba(255,255,255,0.045)"
+        bg="rgba(0,0,0,0.48)"
         borderWidth="1px"
         borderColor="rgba(255,255,255,0.09)"
         backdropFilter="blur(10px)"

@@ -1,4 +1,5 @@
 import { Button, Flex, Input, Select } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface FilterField {
   key: string;
@@ -11,16 +12,43 @@ interface FilterBarProps<TFilters extends object> {
   filters: TFilters;
   onChange: (key: string, value: string) => void;
   onReset: () => void;
+  debounceMs?: number;
 }
+
+const DEFAULT_DEBOUNCE_MS = 400;
 
 export default function FilterBar<TFilters extends object>({
   fields,
   filters,
   onChange,
   onReset,
+  debounceMs = DEFAULT_DEBOUNCE_MS,
 }: FilterBarProps<TFilters>) {
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+
+  useEffect(
+    () => () => {
+      Object.values(timers.current).forEach((timer) => clearTimeout(timer));
+    },
+    []
+  );
+
+  const handleTextChange = (key: string, value: string) => {
+    setDrafts((current) => ({ ...current, [key]: value }));
+    if (timers.current[key]) clearTimeout(timers.current[key]);
+    timers.current[key] = setTimeout(() => onChange(key, value), debounceMs);
+  };
+
+  const handleReset = () => {
+    Object.values(timers.current).forEach((timer) => clearTimeout(timer));
+    timers.current = {};
+    setDrafts({});
+    onReset();
+  };
+
   return (
-    <Flex gap={3} mb={6} wrap="wrap">
+    <Flex gap={3} mb={6} wrap="wrap" align="center">
       {fields.map((field) =>
         field.options ? (
           <Select
@@ -29,9 +57,10 @@ export default function FilterBar<TFilters extends object>({
             placeholder={field.label}
             value={String(filters[field.key as keyof TFilters] ?? '')}
             onChange={(event) => onChange(field.key, event.target.value)}
-            maxW={{ base: 'full', md: '220px' }}
-            bg="whiteAlpha.100"
+            maxW={{ base: 'full', md: '180px', xl: '200px' }}
+            bg="rgba(0,0,0,0.40)"
             borderColor="whiteAlpha.300"
+            flexShrink={0}
           >
             {field.options.map((option) => (
               <option key={option} value={option} style={{ color: '#111827' }}>
@@ -44,11 +73,17 @@ export default function FilterBar<TFilters extends object>({
             key={field.key}
             aria-label={field.label}
             placeholder={field.label}
-            value={String(filters[field.key as keyof TFilters] ?? '')}
-            onChange={(event) => onChange(field.key, event.target.value)}
-            maxW={{ base: 'full', md: '260px' }}
-            bg="whiteAlpha.100"
+            value={
+              drafts[field.key] ??
+              String(filters[field.key as keyof TFilters] ?? '')
+            }
+            onChange={(event) =>
+              handleTextChange(field.key, event.target.value)
+            }
+            maxW={{ base: 'full', md: '160px', xl: '220px' }}
+            bg="rgba(0,0,0,0.40)"
             borderColor="whiteAlpha.300"
+            flexShrink={0}
           />
         )
       )}
@@ -57,7 +92,8 @@ export default function FilterBar<TFilters extends object>({
         colorScheme="blue"
         fontSize="sm"
         borderRadius="full"
-        onClick={onReset}
+        flexShrink={0}
+        onClick={handleReset}
       >
         Reset Filter
       </Button>

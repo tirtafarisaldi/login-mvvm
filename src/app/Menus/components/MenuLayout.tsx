@@ -1,6 +1,9 @@
 import {
   ArrowBackIcon,
   CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  HamburgerIcon,
   InfoIcon,
   SettingsIcon,
   ViewIcon,
@@ -11,42 +14,79 @@ import {
   Divider,
   Flex,
   Icon,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
   Stack,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { useAuth } from 'service/auth';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useLogout } from '../../../data/repositories/AuthRepositoryImpl';
 
-const menuItems = [
+const menuItems: Array<{
+  label: string;
+  href?: string;
+  icon: typeof ViewIcon;
+}> = [
   { label: 'Dashboard', href: '/', icon: ViewIcon },
   { label: 'Inventaris Barang', href: '/inventory', icon: InfoIcon },
   { label: 'Peminjaman', icon: SettingsIcon },
-  { label: 'Jadwal Ruangan', href: '/calendar', icon: CalendarIcon },
+  { label: 'Schedule', href: '/schedule', icon: CalendarIcon },
 ];
-
-const noiseBackground = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
 
 const glowSpots = [
-  { top: '18%', left: '12%', size: 420, color: 'rgba(168,85,247,0.08)' },
-  { top: '12%', left: '80%', size: 460, color: 'rgba(34,211,238,0.08)' },
-  { top: '52%', left: '40%', size: 500, color: 'rgba(59,130,246,0.08)' },
-  { top: '76%', left: '82%', size: 440, color: 'rgba(251,146,60,0.06)' },
-  { top: '84%', left: '10%', size: 400, color: 'rgba(52,211,153,0.06)' },
-  { top: '40%', left: '92%', size: 380, color: 'rgba(244,114,182,0.06)' },
+  { top: '18%', left: '12%', size: 420, color: 'rgba(168,85,247,0.14)' },
+  { top: '12%', left: '80%', size: 460, color: 'rgba(34,211,238,0.14)' },
+  { top: '52%', left: '40%', size: 500, color: 'rgba(59,130,246,0.14)' },
+  { top: '76%', left: '82%', size: 440, color: 'rgba(251,146,60,0.10)' },
+  { top: '84%', left: '10%', size: 400, color: 'rgba(52,211,153,0.10)' },
+  { top: '40%', left: '92%', size: 380, color: 'rgba(244,114,182,0.10)' },
 ];
 
-export default function MenuLayout({ children }: { children: ReactNode }) {
+export default function MenuLayout({
+  children,
+  isLoading,
+}: {
+  children: ReactNode;
+  isLoading?: boolean;
+}) {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { logout } = useLogout();
-  const handleLogout = async () => {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+
+  const initials =
+    (user?.name ?? 'U')
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('') || 'U';
+
+  const roleColor = isAdmin ? '#fde68a' : '#7dd3fc';
+
+  const handleConfirmLogout = async () => {
+    setConfirming(true);
     try {
       await logout();
     } catch {
       // Sesi lokal tetap dibersihkan bila API logout tidak dapat diakses.
     }
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('authUser');
     window.dispatchEvent(new Event('auth-change'));
     router.replace('/login');
   };
@@ -54,26 +94,27 @@ export default function MenuLayout({ children }: { children: ReactNode }) {
   return (
     <Flex
       minH="100vh"
-      bg="#050506"
-      bgImage="radial-gradient(ellipse 60% 42% at 50% -8%, rgba(94,106,210,0.11), transparent 62%), radial-gradient(ellipse 45% 30% at 100% 100%, rgba(94,106,210,0.04), transparent 60%), radial-gradient(circle at 65% 40%, rgba(30,64,175,0.04), transparent 55%), linear-gradient(180deg, #07080A 0%, #050506 50%, #040506 100%)"
+      h={{ base: '100dvh', md: '100vh' }}
+      direction="column"
+      bg="#060a14"
+      bgImage="radial-gradient(ellipse 55% 40% at 12% -10%, rgba(99,102,241,0.32), transparent 60%), radial-gradient(ellipse 45% 35% at 100% -5%, rgba(34,211,238,0.26), transparent 55%), radial-gradient(ellipse 60% 45% at 88% 108%, rgba(168,85,247,0.24), transparent 60%), radial-gradient(ellipse 50% 40% at -5% 100%, rgba(59,130,246,0.24), transparent 55%), linear-gradient(180deg, #0b1121 0%, #0a0f1e 50%, #070b15 100%)"
       position="relative"
       overflow="hidden"
-      p={{ base: 0, md: 9 }}
+      p={{ base: 0, md: 10 }}
     >
       <Box
         position="absolute"
-        inset={{ base: 0, md: 9 }}
+        inset={{ base: 0, md: 10 }}
         borderRadius="2xl"
         borderWidth="1px"
         borderColor="rgba(255,255,255,0.12)"
-        bg="rgba(255,255,255,0.02)"
-        backdropFilter="blur(18px)"
+        bg="rgba(0,0,0,0.30)"
         boxShadow="0 0 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(255,255,255,0.04)"
         pointerEvents="none"
       />
       <Box
         position="absolute"
-        inset={{ base: 0, md: 9 }}
+        inset={{ base: 0, md: 10 }}
         borderRadius="2xl"
         pointerEvents="none"
       >
@@ -87,194 +128,341 @@ export default function MenuLayout({ children }: { children: ReactNode }) {
             h={`${spot.size}px`}
             borderRadius="full"
             bg={`radial-gradient(circle, ${spot.color}, transparent 65%)`}
-            pointerEvents="auto"
-            transition="filter .3s ease"
-            _hover={{
-              filter: 'brightness(1.7)',
-            }}
+            pointerEvents="none"
           />
         ))}
       </Box>
-      {/* <Box
-        position="absolute"
-        top="9%"
-        right="5%"
-        w="280px"
-        h="190px"
-        opacity={0.14}
-        bgImage="linear-gradient(rgba(103, 232, 249, .6) 1px, transparent 1px), linear-gradient(90deg, rgba(103, 232, 249, .6) 1px, transparent 1px)"
-        bgSize="20px 20px"
-        sx={{ maskImage: 'linear-gradient(to bottom, black, transparent)' }}
-        pointerEvents="none"
-      /> */}
-      <Box
-        w={{ base: '72px', md: '236px' }}
-        minH={{ base: '100vh', md: 'calc(100vh - 72px)' }}
-        bg="rgba(255,255,255,0.03)"
-        color="white"
-        p={{ base: 3, md: 5 }}
-        borderWidth={{ base: 0, md: '1px' }}
-        borderColor="rgba(255,255,255,0.10)"
-        borderRightWidth={{ base: '1px', md: '1px' }}
-        borderRightColor="rgba(255,255,255,0.10)"
-        borderRadius={{ base: 0, md: '2xl' }}
-        boxShadow="none"
-        backdropFilter="blur(8px)"
-        zIndex={1}
-      >
-        <Flex align="center" gap={3} mb={10} px={{ base: 0, md: 1 }}>
-          <Flex
-            w={8}
-            h={8}
-            align="center"
-            justify="center"
-            borderRadius="full"
-            bg="blue.600"
-            color="white"
-            fontWeight="black"
-            fontSize="sm"
-          >
-            SP
-          </Flex>
-          <Box display={{ base: 'none', md: 'block' }}>
-            <Text
-              fontWeight="bold"
-              fontSize="sm"
-              letterSpacing="tight"
-              color="white"
-            >
-              Studio Pertunjukan
-            </Text>
-            <Text fontSize="xs" color="whiteAlpha.500">
-              Workspace
-            </Text>
-          </Box>
-        </Flex>
-        <Text
-          display={{ base: 'none', md: 'block' }}
-          color="whiteAlpha.500"
-          fontSize="xs"
-          fontWeight="bold"
-          letterSpacing="widest"
-          textTransform="uppercase"
-          mb={3}
-          px={3}
-        >
-          Main menu
-        </Text>
-        <Stack spacing={2}>
-          {menuItems.map((item) => {
-            const active = item.href === router.pathname;
-            const content = (
-              <Flex
-                align="center"
-                gap={3}
-                px={3}
-                py={2.5}
-                borderRadius="lg"
-                bg={active ? 'rgba(255,255,255,0.08)' : 'transparent'}
-                boxShadow={
-                  active ? 'inset 0 0 0 1px rgba(255,255,255,0.10)' : 'none'
-                }
-                color={active ? 'white' : 'whiteAlpha.500'}
-                opacity={item.href ? 1 : 0.55}
-                cursor={item.href ? 'pointer' : 'not-allowed'}
-                transition="all .18s ease"
-                _hover={
-                  item.href
-                    ? {
-                        bg: 'rgba(255,255,255,0.08)',
-                        color: 'white',
-                      }
-                    : undefined
-                }
-              >
-                <Icon as={item.icon} boxSize={5} />
-                <Text
-                  display={{ base: 'none', md: 'block' }}
-                  fontSize="sm"
-                  fontWeight={active ? 'semibold' : 'normal'}
-                >
-                  {item.label}
-                </Text>
-              </Flex>
-            );
-            return item.href ? (
-              <NextLink href={item.href} key={item.label} passHref>
-                {content}
-              </NextLink>
-            ) : (
-              <Box key={item.label}>{content}</Box>
-            );
-          })}
-        </Stack>
-        <Box display={{ base: 'none', md: 'block' }} mt="auto" pt={12}>
-          <Box
-            bg="rgba(255,255,255,0.05)"
-            borderWidth="1px"
-            borderColor="rgba(255,255,255,0.08)"
-            borderRadius="xl"
-            p={4}
-            backdropFilter="blur(8px)"
-            boxShadow="inset 0 1px 0 rgba(255,255,255,0.04)"
-          >
-            <Text
-              color="white"
-              fontSize="xs"
-              fontWeight="bold"
-              letterSpacing="widest"
-              textTransform="uppercase"
-            >
-              Studio Pertunjukan
-            </Text>
-            <Text color="whiteAlpha.600" fontSize="xs" mt={2} lineHeight="tall">
-              Pantau inventaris dan aktivitas studio dari satu tempat.
-            </Text>
-          </Box>
-        </Box>
-        <Divider
-          display={{ base: 'none', md: 'block' }}
-          borderColor="rgba(255,255,255,0.09)"
-          my={7}
-        />
+
+      <Flex flex="1" minH={0} position="relative" zIndex={1} overflow="hidden">
         <Flex
-          align="center"
-          justify={{ base: 'center', md: 'space-between' }}
-          mt={{ base: 10, md: 0 }}
+          direction="column"
+          w={{ base: '212px', md: '236px' }}
+          h="full"
+          py={{ base: 5, md: 6 }}
+          px={3}
+          color="white"
+          position={{ base: 'absolute', md: 'relative' }}
+          top={0}
+          left={0}
+          zIndex={{ base: 30, md: 1 }}
+          transform={{
+            base: open ? 'translateX(0)' : 'translateX(-100%)',
+            md: 'none',
+          }}
+          transition={{ base: 'transform 200ms ease', md: 'none' }}
+bg="rgba(0,0,0,0.50)"
+          backdropFilter="blur(12px)"
+          borderRightWidth="1px"
+          borderRightColor="rgba(255,255,255,0.10)"
+          borderLeftRadius={{ base: 0, md: '2xl' }}
+          boxShadow={{ base: '0 0 40px rgba(0,0,0,0.55)', md: 'none' }}
+          flexShrink={0}
         >
-          <Button
-            variant="ghost"
-            color="whiteAlpha.500"
-            _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
-            leftIcon={<ArrowBackIcon />}
-            onClick={handleLogout}
-            w="full"
+          <IconButton
+            aria-label={open ? 'Tutup menu' : 'Buka menu'}
+            icon={open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            size="sm"
+            position="absolute"
+            top="50%"
+            right="-16px"
+            zIndex={5}
+            transform="translateY(-50%)"
+            display={{ base: 'inline-flex', md: 'none' }}
             borderRadius="full"
-            justifyContent={{ base: 'center', md: 'flex-start' }}
+            bg="rgba(59,130,246,0.25)"
+            color="white"
+            borderWidth="1px"
+            borderColor="rgba(59,130,246,0.5)"
+            boxShadow="0 0 14px rgba(59,130,246,0.35)"
+            _hover={{ bg: 'rgba(59,130,246,0.45)' }}
+            onClick={() => setOpen((current) => !current)}
+          />
+
+          <Flex align="center" justify="flex-start" gap={3} mb={8}>
+            <Flex
+              w={8}
+              h={8}
+              align="center"
+              justify="center"
+              borderRadius="md"
+              bg="blue.600"
+              color="white"
+              fontWeight="black"
+              fontSize="sm"
+              flexShrink={0}
+            >
+              {user ? initials : '…'}
+            </Flex>
+            <Box minW={0}>
+              {user ? (
+                <>
+                  <Text
+                    fontWeight="bold"
+                    fontSize="sm"
+                    letterSpacing="tight"
+                    color="white"
+                    noOfLines={1}
+                  >
+                    {user.name}
+                  </Text>
+                  <Text
+                    fontSize="xs"
+                    color={roleColor}
+                    textTransform="capitalize"
+                    noOfLines={1}
+                  >
+                    {user.role}
+                  </Text>
+                </>
+              ) : (
+                <Text fontSize="sm" color="whiteAlpha.500">
+                  Memuat…
+                </Text>
+              )}
+            </Box>
+          </Flex>
+
+          <Text
+            color="whiteAlpha.500"
+            fontSize="xs"
+            fontWeight="bold"
+            letterSpacing="widest"
+            textTransform="uppercase"
+            mb={3}
+            px={3}
           >
-            <Text display={{ base: 'none', md: 'block' }}>Keluar</Text>
-          </Button>
+            Main menu
+          </Text>
+
+          <Stack spacing={2}>
+            {menuItems.map((item) => {
+              const active = item.href === router.pathname;
+              const content = (
+                <Flex
+                  align="center"
+                  justify="flex-start"
+                  gap={3}
+                  px={3}
+                  py={2.5}
+                  borderRadius="lg"
+                  bg={
+                    active
+                      ? 'rgba(59, 130, 246, 0.25)'
+                      : 'rgba(255,255,255,0.03)'
+                  }
+                  boxShadow={
+                    active ? 'inset 0 0 0 1px rgba(96,165,250,0.45)' : 'none'
+                  }
+                  color={active ? 'white' : 'whiteAlpha.500'}
+                  opacity={item.href ? 1 : 0.45}
+                  cursor={item.href ? 'pointer' : 'not-allowed'}
+                  _hover={
+                    item.href
+                      ? {
+                          bg: active
+                            ? 'rgba(59, 130, 246, 0.35)'
+                            : 'rgba(255,255,255,0.06)',
+                          color: 'white',
+                        }
+                      : undefined
+                  }
+                >
+                  <Icon as={item.icon} boxSize={5} flexShrink={0} />
+                  <Text
+                    fontSize="sm"
+                    fontWeight={active ? 'semibold' : 'normal'}
+                    noOfLines={1}
+                  >
+                    {item.label}
+                  </Text>
+                </Flex>
+              );
+              return item.href ? (
+                <NextLink href={item.href} key={item.label} passHref>
+                  {content}
+                </NextLink>
+              ) : (
+                <Box key={item.label}>{content}</Box>
+              );
+            })}
+          </Stack>
+
+          <Box mt="auto" pt={10}>
+            <Box
+              bg="rgba(0,0,0,0.35)"
+              borderWidth="1px"
+              borderColor="rgba(255,255,255,0.08)"
+              borderRadius="xl"
+              p={4}
+            >
+              <Text
+                color="white"
+                fontSize="xs"
+                fontWeight="bold"
+                letterSpacing="widest"
+                textTransform="uppercase"
+              >
+                Studio Pertunjukan
+              </Text>
+              <Text
+                color="whiteAlpha.600"
+                fontSize="xs"
+                mt={2}
+                lineHeight="tall"
+              >
+                Pantau inventaris dan aktivitas studio dari satu tempat.
+              </Text>
+            </Box>
+          </Box>
+
+          <Divider borderColor="rgba(255,255,255,0.09)" my={7} />
+
+          <Flex align="center" justify="space-between">
+            <Button
+              variant="outline"
+              color="red.300"
+              borderColor="rgba(255, 99, 132, 0.4)"
+              fontSize="sm"
+              _hover={{
+                bg: 'rgba(255, 99, 132, 0.12)',
+                color: 'white',
+                borderColor: 'rgba(255, 99, 132, 0.6)',
+              }}
+              leftIcon={<ArrowBackIcon />}
+              onClick={onOpen}
+              w="full"
+              borderRadius="full"
+              justifyContent="flex-start"
+            >
+              Keluar
+            </Button>
+          </Flex>
         </Flex>
-      </Box>
-      <Box
-        flex="1"
-        minW={0}
-        p={{ base: 5, md: 8 }}
-        overflowX="auto"
-        color="white"
-        zIndex={1}
-      >
-        {children}
-      </Box>
-      <Box
-        position="absolute"
-        inset={0}
-        bgImage={noiseBackground}
-        bgSize="180px 180px"
-        opacity={0.08}
-        pointerEvents="none"
-        zIndex={2}
-      />
+
+        {open && (
+          <Box
+            position="absolute"
+            inset={0}
+            zIndex={{ base: 20, md: 0 }}
+bg="rgba(0,0,0,0.60)"
+            backdropFilter="blur(2px)"
+            display={{ base: 'block', md: 'none' }}
+            onClick={() => setOpen(false)}
+          />
+        )}
+
+        <Box
+          flex="1"
+          minW={0}
+          p={{ base: 5, md: 10 }}
+          pb={{ base: 5, md: 10 }}
+          overflow="auto"
+          bg="rgba(0,0,0,0.40)"
+          backdropFilter="blur(10px)"
+          borderRightRadius={{ base: 0, md: '2xl' }}
+          color="white"
+          zIndex={1}
+          position="relative"
+        >
+          <IconButton
+            aria-label="Buka menu"
+            icon={<HamburgerIcon />}
+            size="sm"
+            display={{ base: 'inline-flex', md: 'none' }}
+            mb={5}
+            position="sticky"
+            top={{ base: 0, md: 0 }}
+            zIndex={2}
+            borderRadius="full"
+            bg="rgba(59,130,246,0.25)"
+            color="white"
+            borderWidth="1px"
+            borderColor="rgba(59,130,246,0.5)"
+            boxShadow="0 0 14px rgba(59,130,246,0.35)"
+            _hover={{ bg: 'rgba(59,130,246,0.45)' }}
+            onClick={() => setOpen(true)}
+          />
+          {children}
+          {isLoading && !confirming && (
+            <Box
+              position="absolute"
+              inset={0}
+              zIndex={10}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              bg="rgba(5,6,8,0.55)"
+            >
+              <Spinner thickness="3px" size="lg" color="blue.300" />
+            </Box>
+          )}
+        </Box>
+      </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} motionPreset="none" isCentered>
+        <ModalOverlay bg="rgba(0,0,0,0.65)" backdropFilter="blur(2px)" />
+        <ModalContent
+          bg="rgba(8,10,14,0.85)"
+          backdropFilter="blur(16px)"
+          borderWidth="1px"
+          borderColor="rgba(255,255,255,0.15)"
+          color="white"
+          borderRadius="2xl"
+          p={2}
+          mx={4}
+        >
+          <ModalHeader fontSize="lg" fontWeight="bold">
+            Konfirmasi Keluar
+          </ModalHeader>
+          <ModalCloseButton
+            color="whiteAlpha.600"
+            _hover={{ color: 'white', bg: 'whiteAlpha.100' }}
+          />
+          <ModalBody>
+            <Text color="whiteAlpha.700" fontSize="sm">
+              Apakah kamu yakin ingin keluar dari akun ini?
+            </Text>
+          </ModalBody>
+          <ModalFooter gap={3}>
+            <Button
+              flex={1}
+              variant="ghost"
+              color="whiteAlpha.700"
+              borderWidth="1px"
+              borderColor="rgba(255,255,255,0.1)"
+              borderRadius="full"
+              fontSize="sm"
+              _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
+              onClick={onClose}
+              isDisabled={confirming}
+            >
+              Batal
+            </Button>
+            <Button
+              flex={1}
+              color="red.100"
+              bg="rgba(239, 68, 68, 0.25)"
+              borderWidth="1px"
+              borderColor="rgba(239, 68, 68, 0.5)"
+              backdropFilter="blur(12px)"
+              fontSize="sm"
+              borderRadius="full"
+              _hover={{
+                bg: 'rgba(239, 68, 68, 0.45)',
+                color: 'white',
+                borderColor: 'rgba(239, 68, 68, 0.75)',
+                boxShadow: '0 0 20px rgba(239, 68, 68, 0.3)',
+              }}
+              _active={{ bg: 'rgba(239, 68, 68, 0.6)' }}
+              onClick={handleConfirmLogout}
+              isLoading={confirming}
+              loadingText="Keluar"
+            >
+              Ya, Keluar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 }

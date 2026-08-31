@@ -31,7 +31,7 @@ export const withProtected = (WrappedComponent: FC<any>) => {
     }, [isAuthenticated, isAutoLogin, isAutoLogout, isLoading, router]);
 
     if (isLoading || !isAuthenticated || isAutoLogin || isAutoLogout) {
-      return <LoadingPage />;
+      return null;
     }
 
     // handle get redirect back to latest page after success login to dashboard

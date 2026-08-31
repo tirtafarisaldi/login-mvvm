@@ -58,7 +58,7 @@ export default function Login() {
   const toast = useToast();
 
   const pageBg =
-    'radial-gradient(circle at 86% 10%, rgba(94, 106, 210, 0.14), transparent 26%), radial-gradient(circle at 12% 88%, rgba(94, 106, 210, 0.08), transparent 32%), radial-gradient(circle at 52% 48%, rgba(8, 11, 15, 0.4), transparent 54%), linear-gradient(135deg, #0A0B0D 0%, #08090B 48%, #060708 100%)';
+    'radial-gradient(circle at 86% 10%, rgba(124, 96, 222, 0.30), transparent 32%), radial-gradient(circle at 10% 88%, rgba(34, 211, 238, 0.16), transparent 36%), radial-gradient(circle at 52% 44%, rgba(99, 102, 241, 0.14), transparent 46%), linear-gradient(135deg, #0b1121 0%, #0a0f1e 46%, #070b15 100%)';
   const cardBg = 'rgba(255,255,255,0.045)';
   const inputBg = 'rgba(255,255,255,0.06)';
   const textColor = 'whiteAlpha.900';
@@ -167,7 +167,7 @@ export default function Login() {
     <Flex
       minH="100vh"
       bgImage={pageBg}
-      bgColor="#020617"
+      bgColor="#070b15"
       position="relative"
       overflow="hidden"
       px={{ base: 4, md: 8 }}
@@ -219,6 +219,7 @@ export default function Login() {
         direction={{ base: 'column', lg: 'row' }}
         gap={{ base: 10, lg: 12 }}
         zIndex={1}
+        marginTop={{ base: '50px', lg: '0px' }}
       >
         <MotionBox
           flex="1"
@@ -244,7 +245,7 @@ export default function Login() {
 
           <Heading
             as="h1"
-            fontSize={{ base: '5xl', md: '8xl', xl: '8xl' }}
+            fontSize={{ base: '4xl', sm: '5xl', md: '7xl', xl: '8xl' }}
             fontWeight="black"
             letterSpacing="tight"
             lineHeight="0.95"
@@ -282,7 +283,9 @@ export default function Login() {
         </MotionBox>
 
         <MotionBox
-          flex="0 0 380px"
+          flex={{ base: '1 1 auto', lg: '0 0 380px' }}
+          w={{ base: 'full', lg: 'auto' }}
+          maxW="380px"
           bg={cardBg}
           borderRadius="2xl"
           p={{ base: 6, md: 10 }}
@@ -295,7 +298,7 @@ export default function Login() {
           maxH={{ base: 'auto', md: '700px' }}
         >
           <Stack spacing={4} textAlign="center" mb={6}>
-            <Text fontSize="sm" fontWeight="semibold" color="blue.300">
+            <Text fontSize="sm" fontWeight="semibold" color="whiteAlpha.700">
               Selamat datang di Studio Pertunjukan
             </Text>
             <Heading size="lg" color={textColor}>
@@ -432,9 +435,17 @@ export default function Login() {
                 w="full"
                 size="lg"
                 borderRadius="full"
-                bg="blue.600"
                 color="white"
-                _hover={{ bg: 'blue.500' }}
+                bg="rgba(37, 99, 235, 0.25)"
+                borderWidth="1px"
+                borderColor="rgba(59, 130, 246, 0.5)"
+                backdropFilter="blur(12px)"
+                _hover={{
+                  bg: 'rgba(37, 99, 235, 0.45)',
+                  borderColor: 'rgba(59, 130, 246, 0.75)',
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
+                }}
+                _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
                 isLoading={isRegister ? registerLoading : loginLoading}
                 loadingText={isRegister ? 'Mendaftar' : 'Masuk'}
               >

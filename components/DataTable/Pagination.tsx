@@ -53,7 +53,7 @@ export default function DataTablePagination({
               size="sm"
               minW="36px"
               borderRadius="full"
-              bg={page === currentPage ? 'blue.600' : 'whiteAlpha.100'}
+              bg={page === currentPage ? 'blue.600' : 'rgba(0,0,0,0.35)'}
               color={page === currentPage ? 'white' : 'white'}
               _hover={{
                 bg: page === currentPage ? 'blue.500' : 'whiteAlpha.200',

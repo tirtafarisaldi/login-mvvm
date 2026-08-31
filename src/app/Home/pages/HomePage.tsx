@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import GlassCard from '../../../../components/Cards/GlassCard/GlassCard';
-import MenuLayout from '../../Menus/components/MenuLayout';
 import { useHomeViewModel } from '../viewModels/HomeViewModel';
 
 const featureStyles = [
@@ -43,18 +42,18 @@ export default function HomePage() {
   }).format(new Date());
 
   return (
-    <MenuLayout>
+    <>
       <Flex
         justify="space-between"
-        align="flex-end"
-        gap={5}
+        align={{ base: 'start', md: 'flex-end' }}
+        gap={{ base: 4, md: 5 }}
         mb={8}
         direction={{ base: 'column', md: 'row' }}
       >
         <Box>
           <Heading
             as="h1"
-            size={{ base: '2xl', md: '4xl' }}
+            size={{ base: '3xl', md: '4xl' }}
             fontWeight="black"
             letterSpacing="tight"
             lineHeight="shorter"
@@ -63,13 +62,20 @@ export default function HomePage() {
           >
             Overview
           </Heading>
-          <Text color="whiteAlpha.600" mt={4} fontSize="sm" maxW="lg">
+          <Text color="whiteAlpha.600" mt={2} fontSize="sm" maxW="lg">
             Pilih menu untuk mulai mengelola aktivitas laboratorium, inventaris,
             peminjaman, dan jadwal ruangan.
           </Text>
         </Box>
         <GlassCard radius="full" depth={10} maxTilt={6}>
-          <Flex align="center" gap={3} px={6} py={2.5}>
+          <Flex
+            align="center"
+            justify={{ base: 'flex-start', sm: 'center' }}
+            gap={3}
+            px={6}
+            py={2.5}
+            w={{ base: 'full', sm: 'auto' }}
+          >
             <Box
               w={2}
               h={2}
@@ -84,12 +90,20 @@ export default function HomePage() {
         </GlassCard>
       </Flex>
 
-      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={6} mb={8}>
+      <SimpleGrid
+        columns={{ base: 2, md: 3 }}
+        spacing={{ base: 3, md: 3 }}
+        mb={6}
+      >
         {stats.map((stat, index) => {
           const style = statStyles[index % statStyles.length];
           return (
             <GlassCard key={stat.id} radius="2xl" depth={20}>
-              <Flex align="center" gap={5} p={6}>
+              <Flex
+                align="center"
+                gap={{ base: 3, md: 5 }}
+                p={{ base: 4, md: 6 }}
+              >
                 <Box position="relative" flexShrink={0}>
                   <Box
                     position="absolute"
@@ -100,8 +114,8 @@ export default function HomePage() {
                     filter="blur(18px)"
                   />
                   <Flex
-                    w={12}
-                    h={12}
+                    w={{ base: 9, md: 12 }}
+                    h={{ base: 9, md: 12 }}
                     align="center"
                     justify="center"
                     position="relative"
@@ -111,16 +125,17 @@ export default function HomePage() {
                     borderColor="rgba(255,255,255,0.12)"
                     color={style.color}
                   >
-                    <Icon as={style.icon} boxSize={6} />
+                    <Icon as={style.icon} boxSize={{ base: 4, md: 6 }} />
                   </Flex>
                 </Box>
-                <Box>
+                <Box minW={0}>
                   <Text
                     color="whiteAlpha.500"
                     fontSize="xs"
                     fontWeight="semibold"
                     letterSpacing="wide"
                     textTransform="uppercase"
+                    noOfLines={1}
                   >
                     {stat.label}
                   </Text>
@@ -134,7 +149,12 @@ export default function HomePage() {
                   >
                     {statsLoading ? '…' : stat.value.toLocaleString('id-ID')}
                   </Text>
-                  <Text color="whiteAlpha.600" fontSize="xs" mt={1}>
+                  <Text
+                    color="whiteAlpha.600"
+                    fontSize="xs"
+                    mt={1}
+                    display={{ base: 'none', md: 'block' }}
+                  >
                     {stat.hint}
                   </Text>
                 </Box>
@@ -144,20 +164,23 @@ export default function HomePage() {
         })}
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, sm: 2, xl: 4 }} spacing={6}>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, xl: 4 }}
+        spacing={{ base: 3, md: 3 }}
+      >
         {features.map((feature, index) => {
           const style = featureStyles[index % featureStyles.length];
           return (
             <GlassCard key={feature.id} radius="2xl" depth={26}>
               <Stack
-                spacing={4}
-                p={6}
-                minH="220px"
+                spacing={1}
+                p={{ base: 5, md: 6 }}
+                minH={{ base: '170px', md: '200px' }}
                 h="full"
                 justify="space-between"
               >
                 <Box>
-                  <Flex align="flex-start" gap={4}>
+                  <Flex align="flex-start" gap={3}>
                     <Box position="relative" flexShrink={0}>
                       <Box
                         position="absolute"
@@ -227,6 +250,6 @@ export default function HomePage() {
           );
         })}
       </SimpleGrid>
-    </MenuLayout>
+    </>
   );
 }

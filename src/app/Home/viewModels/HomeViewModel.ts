@@ -1,7 +1,4 @@
-import {
-  buildSampleEvents,
-  toDateKey,
-} from '../../Menus/Calendar/domain/events';
+import { buildSampleEvents, toDateKey } from 'components/Calendar';
 import { useGetInventoriesViewModel } from '../../Menus/Inventory/viewModels/getInventoriesViewModel';
 
 export interface CmsFeature {
@@ -40,9 +37,9 @@ const features: CmsFeature[] = [
   },
   {
     id: 'schedules',
-    label: 'Jadwal Ruangan',
+    label: 'Schedule',
     description: 'Atur agenda penggunaan ruangan studio.',
-    href: '/calendar',
+    href: '/schedule',
   },
   {
     id: 'users',

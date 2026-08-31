@@ -2,17 +2,15 @@ import 'styles/tailwind.css';
 import 'styles/index.css';
 import 'styles/filter-date-datepicker.css';
 
-import React, { ReactNode } from 'react';
-import type { FC } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from 'styles/theme';
-import { NextComponentType, NextPageContext } from 'next/types';
 import { AuthProvider } from 'service/auth';
-import SidebarLayout from 'layouts';
+import MenuLayout from 'src/app/Menus/components/MenuLayout';
 
 import type { DehydratedState } from 'react-query';
 import { Hydrate, QueryClientProvider } from 'react-query';
@@ -25,21 +23,38 @@ const ReactQueryDevtools = dynamic(
   { ssr: false }
 );
 
-type AppPropsWithLayout<P> = AppProps<P> & {
-  Component: NextComponentType<NextPageContext, any, any> & {
-    layout: any;
-  };
-  dehydratedState?: DehydratedState;
+const menuRoutes = ['/', '/inventory', '/schedule'];
+
+type AppPropsWithDehydratedState = AppProps & {
+  pageProps: AppProps['pageProps'] & { dehydratedState?: DehydratedState };
 };
 
-function MyApp({
-  Component,
-  pageProps,
-}: AppPropsWithLayout<{ dehydratedState: DehydratedState }>) {
-  const { pathname } = useRouter();
-  const Layout =
-    Component.layout ||
-    (({ children }: { children: ReactNode }) => <>{children}</>);
+function MyApp({ Component, pageProps }: AppPropsWithDehydratedState) {
+  const router = useRouter();
+  const [isRouteChanging, setIsRouteChanging] = useState(false);
+
+  useEffect(() => {
+    const onStart = () => setIsRouteChanging(true);
+    const onDone = () => setIsRouteChanging(false);
+    router.events.on('routeChangeStart', onStart);
+    router.events.on('routeChangeComplete', onDone);
+    router.events.on('routeChangeError', onDone);
+    return () => {
+      router.events.off('routeChangeStart', onStart);
+      router.events.off('routeChangeComplete', onDone);
+      router.events.off('routeChangeError', onDone);
+    };
+  }, [router.events]);
+
+  const isMenuRoute = menuRoutes.includes(router.pathname);
+
+  const content = isMenuRoute ? (
+    <MenuLayout isLoading={isRouteChanging}>
+      <Component {...pageProps} />
+    </MenuLayout>
+  ) : (
+    <Component {...pageProps} />
+  );
 
   return (
     <QueryClientProvider client={client}>
@@ -53,11 +68,7 @@ function MyApp({
               />
               <title>Studio Pertunjukan</title>
             </Head>
-            <React.StrictMode>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </React.StrictMode>
+            <StrictMode>{content}</StrictMode>
           </AuthProvider>
         </ChakraProvider>
         <ReactQueryDevtools />

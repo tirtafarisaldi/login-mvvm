@@ -2,12 +2,15 @@ import { IPaginationResponse, Pagination } from '../vo/Pagination';
 import { GeneralStatus, Status } from '../vo/Status';
 import { BaseModel } from './BaseModel';
 
+export type UserRole = 'member' | 'admin';
+
 export interface IUser {
   uuid: string;
   name: string;
   avatar: string;
   bio_description: string;
   email: string;
+  role: UserRole;
 }
 
 export interface IUserResponse {
@@ -28,6 +31,7 @@ export class UserModel extends BaseModel {
   avatar;
   bio_description;
   email;
+  role;
 
   constructor(data: IUser) {
     super(data.uuid);
@@ -36,6 +40,7 @@ export class UserModel extends BaseModel {
     this.avatar = data.avatar;
     this.bio_description = data.bio_description;
     this.email = data.email;
+    this.role = data.role;
   }
 }
 

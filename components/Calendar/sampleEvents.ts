@@ -1,22 +1,5 @@
-export type EventColor =
-  'blue' | 'cyan' | 'green' | 'orange' | 'violet' | 'rose';
-
-export interface CalendarEvent {
-  id: string;
-  dateKey: string;
-  title: string;
-  start: string;
-  end: string;
-  location: string;
-  organizer: string;
-  color: EventColor;
-  note?: string;
-}
-
-export const toDateKey = (date: Date): string =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-    date.getDate()
-  ).padStart(2, '0')}`;
+import type { CalendarEvent, EventColor } from './calendar-types';
+import { toDateKey } from './calendar-types';
 
 const enumerateWeekday = (
   year: number,
