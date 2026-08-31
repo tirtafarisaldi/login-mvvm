@@ -1,10 +1,6 @@
 import { withProtected } from 'components/PrivateRoute';
 import type { NextPage } from 'next';
-import dynamic from 'next/dynamic';
-
-const HomePage = dynamic(() => import('src/app/Home/pages/HomePage'), {
-  ssr: false,
-});
+import HomePage from 'src/app/Home/pages/HomePage';
 
 const DashboardPage: NextPage = () => <HomePage />;
 

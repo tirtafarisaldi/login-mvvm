@@ -5,7 +5,9 @@ import {
   ChevronRightIcon,
   HamburgerIcon,
   InfoIcon,
+  MoonIcon,
   SettingsIcon,
+  SunIcon,
   ViewIcon,
 } from '@chakra-ui/icons';
 import {
@@ -32,6 +34,8 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, type ReactNode } from 'react';
 import { useLogout } from '../../../data/repositories/AuthRepositoryImpl';
+import { useThemeStore } from '../store/useThemeStore';
+import { useThemeColors } from '../store/themeColors';
 
 const menuItems: Array<{
   label: string;
@@ -67,6 +71,10 @@ export default function MenuLayout({
   const { logout } = useLogout();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
+  const mode = useThemeStore((state) => state.mode);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const hasHydrated = useThemeStore((state) => state.hasHydrated);
+  const theme = useThemeColors();
 
   const initials =
     (user?.name ?? 'U')
@@ -76,7 +84,14 @@ export default function MenuLayout({
       .map((part) => part[0]?.toUpperCase() ?? '')
       .join('') || 'U';
 
-  const roleColor = isAdmin ? '#fde68a' : '#7dd3fc';
+  const roleColor =
+    mode === 'dark'
+      ? isAdmin
+        ? '#fde68a'
+        : '#7dd3fc'
+      : isAdmin
+        ? '#b45309'
+        : '#0369a1';
 
   const handleConfirmLogout = async () => {
     setConfirming(true);
@@ -96,20 +111,39 @@ export default function MenuLayout({
       minH="100vh"
       h={{ base: '100dvh', md: '100vh' }}
       direction="column"
-      bg="#060a14"
-      bgImage="radial-gradient(ellipse 55% 40% at 12% -10%, rgba(99,102,241,0.32), transparent 60%), radial-gradient(ellipse 45% 35% at 100% -5%, rgba(34,211,238,0.26), transparent 55%), radial-gradient(ellipse 60% 45% at 88% 108%, rgba(168,85,247,0.24), transparent 60%), radial-gradient(ellipse 50% 40% at -5% 100%, rgba(59,130,246,0.24), transparent 55%), linear-gradient(180deg, #0b1121 0%, #0a0f1e 50%, #070b15 100%)"
+      bg={theme.pageBg}
+      bgImage={theme.pageBgImage}
       position="relative"
       overflow="hidden"
       p={{ base: 0, md: 10 }}
     >
+      {!hasHydrated && (
+        <Box
+          position="absolute"
+          inset={{ base: 0, md: 10 }}
+          borderRadius="2xl"
+          bg={theme.pageBg}
+          zIndex={90}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Flex align="center" justify="center" direction="column" gap={3}>
+            <Spinner color="blue.400" />
+            <Text color={theme.textMuted} fontSize="sm">
+              Memuat…
+            </Text>
+          </Flex>
+        </Box>
+      )}
       <Box
         position="absolute"
         inset={{ base: 0, md: 10 }}
         borderRadius="2xl"
         borderWidth="1px"
-        borderColor="rgba(255,255,255,0.12)"
-        bg="rgba(0,0,0,0.30)"
-        boxShadow="0 0 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(255,255,255,0.04)"
+        borderColor={theme.panelBorder}
+        bg={theme.panelBg}
+        boxShadow={theme.panelShadow}
         pointerEvents="none"
       />
       <Box
@@ -118,19 +152,20 @@ export default function MenuLayout({
         borderRadius="2xl"
         pointerEvents="none"
       >
-        {glowSpots.map((spot) => (
-          <Box
-            key={`${spot.top}-${spot.left}`}
-            position="absolute"
-            top={spot.top}
-            left={spot.left}
-            w={`${spot.size}px`}
-            h={`${spot.size}px`}
-            borderRadius="full"
-            bg={`radial-gradient(circle, ${spot.color}, transparent 65%)`}
-            pointerEvents="none"
-          />
-        ))}
+        {mode === 'dark' &&
+          glowSpots.map((spot) => (
+            <Box
+              key={`${spot.top}-${spot.left}`}
+              position="absolute"
+              top={spot.top}
+              left={spot.left}
+              w={`${spot.size}px`}
+              h={`${spot.size}px`}
+              borderRadius="full"
+              bg={`radial-gradient(circle, ${spot.color}, transparent 65%)`}
+              pointerEvents="none"
+            />
+          ))}
       </Box>
 
       <Flex flex="1" minH={0} position="relative" zIndex={1} overflow="hidden">
@@ -140,7 +175,7 @@ export default function MenuLayout({
           h="full"
           py={{ base: 5, md: 6 }}
           px={3}
-          color="white"
+          color={theme.textPrimary}
           position={{ base: 'absolute', md: 'relative' }}
           top={0}
           left={0}
@@ -150,10 +185,12 @@ export default function MenuLayout({
             md: 'none',
           }}
           transition={{ base: 'transform 200ms ease', md: 'none' }}
-bg="rgba(0,0,0,0.50)"
+          bg={mode === 'dark' ? 'rgba(0,0,0,0.50)' : 'rgba(255,255,255,0.78)'}
           backdropFilter="blur(12px)"
           borderRightWidth="1px"
-          borderRightColor="rgba(255,255,255,0.10)"
+          borderRightColor={
+            mode === 'dark' ? 'rgba(255,255,255,0.10)' : 'rgba(15,23,42,0.10)'
+          }
           borderLeftRadius={{ base: 0, md: '2xl' }}
           boxShadow={{ base: '0 0 40px rgba(0,0,0,0.55)', md: 'none' }}
           flexShrink={0}
@@ -178,52 +215,65 @@ bg="rgba(0,0,0,0.50)"
             onClick={() => setOpen((current) => !current)}
           />
 
-          <Flex align="center" justify="flex-start" gap={3} mb={8}>
-            <Flex
-              w={8}
-              h={8}
-              align="center"
-              justify="center"
-              borderRadius="md"
-              bg="blue.600"
-              color="white"
-              fontWeight="black"
-              fontSize="sm"
-              flexShrink={0}
-            >
-              {user ? initials : '…'}
+          <Flex align="center" justify="space-between" gap={2} mb={6}>
+            <Flex align="center" justify="flex-start" gap={3} minW={0}>
+              <Flex
+                w={8}
+                h={8}
+                align="center"
+                justify="center"
+                borderRadius="md"
+                bg="blue.600"
+                color="white"
+                fontWeight="black"
+                fontSize="sm"
+                flexShrink={0}
+              >
+                {user ? initials : '…'}
+              </Flex>
+              <Box minW={0}>
+                {user ? (
+                  <>
+                    <Text
+                      fontWeight="bold"
+                      fontSize="sm"
+                      letterSpacing="tight"
+                      color={theme.textPrimary}
+                      noOfLines={1}
+                    >
+                      {user.name}
+                    </Text>
+                    <Text
+                      fontSize="xs"
+                      color={roleColor}
+                      textTransform="capitalize"
+                      noOfLines={1}
+                    >
+                      {user.role}
+                    </Text>
+                  </>
+                ) : (
+                  <Text fontSize="sm" color={theme.textMuted}>
+                    Memuat…
+                  </Text>
+                )}
+              </Box>
             </Flex>
-            <Box minW={0}>
-              {user ? (
-                <>
-                  <Text
-                    fontWeight="bold"
-                    fontSize="sm"
-                    letterSpacing="tight"
-                    color="white"
-                    noOfLines={1}
-                  >
-                    {user.name}
-                  </Text>
-                  <Text
-                    fontSize="xs"
-                    color={roleColor}
-                    textTransform="capitalize"
-                    noOfLines={1}
-                  >
-                    {user.role}
-                  </Text>
-                </>
-              ) : (
-                <Text fontSize="sm" color="whiteAlpha.500">
-                  Memuat…
-                </Text>
-              )}
-            </Box>
+            <IconButton
+              aria-label="Ganti tema"
+              icon={mode === 'dark' ? <SunIcon /> : <MoonIcon />}
+              variant="ghost"
+              size="sm"
+              borderRadius="full"
+              flexShrink={0}
+              color={theme.textSecondary}
+              _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
+              onClick={toggleTheme}
+            />
           </Flex>
 
           <Text
-            color="whiteAlpha.500"
+            color={theme.textMuted}
             fontSize="xs"
             fontWeight="bold"
             letterSpacing="widest"
@@ -246,23 +296,38 @@ bg="rgba(0,0,0,0.50)"
                   py={2.5}
                   borderRadius="lg"
                   bg={
-                    active
-                      ? 'rgba(59, 130, 246, 0.25)'
-                      : 'rgba(255,255,255,0.03)'
+                    mode === 'dark'
+                      ? active
+                        ? 'rgba(59, 130, 246, 0.25)'
+                        : 'rgba(255,255,255,0.03)'
+                      : active
+                        ? 'rgba(59, 130, 246, 0.15)'
+                        : 'rgba(15,23,42,0.04)'
                   }
                   boxShadow={
                     active ? 'inset 0 0 0 1px rgba(96,165,250,0.45)' : 'none'
                   }
-                  color={active ? 'white' : 'whiteAlpha.500'}
+                  color={
+                    active
+                      ? theme.textPrimary
+                      : mode === 'dark'
+                        ? 'whiteAlpha.500'
+                        : 'gray.600'
+                  }
                   opacity={item.href ? 1 : 0.45}
                   cursor={item.href ? 'pointer' : 'not-allowed'}
                   _hover={
                     item.href
                       ? {
-                          bg: active
-                            ? 'rgba(59, 130, 246, 0.35)'
-                            : 'rgba(255,255,255,0.06)',
-                          color: 'white',
+                          bg:
+                            mode === 'dark'
+                              ? active
+                                ? 'rgba(59, 130, 246, 0.35)'
+                                : 'rgba(255,255,255,0.06)'
+                              : active
+                                ? 'rgba(59, 130, 246, 0.22)'
+                                : 'rgba(15,23,42,0.08)',
+                          color: theme.textPrimary,
                         }
                       : undefined
                   }
@@ -289,14 +354,16 @@ bg="rgba(0,0,0,0.50)"
 
           <Box mt="auto" pt={10}>
             <Box
-              bg="rgba(0,0,0,0.35)"
+              bg={
+                mode === 'dark' ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.6)'
+              }
               borderWidth="1px"
-              borderColor="rgba(255,255,255,0.08)"
+              borderColor={theme.panelBorder}
               borderRadius="xl"
               p={4}
             >
               <Text
-                color="white"
+                color={theme.textPrimary}
                 fontSize="xs"
                 fontWeight="bold"
                 letterSpacing="widest"
@@ -305,7 +372,7 @@ bg="rgba(0,0,0,0.50)"
                 Studio Pertunjukan
               </Text>
               <Text
-                color="whiteAlpha.600"
+                color={theme.textSecondary}
                 fontSize="xs"
                 mt={2}
                 lineHeight="tall"
@@ -315,18 +382,25 @@ bg="rgba(0,0,0,0.50)"
             </Box>
           </Box>
 
-          <Divider borderColor="rgba(255,255,255,0.09)" my={7} />
+          <Divider borderColor={theme.panelBorder} my={7} />
 
-          <Flex align="center" justify="space-between">
+          <Flex align="center" justify="space-between" mt={3}>
             <Button
               variant="outline"
-              color="red.300"
-              borderColor="rgba(255, 99, 132, 0.4)"
+              color={mode === 'dark' ? 'red.300' : 'red.600'}
+              borderColor={
+                mode === 'dark'
+                  ? 'rgba(255, 99, 132, 0.4)'
+                  : 'rgba(220, 38, 38, 0.5)'
+              }
               fontSize="sm"
               _hover={{
-                bg: 'rgba(255, 99, 132, 0.12)',
-                color: 'white',
-                borderColor: 'rgba(255, 99, 132, 0.6)',
+                bg:
+                  mode === 'dark'
+                    ? 'rgba(255, 99, 132, 0.12)'
+                    : 'rgba(220, 38, 38, 0.06)',
+                color: theme.textPrimary,
+                borderColor: 'rgba(220, 38, 38, 0.6)',
               }}
               leftIcon={<ArrowBackIcon />}
               onClick={onOpen}
@@ -344,7 +418,7 @@ bg="rgba(0,0,0,0.50)"
             position="absolute"
             inset={0}
             zIndex={{ base: 20, md: 0 }}
-bg="rgba(0,0,0,0.60)"
+            bg="rgba(0,0,0,0.60)"
             backdropFilter="blur(2px)"
             display={{ base: 'block', md: 'none' }}
             onClick={() => setOpen(false)}
@@ -357,10 +431,10 @@ bg="rgba(0,0,0,0.60)"
           p={{ base: 5, md: 10 }}
           pb={{ base: 5, md: 10 }}
           overflow="auto"
-          bg="rgba(0,0,0,0.40)"
+          bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'rgba(255,255,255,0.55)'}
           backdropFilter="blur(10px)"
           borderRightRadius={{ base: 0, md: '2xl' }}
-          color="white"
+          color={theme.textPrimary}
           zIndex={1}
           position="relative"
         >
@@ -391,9 +465,16 @@ bg="rgba(0,0,0,0.60)"
               display="flex"
               alignItems="center"
               justifyContent="center"
-              bg="rgba(5,6,8,0.55)"
+              bg={
+                mode === 'dark' ? 'rgba(5,6,8,0.55)' : 'rgba(255,255,255,0.55)'
+              }
+              backdropFilter="blur(2px)"
             >
-              <Spinner thickness="3px" size="lg" color="blue.300" />
+              <Spinner
+                thickness="3px"
+                size="lg"
+                color={mode === 'dark' ? 'blue.300' : 'blue.500'}
+              />
             </Box>
           )}
         </Box>
@@ -402,11 +483,11 @@ bg="rgba(0,0,0,0.60)"
       <Modal isOpen={isOpen} onClose={onClose} motionPreset="none" isCentered>
         <ModalOverlay bg="rgba(0,0,0,0.65)" backdropFilter="blur(2px)" />
         <ModalContent
-          bg="rgba(8,10,14,0.85)"
+          bg={mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.95)'}
           backdropFilter="blur(16px)"
           borderWidth="1px"
-          borderColor="rgba(255,255,255,0.15)"
-          color="white"
+          borderColor={theme.panelBorder}
+          color={theme.textPrimary}
           borderRadius="2xl"
           p={2}
           mx={4}
@@ -415,11 +496,11 @@ bg="rgba(0,0,0,0.60)"
             Konfirmasi Keluar
           </ModalHeader>
           <ModalCloseButton
-            color="whiteAlpha.600"
-            _hover={{ color: 'white', bg: 'whiteAlpha.100' }}
+            color={theme.textSecondary}
+            _hover={{ color: theme.textPrimary, bg: theme.hoverBg }}
           />
           <ModalBody>
-            <Text color="whiteAlpha.700" fontSize="sm">
+            <Text color={theme.textSecondary} fontSize="sm">
               Apakah kamu yakin ingin keluar dari akun ini?
             </Text>
           </ModalBody>
@@ -427,12 +508,12 @@ bg="rgba(0,0,0,0.60)"
             <Button
               flex={1}
               variant="ghost"
-              color="whiteAlpha.700"
+              color={theme.textSecondary}
               borderWidth="1px"
-              borderColor="rgba(255,255,255,0.1)"
+              borderColor={theme.panelBorder}
               borderRadius="full"
               fontSize="sm"
-              _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
+              _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
               onClick={onClose}
               isDisabled={confirming}
             >
@@ -440,8 +521,12 @@ bg="rgba(0,0,0,0.60)"
             </Button>
             <Button
               flex={1}
-              color="red.100"
-              bg="rgba(239, 68, 68, 0.25)"
+              color={mode === 'dark' ? 'red.100' : 'red.600'}
+              bg={
+                mode === 'dark'
+                  ? 'rgba(239, 68, 68, 0.25)'
+                  : 'rgba(239, 68, 68, 0.12)'
+              }
               borderWidth="1px"
               borderColor="rgba(239, 68, 68, 0.5)"
               backdropFilter="blur(12px)"

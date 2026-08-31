@@ -9,6 +9,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
 
 const HOURS = Array.from({ length: 24 }, (_, index) => index);
 const MINUTES = [0, 15, 30, 45];
@@ -25,6 +26,7 @@ export default function TimePickerField({
   onChange,
 }: TimePickerFieldProps) {
   const disclosure = useDisclosure();
+  const mode = useThemeStore((state) => state.mode);
   const [hour, minute] = (value || '08:00').split(':').map(Number);
 
   const pickHour = (pickedHour: number): void =>
@@ -50,30 +52,48 @@ export default function TimePickerField({
           textAlign="left"
           px={3}
           borderRadius="xl"
-          bg="whiteAlpha.100"
-          borderColor="whiteAlpha.300"
-          color={value ? 'white' : 'whiteAlpha.500'}
+          bg={mode === 'dark' ? 'whiteAlpha.100' : 'white'}
+          borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
+          color={
+            value
+              ? mode === 'dark'
+                ? 'white'
+                : 'gray.800'
+              : mode === 'dark'
+                ? 'whiteAlpha.500'
+                : 'gray.500'
+          }
           fontSize="sm"
           fontWeight="medium"
-          _hover={{ bg: 'whiteAlpha.200', borderColor: 'whiteAlpha.400' }}
-          leftIcon={<TimeIcon color="blue.300" boxSize={4} />}
+          _hover={{
+            bg: mode === 'dark' ? 'whiteAlpha.200' : 'gray.50',
+            borderColor: mode === 'dark' ? 'whiteAlpha.400' : 'gray.400',
+          }}
+          leftIcon={
+            <TimeIcon
+              color={mode === 'dark' ? 'blue.300' : 'blue.600'}
+              boxSize={4}
+            />
+          }
         >
           {value || 'Pilih jam'}
         </Button>
       </PopoverTrigger>
       <PopoverContent
         w="256px"
-        bg="rgba(10,12,18,0.95)"
-        color="white"
+        bg={mode === 'dark' ? 'rgba(10,12,18,0.95)' : 'rgba(255,255,255,0.98)'}
+        color={mode === 'dark' ? 'white' : 'gray.800'}
         borderWidth="1px"
-        borderColor="rgba(255,255,255,0.14)"
+        borderColor={
+          mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(15,23,42,0.12)'
+        }
         borderRadius="2xl"
         boxShadow="0 24px 80px rgba(0,0,0,.6)"
         backdropFilter="blur(20px)"
       >
         <PopoverBody p={3}>
           <Text
-            color="whiteAlpha.500"
+            color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
             fontSize="xs"
             fontWeight="bold"
             letterSpacing="wide"
@@ -91,11 +111,23 @@ export default function TimePickerField({
                 px={0}
                 borderRadius="md"
                 bg={pickedHour === hour ? 'blue.600' : 'transparent'}
-                color={pickedHour === hour ? 'white' : 'whiteAlpha.700'}
+                color={
+                  pickedHour === hour
+                    ? 'white'
+                    : mode === 'dark'
+                      ? 'whiteAlpha.700'
+                      : 'gray.600'
+                }
                 _hover={
                   pickedHour === hour
                     ? undefined
-                    : { bg: 'whiteAlpha.100', color: 'white' }
+                    : {
+                        bg:
+                          mode === 'dark'
+                            ? 'whiteAlpha.100'
+                            : 'rgba(15,23,42,0.06)',
+                        color: mode === 'dark' ? 'white' : 'gray.900',
+                      }
                 }
                 onClick={() => pickHour(pickedHour)}
               >
@@ -105,7 +137,7 @@ export default function TimePickerField({
           </Box>
 
           <Text
-            color="whiteAlpha.500"
+            color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
             fontSize="xs"
             fontWeight="bold"
             letterSpacing="wide"
@@ -123,11 +155,23 @@ export default function TimePickerField({
                 h={7}
                 borderRadius="md"
                 bg={pickedMinute === minute ? 'blue.600' : 'transparent'}
-                color={pickedMinute === minute ? 'white' : 'whiteAlpha.700'}
+                color={
+                  pickedMinute === minute
+                    ? 'white'
+                    : mode === 'dark'
+                      ? 'whiteAlpha.700'
+                      : 'gray.600'
+                }
                 _hover={
                   pickedMinute === minute
                     ? undefined
-                    : { bg: 'whiteAlpha.100', color: 'white' }
+                    : {
+                        bg:
+                          mode === 'dark'
+                            ? 'whiteAlpha.100'
+                            : 'rgba(15,23,42,0.06)',
+                        color: mode === 'dark' ? 'white' : 'gray.900',
+                      }
                 }
                 onClick={() => pickMinute(pickedMinute)}
               >

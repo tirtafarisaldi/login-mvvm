@@ -42,6 +42,8 @@ import { useCreateScheduleViewModel } from '../viewModels/createScheduleViewMode
 import { useDeleteScheduleViewModel } from '../viewModels/deleteScheduleViewModel';
 import { useGetSchedulesViewModel } from '../viewModels/getSchedulesViewModel';
 import { useUpdateScheduleViewModel } from '../viewModels/updateScheduleViewModel';
+import { useThemeStore } from '../../store/useThemeStore';
+import { useThemeColors } from '../../store/themeColors';
 
 const FIXED_ROOM = 'Studio Pertunjukan lt 11 Pasca';
 
@@ -49,6 +51,8 @@ export default function SchedulePage() {
   const toast = useToast();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
+  const mode = useThemeStore((state) => state.mode);
+  const theme = useThemeColors();
   const detailModal = useDisclosure();
   const openDetailModal = detailModal.onOpen;
   const createModal = useDisclosure();
@@ -272,12 +276,12 @@ export default function SchedulePage() {
           <Heading
             as="h1"
             size={{ base: '2xl', md: '4xl' }}
-            color="white"
+            color={theme.textPrimary}
             letterSpacing="tight"
           >
             Schedule
           </Heading>
-          <Text color="whiteAlpha.700" mt={2} fontSize="sm">
+          <Text color={theme.textSecondary} mt={2} fontSize="sm">
             Lihat secara langsung jadwal penggunaan ruangan di Laboratorium
             Studio Pertunjukan.
           </Text>
@@ -285,16 +289,19 @@ export default function SchedulePage() {
         {isAdmin && (
           <Button
             color="white"
-            bg="rgba(37, 99, 235, 0.25)"
+            bg={mode === 'dark' ? 'rgba(37, 99, 235, 0.25)' : 'blue.600'}
             borderWidth="1px"
-            borderColor="rgba(59, 130, 246, 0.5)"
+            borderColor={
+              mode === 'dark' ? 'rgba(59, 130, 246, 0.5)' : 'blue.600'
+            }
             backdropFilter="blur(12px)"
             fontSize="sm"
             borderRadius="full"
             w={{ base: 'full', md: 'auto' }}
             _hover={{
-              bg: 'rgba(37, 99, 235, 0.45)',
-              borderColor: 'rgba(59, 130, 246, 0.75)',
+              bg: mode === 'dark' ? 'rgba(37, 99, 235, 0.45)' : 'blue.700',
+              borderColor:
+                mode === 'dark' ? 'rgba(59, 130, 246, 0.75)' : 'blue.700',
               boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
             }}
             _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
@@ -307,7 +314,11 @@ export default function SchedulePage() {
       </Flex>
 
       {usingSampleData && (
-        <Text color="orange.200" mb={6} fontSize="sm">
+        <Text
+          color={mode === 'dark' ? 'orange.200' : 'orange.700'}
+          mb={6}
+          fontSize="sm"
+        >
           Menampilkan data contoh — jadwal belum terhubung ke API.
         </Text>
       )}
@@ -330,11 +341,11 @@ export default function SchedulePage() {
       >
         <ModalOverlay backdropFilter="blur(8px)" bg="blackAlpha.700" />
         <ModalContent
-          bg="rgba(8,10,14,0.85)"
+          bg={mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'}
           backdropFilter="blur(16px)"
-          color="white"
+          color={theme.textPrimary}
           borderWidth="1px"
-          borderColor="rgba(255,255,255,0.2)"
+          borderColor={theme.panelBorder}
           boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
         >
           <ModalHeader fontSize="lg">
@@ -365,13 +376,17 @@ export default function SchedulePage() {
                     align="center"
                     justify="center"
                     borderRadius="xl"
-                    bg="rgba(255,255,255,0.08)"
-                    color="blue.300"
+                    bg={
+                      mode === 'dark'
+                        ? 'rgba(255,255,255,0.08)'
+                        : 'rgba(15,23,42,0.06)'
+                    }
+                    color={mode === 'dark' ? 'blue.300' : 'blue.600'}
                   >
                     <TimeIcon boxSize={4} />
                   </Flex>
                   <Box>
-                    <Text color="whiteAlpha.700" fontSize="xs">
+                    <Text color={theme.textSecondary} fontSize="xs">
                       Waktu
                     </Text>
                     <Text fontSize="sm">
@@ -386,13 +401,17 @@ export default function SchedulePage() {
                     align="center"
                     justify="center"
                     borderRadius="xl"
-                    bg="rgba(255,255,255,0.08)"
-                    color="blue.300"
+                    bg={
+                      mode === 'dark'
+                        ? 'rgba(255,255,255,0.08)'
+                        : 'rgba(15,23,42,0.06)'
+                    }
+                    color={mode === 'dark' ? 'blue.300' : 'blue.600'}
                   >
                     <InfoIcon boxSize={4} />
                   </Flex>
                   <Box>
-                    <Text color="whiteAlpha.700" fontSize="xs">
+                    <Text color={theme.textSecondary} fontSize="xs">
                       Ruangan
                     </Text>
                     <Text fontSize="sm">{detailEvent.location}</Text>
@@ -405,13 +424,17 @@ export default function SchedulePage() {
                     align="center"
                     justify="center"
                     borderRadius="xl"
-                    bg="rgba(255,255,255,0.08)"
-                    color="blue.300"
+                    bg={
+                      mode === 'dark'
+                        ? 'rgba(255,255,255,0.08)'
+                        : 'rgba(15,23,42,0.06)'
+                    }
+                    color={mode === 'dark' ? 'blue.300' : 'blue.600'}
                   >
                     <InfoIcon boxSize={4} />
                   </Flex>
                   <Box>
-                    <Text color="whiteAlpha.700" fontSize="xs">
+                    <Text color={theme.textSecondary} fontSize="xs">
                       Peminjam
                     </Text>
                     <Text fontSize="sm">{detailEvent.organizer}</Text>
@@ -431,7 +454,7 @@ export default function SchedulePage() {
                       <InfoIcon boxSize={4} />
                     </Flex>
                     <Box>
-                      <Text color="whiteAlpha.700" fontSize="xs">
+                      <Text color={theme.textSecondary} fontSize="xs">
                         Keterangan
                       </Text>
                       <Text fontSize="sm">{detailEvent.note}</Text>
@@ -444,14 +467,17 @@ export default function SchedulePage() {
           <ModalFooter>
             <Button
               variant="ghost"
-              color="red.300"
+              color={mode === 'dark' ? 'red.300' : 'red.600'}
               fontSize="sm"
               borderWidth="1px"
               borderColor="rgba(255, 99, 132, 0.35)"
               borderRadius="full"
               isLoading={isDeleting}
               leftIcon={<DeleteIcon />}
-              _hover={{ bg: 'rgba(255, 99, 132, 0.15)', color: 'red.200' }}
+              _hover={{
+                bg: 'rgba(255, 99, 132, 0.15)',
+                color: mode === 'dark' ? 'red.200' : 'red.700',
+              }}
               onClick={() => {
                 void handleDelete();
               }}
@@ -460,14 +486,14 @@ export default function SchedulePage() {
             </Button>
             <Button
               variant="ghost"
-              color="whiteAlpha.700"
+              color={theme.textSecondary}
               fontSize="sm"
               borderWidth="1px"
-              borderColor="rgba(255,255,255,0.1)"
+              borderColor={theme.panelBorder}
               borderRadius="full"
               ml={3}
               leftIcon={<EditIcon />}
-              _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
+              _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
               onClick={openEdit}
             >
               Edit

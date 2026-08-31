@@ -18,6 +18,7 @@ import {
   toDateKey,
   WEEKDAYS,
 } from './calendar-types';
+import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
 
 interface CalendarProps {
   events: CalendarEvent[];
@@ -38,6 +39,7 @@ function Calendar({
   onEventClick,
   onTodayClick,
 }: CalendarProps) {
+  const mode = useThemeStore((state) => state.mode);
   const today = new Date();
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -73,11 +75,17 @@ function Calendar({
       minW={0}
       w="full"
       borderRadius="2xl"
-      bg="rgba(0,0,0,0.55)"
+      bg={mode === 'dark' ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.92)'}
       borderWidth="1px"
-      borderColor="rgba(255,255,255,0.08)"
+      borderColor={
+        mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.10)'
+      }
       backdropFilter="blur(8px)"
-      boxShadow="inset 0 1px 0 rgba(255,255,255,0.06)"
+      boxShadow={
+        mode === 'dark'
+          ? 'inset 0 1px 0 rgba(255,255,255,0.06)'
+          : '0 8px 30px rgba(15,23,42,0.08)'
+      }
       overflow="hidden"
     >
       <Flex
@@ -87,7 +95,9 @@ function Calendar({
         px={{ base: 3, md: 4 }}
         py={3}
         borderBottomWidth="1px"
-        borderBottomColor="rgba(255,255,255,0.08)"
+        borderBottomColor={
+          mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.10)'
+        }
       >
         <MonthPicker
           value={viewDate}
@@ -97,8 +107,11 @@ function Calendar({
         <Flex align="center" gap={1}>
           <Button
             variant="ghost"
-            color="whiteAlpha.600"
-            _hover={{ bg: 'whiteAlpha.100', color: 'white' }}
+            color={mode === 'dark' ? 'whiteAlpha.600' : 'gray.600'}
+            _hover={{
+              bg: mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.100',
+              color: mode === 'dark' ? 'white' : 'gray.900',
+            }}
             size="sm"
             fontWeight="medium"
             onClick={onTodayClick}
@@ -109,9 +122,11 @@ function Calendar({
           <IconButton
             aria-label="Bulan sebelumnya"
             variant="solid"
-            color="white"
-            bg="rgba(255,255,255,0.14)"
-            _hover={{ bg: 'rgba(255,255,255,0.12)' }}
+            color={mode === 'dark' ? 'white' : 'gray.700'}
+            bg={mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'blackAlpha.100'}
+            _hover={{
+              bg: mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'blackAlpha.200',
+            }}
             size="sm"
             borderRadius="full"
             icon={<ChevronLeftIcon />}
@@ -120,9 +135,11 @@ function Calendar({
           <IconButton
             aria-label="Bulan berikutnya"
             variant="solid"
-            color="white"
-            bg="rgba(255,255,255,0.14)"
-            _hover={{ bg: 'rgba(255,255,255,0.12)' }}
+            color={mode === 'dark' ? 'white' : 'gray.700'}
+            bg={mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'blackAlpha.100'}
+            _hover={{
+              bg: mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'blackAlpha.200',
+            }}
             size="sm"
             borderRadius="full"
             icon={<ChevronRightIcon />}
@@ -135,7 +152,7 @@ function Calendar({
         {WEEKDAYS.map((weekday) => (
           <Text
             key={weekday}
-            color="whiteAlpha.500"
+            color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
             fontSize="xs"
             fontWeight="bold"
             letterSpacing="widest"
@@ -154,7 +171,7 @@ function Calendar({
         display="grid"
         gridTemplateColumns="repeat(7, 1fr)"
         gap={1}
-        bg="rgba(0,0,0,0.20)"
+        bg={mode === 'dark' ? 'rgba(0,0,0,0.20)' : 'rgba(15,23,42,0.03)'}
       >
         {monthDays.map((day) => {
           const dayKey = toDateKey(day);
@@ -173,23 +190,39 @@ function Calendar({
               cursor="pointer"
               bg={
                 isSelected
-                  ? 'rgba(59,130,246,0.14)'
+                  ? mode === 'dark'
+                    ? 'rgba(59,130,246,0.14)'
+                    : 'rgba(59,130,246,0.12)'
                   : isToday
-                    ? 'rgba(255,255,255,0.045)'
-                    : 'rgba(255,255,255,0.02)'
+                    ? mode === 'dark'
+                      ? 'rgba(255,255,255,0.10)'
+                      : 'blackAlpha.50'
+                    : mode === 'dark'
+                      ? 'whiteAlpha.100'
+                      : 'blackAlpha.50'
               }
               borderWidth="1px"
               borderColor={
                 isSelected
                   ? 'rgba(59,130,246,0.55)'
                   : isToday
-                    ? 'rgba(255,255,255,0.16)'
-                    : 'rgba(255,255,255,0.04)'
+                    ? mode === 'dark'
+                      ? 'rgba(255,255,255,0.16)'
+                      : 'rgba(15,23,42,0.16)'
+                    : mode === 'dark'
+                      ? 'rgba(255,255,255,0.04)'
+                      : 'rgba(15,23,42,0.05)'
               }
               boxShadow="none"
               _hover={{
-                bg: 'rgba(255,255,255,0.07)',
-                borderColor: 'rgba(255,255,255,0.16)',
+                bg:
+                  mode === 'dark'
+                    ? 'rgba(255,255,255,0.16)'
+                    : 'rgba(15,23,42,0.08)',
+                borderColor:
+                  mode === 'dark'
+                    ? 'rgba(255,255,255,0.16)'
+                    : 'rgba(15,23,42,0.16)',
               }}
             >
               <Flex align="center" justify="space-between" mb={1}>
@@ -204,8 +237,12 @@ function Calendar({
                     isToday
                       ? 'white'
                       : inViewMonth
-                        ? 'whiteAlpha.800'
-                        : 'whiteAlpha.300'
+                        ? mode === 'dark'
+                          ? 'whiteAlpha.800'
+                          : 'gray.800'
+                        : mode === 'dark'
+                          ? 'whiteAlpha.300'
+                          : 'gray.400'
                   }
                   fontSize="xs"
                   fontWeight={isToday ? 'bold' : 'medium'}
@@ -219,8 +256,12 @@ function Calendar({
                     align="center"
                     justify="center"
                     borderRadius="full"
-                    bg="rgba(255,255,255,0.08)"
-                    color="whiteAlpha.600"
+                    bg={
+                      mode === 'dark'
+                        ? 'rgba(255,255,255,0.08)'
+                        : 'rgba(15,23,42,0.06)'
+                    }
+                    color={mode === 'dark' ? 'whiteAlpha.600' : 'gray.600'}
                     fontSize="10px"
                     fontWeight="bold"
                   >
@@ -243,7 +284,12 @@ function Calendar({
                         h="auto"
                         p={0}
                         bg="transparent"
-                        _hover={{ bg: 'rgba(255,255,255,0.05)' }}
+                        _hover={{
+                          bg:
+                            mode === 'dark'
+                              ? 'rgba(255,255,255,0.05)'
+                              : 'rgba(15,23,42,0.04)',
+                        }}
                         onClick={(eventClick) => {
                           eventClick.stopPropagation();
                           onEventClick?.(event);
@@ -293,10 +339,13 @@ function Calendar({
                   <Button
                     size="xs"
                     variant="ghost"
-                    color="whiteAlpha.500"
+                    color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
                     h="auto"
                     borderRadius="full"
-                    _hover={{ bg: 'whiteAlpha.100', color: 'white' }}
+                    _hover={{
+                      bg: mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.100',
+                      color: mode === 'dark' ? 'white' : 'gray.800',
+                    }}
                     onClick={(eventClick) => {
                       eventClick.stopPropagation();
                       onSelectDay(day);

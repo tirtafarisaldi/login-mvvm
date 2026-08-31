@@ -47,6 +47,8 @@ import type {
   InventoryModel,
   InventoryStatus,
 } from '../../../../domain/models/InventoryModel';
+import { useThemeStore } from '../../store/useThemeStore';
+import { useThemeColors } from '../../store/themeColors';
 
 const categories = ['Kamera', 'Audio', 'Pencahayaan', 'Aksesori', 'Properti'];
 const locations = [
@@ -93,6 +95,10 @@ const toInput = (inventory: InventoryModel): InventoryInput => ({
 export default function InventoryPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
+  const mode = useThemeStore((state) => state.mode);
+  const theme = useThemeColors();
+  const inputBg = mode === 'dark' ? 'whiteAlpha.100' : 'white';
+  const inputBorder = mode === 'dark' ? 'whiteAlpha.300' : 'gray.300';
   const toast = useToast();
   const formModal = useDisclosure();
   const imageModal = useDisclosure();
@@ -209,12 +215,12 @@ export default function InventoryPage() {
             <Heading
               as="h1"
               size={{ base: 'xl', md: '2xl' }}
-              color="white"
+              color={theme.textPrimary}
               letterSpacing="tight"
             >
               Daftar Peralatan
             </Heading>
-            <Text color="whiteAlpha.700" mt={2} fontSize="sm">
+            <Text color={theme.textSecondary} mt={2} fontSize="sm">
               Kelola aset Laboratorium Studio Pertunjukan dalam satu ruang
               kerja.
             </Text>
@@ -222,16 +228,19 @@ export default function InventoryPage() {
           {isAdmin && (
             <Button
               color="white"
-              bg="rgba(37, 99, 235, 0.25)"
+              bg={mode === 'dark' ? 'rgba(37, 99, 235, 0.25)' : 'blue.600'}
               borderWidth="1px"
-              borderColor="rgba(59, 130, 246, 0.5)"
+              borderColor={
+                mode === 'dark' ? 'rgba(59, 130, 246, 0.5)' : 'blue.600'
+              }
               backdropFilter="blur(12px)"
               fontSize="sm"
               borderRadius="full"
               w={{ base: 'full', md: 'auto' }}
               _hover={{
-                bg: 'rgba(37, 99, 235, 0.45)',
-                borderColor: 'rgba(59, 130, 246, 0.75)',
+                bg: mode === 'dark' ? 'rgba(37, 99, 235, 0.45)' : 'blue.700',
+                borderColor:
+                  mode === 'dark' ? 'rgba(59, 130, 246, 0.75)' : 'blue.700',
                 boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
               }}
               _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
@@ -243,7 +252,7 @@ export default function InventoryPage() {
           )}
         </Flex>
         {error && (
-          <Text color="orange.200" mb={4}>
+          <Text color={mode === 'dark' ? 'orange.200' : 'orange.700'} mb={4}>
             API belum tersedia — menampilkan data contoh.
           </Text>
         )}
@@ -263,52 +272,80 @@ export default function InventoryPage() {
               display={{ base: 'none', md: 'block' }}
               overflowX="auto"
               borderRadius="2xl"
-              bg="rgba(0,0,0,0.55)"
+              bg={theme.cardBg}
               borderWidth="1px"
-              borderColor="rgba(255,255,255,0.08)"
+              borderColor={theme.cardBorder}
               backdropFilter="blur(8px)"
             >
-              <Table variant="simple" minW="920px">
-                <Thead bg="whiteAlpha.100">
+              <Table
+                variant="simple"
+                minW="920px"
+                sx={{
+                  th: {
+                    fontSize: 'xs',
+                    borderColor:
+                      mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'gray.200',
+                  },
+                  td: {
+                    fontSize: 'xs',
+                    borderColor:
+                      mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'gray.200',
+                  },
+                }}
+              >
+                <Thead
+                  bg={mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
+                >
                   <Tr>
-                    <Th color="whiteAlpha.500">ID</Th>
-                    <Th color="whiteAlpha.500">Nama Barang</Th>
-                    <Th color="whiteAlpha.500">Kategori</Th>
-                    <Th color="whiteAlpha.500">Stok</Th>
-                    <Th color="whiteAlpha.500">Lokasi</Th>
-                    <Th color="whiteAlpha.500">Status</Th>
-                    <Th color="whiteAlpha.500">Gambar</Th>
-                    <Th color="whiteAlpha.500" textAlign="right">
+                    <Th color={theme.textMuted}>ID</Th>
+                    <Th color={theme.textMuted}>Nama Barang</Th>
+                    <Th color={theme.textMuted}>Kategori</Th>
+                    <Th color={theme.textMuted}>Stok</Th>
+                    <Th color={theme.textMuted}>Lokasi</Th>
+                    <Th color={theme.textMuted}>Status</Th>
+                    <Th color={theme.textMuted}>Gambar</Th>
+                    <Th color={theme.textMuted} textAlign="right">
                       Aksi
                     </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {inventories.map((item) => (
-                    <Tr key={item.id} _hover={{ bg: 'whiteAlpha.100' }}>
-                      <Td
-                        color="whiteAlpha.400"
-                        fontSize="sm"
-                        fontWeight="semibold"
-                      >
+                    <Tr
+                      key={item.id}
+                      _hover={{
+                        bg:
+                          mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100',
+                      }}
+                    >
+                      <Td color={theme.textMuted} fontWeight="semibold">
                         {item.id}
                       </Td>
-                      <Td color="white" fontWeight="semibold">
+                      <Td color={theme.textPrimary} fontWeight="semibold">
                         {item.name}
                       </Td>
                       <Td>
-                        <Badge bg="whiteAlpha.200" color="white">
+                        <Badge
+                          bg={
+                            mode === 'dark'
+                              ? 'whiteAlpha.200'
+                              : 'blackAlpha.100'
+                          }
+                          color={theme.textPrimary}
+                          fontWeight="semibold"
+                        >
                           {item.category}
                         </Badge>
                       </Td>
-                      <Td color="whiteAlpha.800">{item.stock} unit</Td>
-                      <Td color="whiteAlpha.800">{item.location}</Td>
+                      <Td color={theme.textSecondary}>{item.stock} unit</Td>
+                      <Td color={theme.textSecondary}>{item.location}</Td>
                       <Td>
                         <Badge
                           colorScheme={statusColor[item.status]}
                           borderRadius="full"
                           px={3}
                           py={1}
+                          fontWeight="bold"
                         >
                           {item.status}
                         </Badge>
@@ -316,8 +353,8 @@ export default function InventoryPage() {
                       <Td>
                         <Button
                           variant="link"
-                          color="blue.200"
-                          size="sm"
+                          color={mode === 'dark' ? 'blue.200' : 'blue.600'}
+                          fontSize="xs"
                           onClick={() => openImage(item)}
                           isDisabled={!item.image}
                         >
@@ -329,9 +366,9 @@ export default function InventoryPage() {
                           <Button
                             aria-label="Ubah inventaris"
                             variant="ghost"
-                            color="white"
-                            _hover={{ bg: 'whiteAlpha.200' }}
-                            size="sm"
+                            color={theme.textPrimary}
+                            _hover={{ bg: theme.hoverBg }}
+                            fontSize="xs"
                             onClick={() => openEdit(item)}
                           >
                             <EditIcon />
@@ -339,9 +376,9 @@ export default function InventoryPage() {
                           <Button
                             aria-label="Hapus inventaris"
                             variant="ghost"
-                            color="red.200"
+                            color={mode === 'dark' ? 'red.200' : 'red.600'}
                             _hover={{ bg: 'red.500' }}
-                            size="sm"
+                            fontSize="xs"
                             isLoading={isDeleting}
                             onClick={() => remove(item)}
                           >
@@ -360,17 +397,21 @@ export default function InventoryPage() {
                 <Box
                   key={item.id}
                   borderRadius="2xl"
-                  bg="rgba(0,0,0,0.55)"
+                  bg={theme.cardBg}
                   borderWidth="1px"
-                  borderColor="rgba(255,255,255,0.09)"
+                  borderColor={theme.cardBorder}
                   p={4}
                 >
                   <Flex align="start" justify="space-between" gap={3}>
                     <Box minW={0}>
-                      <Text color="white" fontWeight="semibold" noOfLines={1}>
+                      <Text
+                        color={theme.textPrimary}
+                        fontWeight="semibold"
+                        noOfLines={1}
+                      >
                         {item.name}
                       </Text>
-                      <Text color="whiteAlpha.500" fontSize="xs" mt={0.5}>
+                      <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
                         ID {item.id} · {item.category}
                       </Text>
                     </Box>
@@ -380,6 +421,7 @@ export default function InventoryPage() {
                       px={3}
                       py={1}
                       flexShrink={0}
+                      fontWeight="bold"
                     >
                       {item.status}
                     </Badge>
@@ -388,18 +430,18 @@ export default function InventoryPage() {
                     mt={3}
                     gap={4}
                     fontSize="xs"
-                    color="whiteAlpha.700"
+                    color={theme.textSecondary}
                     wrap="wrap"
                   >
                     <Text>
                       Stok:{' '}
-                      <Text as="span" color="white">
+                      <Text as="span" color={theme.textPrimary}>
                         {item.stock} unit
                       </Text>
                     </Text>
                     <Text>
                       Lokasi:{' '}
-                      <Text as="span" color="white">
+                      <Text as="span" color={theme.textPrimary}>
                         {item.location}
                       </Text>
                     </Text>
@@ -407,7 +449,7 @@ export default function InventoryPage() {
                   <Flex mt={3} align="center" gap={2}>
                     <Button
                       variant="link"
-                      color="blue.200"
+                      color={mode === 'dark' ? 'blue.200' : 'blue.600'}
                       size="sm"
                       onClick={() => openImage(item)}
                       isDisabled={!item.image}
@@ -418,8 +460,8 @@ export default function InventoryPage() {
                     <Button
                       aria-label="Ubah inventaris"
                       variant="ghost"
-                      color="white"
-                      _hover={{ bg: 'whiteAlpha.200' }}
+                      color={theme.textPrimary}
+                      _hover={{ bg: theme.hoverBg }}
                       size="sm"
                       onClick={() => openEdit(item)}
                     >
@@ -428,7 +470,7 @@ export default function InventoryPage() {
                     <Button
                       aria-label="Hapus inventaris"
                       variant="ghost"
-                      color="red.200"
+                      color={mode === 'dark' ? 'red.200' : 'red.600'}
                       _hover={{ bg: 'red.500' }}
                       size="sm"
                       isLoading={isDeleting}
@@ -458,11 +500,13 @@ export default function InventoryPage() {
           <ModalContent
             as="form"
             onSubmit={submit}
-            bg="rgba(8,10,14,0.85)"
+            bg={
+              mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'
+            }
             backdropFilter="blur(20px)"
-            color="white"
+            color={theme.textPrimary}
             borderWidth="1px"
-            borderColor="rgba(255,255,255,0.14)"
+            borderColor={theme.panelBorder}
             boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
           >
             <ModalHeader fontSize="lg">
@@ -477,8 +521,8 @@ export default function InventoryPage() {
                   <Input
                     size="sm"
                     value={form.name}
-                    bg="whiteAlpha.100"
-                    borderColor="whiteAlpha.300"
+                    bg={inputBg}
+                    borderColor={inputBorder}
                     borderRadius="xl"
                     onChange={(event) =>
                       updateForm({ name: event.target.value })
@@ -493,8 +537,8 @@ export default function InventoryPage() {
                     size="sm"
                     placeholder="Pilih kategori"
                     value={form.category}
-                    bg="whiteAlpha.100"
-                    borderColor="whiteAlpha.300"
+                    bg={inputBg}
+                    borderColor={inputBorder}
                     borderRadius="xl"
                     onChange={(event) =>
                       updateForm({ category: event.target.value })
@@ -520,8 +564,8 @@ export default function InventoryPage() {
                     type="number"
                     min={0}
                     value={form.stock === 0 ? '' : form.stock}
-                    bg="whiteAlpha.100"
-                    borderColor="whiteAlpha.300"
+                    bg={inputBg}
+                    borderColor={inputBorder}
                     borderRadius="xl"
                     onChange={(event) =>
                       updateForm({
@@ -541,8 +585,8 @@ export default function InventoryPage() {
                     size="sm"
                     placeholder="Pilih lokasi"
                     value={form.location}
-                    bg="whiteAlpha.100"
-                    borderColor="whiteAlpha.300"
+                    bg={inputBg}
+                    borderColor={inputBorder}
                     borderRadius="xl"
                     onChange={(event) =>
                       updateForm({ location: event.target.value })
@@ -566,8 +610,8 @@ export default function InventoryPage() {
                   <Select
                     size="sm"
                     value={form.status}
-                    bg="whiteAlpha.100"
-                    borderColor="whiteAlpha.300"
+                    bg={inputBg}
+                    borderColor={inputBorder}
                     borderRadius="xl"
                     onChange={(event) =>
                       updateForm({
@@ -598,8 +642,8 @@ export default function InventoryPage() {
                     type="url"
                     placeholder="https://... atau /img/barang.jpg"
                     value={form.image}
-                    bg="whiteAlpha.100"
-                    borderColor="whiteAlpha.300"
+                    bg={inputBg}
+                    borderColor={inputBorder}
                     borderRadius="xl"
                     onChange={(event) =>
                       updateForm({ image: event.target.value })
@@ -614,8 +658,8 @@ export default function InventoryPage() {
                 <Textarea
                   size="sm"
                   value={form.information}
-                  bg="whiteAlpha.100"
-                  borderColor="whiteAlpha.300"
+                  bg={inputBg}
+                  borderColor={inputBorder}
                   borderRadius="xl"
                   onChange={(event) =>
                     updateForm({ information: event.target.value })
@@ -627,11 +671,11 @@ export default function InventoryPage() {
               <Button
                 mr={3}
                 variant="ghost"
-                color="whiteAlpha.700"
+                color={theme.textSecondary}
                 borderWidth="1px"
-                borderColor="rgba(255,255,255,0.1)"
+                borderColor={theme.panelBorder}
                 borderRadius="full"
-                _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
+                _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
                 onClick={formModal.onClose}
               >
                 Batal
@@ -639,15 +683,18 @@ export default function InventoryPage() {
               <Button
                 type="submit"
                 color="white"
-                bg="rgba(37, 99, 235, 0.25)"
+                bg={mode === 'dark' ? 'rgba(37, 99, 235, 0.25)' : 'blue.600'}
                 borderWidth="1px"
-                borderColor="rgba(59, 130, 246, 0.5)"
+                borderColor={
+                  mode === 'dark' ? 'rgba(59, 130, 246, 0.5)' : 'blue.600'
+                }
                 backdropFilter="blur(12px)"
                 fontSize="sm"
                 borderRadius="full"
                 _hover={{
-                  bg: 'rgba(37, 99, 235, 0.45)',
-                  borderColor: 'rgba(59, 130, 246, 0.75)',
+                  bg: mode === 'dark' ? 'rgba(37, 99, 235, 0.45)' : 'blue.700',
+                  borderColor:
+                    mode === 'dark' ? 'rgba(59, 130, 246, 0.75)' : 'blue.700',
                   boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
                 }}
                 _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
@@ -666,12 +713,14 @@ export default function InventoryPage() {
         >
           <ModalOverlay backdropFilter="blur(8px)" bg="blackAlpha.700" />
           <ModalContent
-            bg="rgba(8,10,14,0.85)"
+            bg={
+              mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'
+            }
             backdropFilter="blur(16px)"
-            color="white"
+            color={theme.textPrimary}
             overflow="hidden"
             borderWidth="1px"
-            borderColor="rgba(255,255,255,0.14)"
+            borderColor={theme.panelBorder}
             boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
           >
             <ModalHeader fontSize="lg">{previewImage?.name}</ModalHeader>

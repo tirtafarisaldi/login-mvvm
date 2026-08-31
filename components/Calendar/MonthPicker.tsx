@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { MONTH_NAMES } from './calendar-types';
+import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
 
 interface MonthPickerProps {
   value: Date;
@@ -31,6 +32,7 @@ export default function MonthPicker({
   monthLabel,
 }: MonthPickerProps) {
   const popover = useDisclosure();
+  const mode = useThemeStore((state) => state.mode);
   const [pickerYear, setPickerYear] = useState(value.getFullYear());
 
   useEffect(() => {
@@ -52,29 +54,51 @@ export default function MonthPicker({
           px={4}
           py={2.5}
           borderRadius="full"
-          bg="rgba(255,255,255,0.05)"
+          bg={
+            mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(15,23,42,0.05)'
+          }
           borderWidth="1px"
-          borderColor="rgba(255,255,255,0.12)"
-          color="white"
+          borderColor={
+            mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(15,23,42,0.12)'
+          }
+          color={mode === 'dark' ? 'white' : 'gray.800'}
           boxShadow="inset 0 1px 0 rgba(255,255,255,0.06)"
           _hover={{
-            bg: 'rgba(255,255,255,0.1)',
-            borderColor: 'rgba(255,255,255,0.22)',
+            bg:
+              mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(15,23,42,0.09)',
+            borderColor:
+              mode === 'dark' ? 'rgba(255,255,255,0.22)' : 'rgba(15,23,42,0.2)',
           }}
-          _active={{ bg: 'rgba(255,255,255,0.14)' }}
-          rightIcon={<ChevronDownIcon boxSize={4} color="whiteAlpha.400" />}
+          _active={{
+            bg:
+              mode === 'dark'
+                ? 'rgba(255,255,255,0.14)'
+                : 'rgba(15,23,42,0.12)',
+          }}
+          rightIcon={
+            <ChevronDownIcon
+              boxSize={4}
+              color={mode === 'dark' ? 'whiteAlpha.400' : 'gray.500'}
+            />
+          }
         >
-          <Heading size="sm" color="white" letterSpacing="tight">
+          <Heading
+            size="sm"
+            color={mode === 'dark' ? 'white' : 'gray.800'}
+            letterSpacing="tight"
+          >
             {monthLabel}
           </Heading>
         </Button>
       </PopoverTrigger>
       <PopoverContent
         w="296px"
-        bg="rgba(10,12,18,0.96)"
-        color="white"
+        bg={mode === 'dark' ? 'rgba(10,12,18,0.96)' : 'rgba(255,255,255,0.98)'}
+        color={mode === 'dark' ? 'white' : 'gray.800'}
         borderWidth="1px"
-        borderColor="rgba(255,255,255,0.14)"
+        borderColor={
+          mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(15,23,42,0.12)'
+        }
         borderRadius="2xl"
         boxShadow="0 24px 80px rgba(0,0,0,.6)"
         backdropFilter="blur(20px)"
@@ -86,13 +110,18 @@ export default function MonthPicker({
             pb={3}
             mb={3}
             borderBottomWidth="1px"
-            borderBottomColor="rgba(255,255,255,0.08)"
+            borderBottomColor={
+              mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.1)'
+            }
           >
             <IconButton
               aria-label="Tahun sebelumnya"
               variant="ghost"
-              color="whiteAlpha.600"
-              _hover={{ bg: 'whiteAlpha.100', color: 'white' }}
+              color={mode === 'dark' ? 'whiteAlpha.600' : 'gray.600'}
+              _hover={{
+                bg: mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.100',
+                color: mode === 'dark' ? 'white' : 'gray.900',
+              }}
               size="sm"
               borderRadius="full"
               icon={<ChevronLeftIcon />}
@@ -104,8 +133,11 @@ export default function MonthPicker({
             <IconButton
               aria-label="Tahun berikutnya"
               variant="ghost"
-              color="whiteAlpha.600"
-              _hover={{ bg: 'whiteAlpha.100', color: 'white' }}
+              color={mode === 'dark' ? 'whiteAlpha.600' : 'gray.600'}
+              _hover={{
+                bg: mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.100',
+                color: mode === 'dark' ? 'white' : 'gray.900',
+              }}
               size="sm"
               borderRadius="full"
               icon={<ChevronRightIcon />}
@@ -129,7 +161,13 @@ export default function MonthPicker({
                       ? 'linear-gradient(135deg, #3b82f6, #2563eb)'
                       : 'transparent'
                   }
-                  color={active ? 'white' : 'whiteAlpha.700'}
+                  color={
+                    active
+                      ? 'white'
+                      : mode === 'dark'
+                        ? 'whiteAlpha.700'
+                        : 'gray.600'
+                  }
                   fontWeight={active ? 'bold' : 'medium'}
                   boxShadow={
                     active ? '0 4px 18px rgba(59,130,246,0.45)' : 'none'
@@ -138,8 +176,11 @@ export default function MonthPicker({
                     active
                       ? undefined
                       : {
-                          bg: 'rgba(255,255,255,0.08)',
-                          color: 'white',
+                          bg:
+                            mode === 'dark'
+                              ? 'rgba(255,255,255,0.08)'
+                              : 'rgba(15,23,42,0.07)',
+                          color: mode === 'dark' ? 'white' : 'gray.900',
                           transform: 'translateY(-1px)',
                         }
                   }

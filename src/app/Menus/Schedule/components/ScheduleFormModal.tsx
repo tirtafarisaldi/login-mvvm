@@ -21,6 +21,8 @@ import { toDateKey } from 'components/Calendar';
 import DatePickerField from '../../../../../components/Pickers/DatePickerField';
 import TimePickerField from '../../../../../components/Pickers/TimePickerField';
 import { useEffect, useState } from 'react';
+import { useThemeStore } from '../../store/useThemeStore';
+import { useThemeColors } from '../../store/themeColors';
 
 export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly';
 
@@ -126,6 +128,10 @@ export default function ScheduleFormModal({
   onSubmit,
 }: ScheduleFormModalProps) {
   const toast = useToast();
+  const themeMode = useThemeStore((state) => state.mode);
+  const theme = useThemeColors();
+  const inputBg = themeMode === 'dark' ? 'whiteAlpha.100' : 'white';
+  const inputBorder = themeMode === 'dark' ? 'whiteAlpha.300' : 'gray.300';
   const [form, setForm] = useState<CreateForm>(emptyForm);
 
   useEffect(() => {
@@ -199,11 +205,13 @@ export default function ScheduleFormModal({
           event.preventDefault();
           submit();
         }}
-        bg="rgba(8,10,14,0.85)"
+        bg={
+          themeMode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'
+        }
         backdropFilter="blur(16px)"
-        color="white"
+        color={theme.textPrimary}
         borderWidth="1px"
-        borderColor="rgba(255,255,255,0.2)"
+        borderColor={theme.panelBorder}
         boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
       >
         <ModalHeader fontSize="lg">
@@ -219,8 +227,8 @@ export default function ScheduleFormModal({
               <Input
                 size="sm"
                 value={form.title}
-                bg="whiteAlpha.100"
-                borderColor="whiteAlpha.300"
+                bg={inputBg}
+                borderColor={inputBorder}
                 borderRadius="xl"
                 onChange={(event) => updateForm({ title: event.target.value })}
                 placeholder="Contoh: Latihan Tari"
@@ -263,8 +271,8 @@ export default function ScheduleFormModal({
               <Input
                 size="sm"
                 value={form.peminjam}
-                bg="whiteAlpha.100"
-                borderColor="whiteAlpha.300"
+                bg={inputBg}
+                borderColor={inputBorder}
                 borderRadius="xl"
                 onChange={(event) =>
                   updateForm({ peminjam: event.target.value })
@@ -280,8 +288,8 @@ export default function ScheduleFormModal({
                 <Select
                   size="sm"
                   value={form.repeat}
-                  bg="whiteAlpha.100"
-                  borderColor="whiteAlpha.300"
+                  bg={inputBg}
+                  borderColor={inputBorder}
                   borderRadius="xl"
                   onChange={(event) =>
                     changeRepeat(event.target.value as RepeatType)
@@ -323,8 +331,8 @@ export default function ScheduleFormModal({
               <Textarea
                 size="sm"
                 value={form.note}
-                bg="whiteAlpha.100"
-                borderColor="whiteAlpha.300"
+                bg={inputBg}
+                borderColor={inputBorder}
                 borderRadius="xl"
                 onChange={(event) => updateForm({ note: event.target.value })}
                 placeholder="Catatan kegiatan…"
@@ -336,27 +344,30 @@ export default function ScheduleFormModal({
           <Button
             mr={3}
             variant="ghost"
-            color="whiteAlpha.700"
+            color={theme.textSecondary}
             borderWidth="1px"
-            borderColor="rgba(255,255,255,0.1)"
+            borderColor={theme.panelBorder}
             borderRadius="full"
-            _hover={{ bg: 'rgba(255,255,255,0.08)', color: 'white' }}
+            _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
             onClick={onClose}
           >
             Batal
           </Button>
           <Button
             type="submit"
-            color="white"
-            bg="rgba(37, 99, 235, 0.25)"
+            color={themeMode === 'dark' ? 'white' : 'white'}
+            bg={themeMode === 'dark' ? 'rgba(37, 99, 235, 0.25)' : 'blue.600'}
             borderWidth="1px"
-            borderColor="rgba(59, 130, 246, 0.5)"
+            borderColor={
+              themeMode === 'dark' ? 'rgba(59, 130, 246, 0.5)' : 'blue.600'
+            }
             backdropFilter="blur(12px)"
             fontSize="sm"
             borderRadius="full"
             _hover={{
-              bg: 'rgba(37, 99, 235, 0.45)',
-              borderColor: 'rgba(59, 130, 246, 0.75)',
+              bg: themeMode === 'dark' ? 'rgba(37, 99, 235, 0.45)' : 'blue.700',
+              borderColor:
+                themeMode === 'dark' ? 'rgba(59, 130, 246, 0.75)' : 'blue.700',
               boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
             }}
             _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}

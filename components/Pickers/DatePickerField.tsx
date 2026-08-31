@@ -23,6 +23,7 @@ import {
   toDateKey,
 } from 'components/Calendar';
 import { useEffect, useMemo, useState } from 'react';
+import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
 
 const WEEKDAY_SHORT = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
@@ -55,6 +56,7 @@ export default function DatePickerField({
   min,
 }: DatePickerFieldProps) {
   const disclosure = useDisclosure();
+  const mode = useThemeStore((state) => state.mode);
   const parsed = parseDate(value);
   const [viewDate, setViewDate] = useState(
     () =>
@@ -104,23 +106,41 @@ export default function DatePickerField({
           textAlign="left"
           px={3}
           borderRadius="xl"
-          bg="whiteAlpha.100"
-          borderColor="whiteAlpha.300"
-          color={value ? 'white' : 'whiteAlpha.500'}
+          bg={mode === 'dark' ? 'whiteAlpha.100' : 'white'}
+          borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
+          color={
+            value
+              ? mode === 'dark'
+                ? 'white'
+                : 'gray.800'
+              : mode === 'dark'
+                ? 'whiteAlpha.500'
+                : 'gray.500'
+          }
           fontSize="sm"
           fontWeight="medium"
-          _hover={{ bg: 'whiteAlpha.200', borderColor: 'whiteAlpha.400' }}
-          leftIcon={<CalendarIcon color="blue.300" boxSize={4} />}
+          _hover={{
+            bg: mode === 'dark' ? 'whiteAlpha.200' : 'gray.50',
+            borderColor: mode === 'dark' ? 'whiteAlpha.400' : 'gray.400',
+          }}
+          leftIcon={
+            <CalendarIcon
+              color={mode === 'dark' ? 'blue.300' : 'blue.600'}
+              boxSize={4}
+            />
+          }
         >
           {formatLabel(value)}
         </Button>
       </PopoverTrigger>
       <PopoverContent
         w="288px"
-        bg="rgba(10,12,18,0.95)"
-        color="white"
+        bg={mode === 'dark' ? 'rgba(10,12,18,0.95)' : 'rgba(255,255,255,0.98)'}
+        color={mode === 'dark' ? 'white' : 'gray.800'}
         borderWidth="1px"
-        borderColor="rgba(255,255,255,0.14)"
+        borderColor={
+          mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(15,23,42,0.12)'
+        }
         borderRadius="2xl"
         boxShadow="0 24px 80px rgba(0,0,0,.6)"
         backdropFilter="blur(20px)"
@@ -130,21 +150,31 @@ export default function DatePickerField({
             <IconButton
               aria-label="Bulan sebelumnya"
               variant="ghost"
-              color="whiteAlpha.600"
-              _hover={{ bg: 'whiteAlpha.100', color: 'white' }}
+              color={mode === 'dark' ? 'whiteAlpha.600' : 'gray.600'}
+              _hover={{
+                bg: mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.100',
+                color: mode === 'dark' ? 'white' : 'gray.900',
+              }}
               size="sm"
               borderRadius="full"
               icon={<ChevronLeftIcon />}
               onClick={() => moveMonth(-1)}
             />
-            <Heading size="xs" color="white" letterSpacing="tight">
+            <Heading
+              size="xs"
+              color={mode === 'dark' ? 'white' : 'gray.800'}
+              letterSpacing="tight"
+            >
               {monthLabel}
             </Heading>
             <IconButton
               aria-label="Bulan berikutnya"
               variant="ghost"
-              color="whiteAlpha.600"
-              _hover={{ bg: 'whiteAlpha.100', color: 'white' }}
+              color={mode === 'dark' ? 'whiteAlpha.600' : 'gray.600'}
+              _hover={{
+                bg: mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.100',
+                color: mode === 'dark' ? 'white' : 'gray.900',
+              }}
               size="sm"
               borderRadius="full"
               icon={<ChevronRightIcon />}
@@ -161,7 +191,7 @@ export default function DatePickerField({
             {WEEKDAY_SHORT.map((weekday) => (
               <Text
                 key={weekday}
-                color="whiteAlpha.500"
+                color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
                 fontSize="xs"
                 fontWeight="bold"
                 textAlign="center"
@@ -198,8 +228,12 @@ export default function DatePickerField({
                     isSelected
                       ? 'white'
                       : inViewMonth
-                        ? 'whiteAlpha.800'
-                        : 'whiteAlpha.300'
+                        ? mode === 'dark'
+                          ? 'whiteAlpha.800'
+                          : 'gray.800'
+                        : mode === 'dark'
+                          ? 'whiteAlpha.300'
+                          : 'gray.400'
                   }
                   boxShadow={
                     isSelected ? '0 0 12px rgba(59,130,246,0.45)' : 'none'
@@ -211,7 +245,13 @@ export default function DatePickerField({
                   _hover={
                     disabled || isSelected
                       ? undefined
-                      : { bg: 'whiteAlpha.150', color: 'white' }
+                      : {
+                          bg:
+                            mode === 'dark'
+                              ? 'whiteAlpha.150'
+                              : 'rgba(15,23,42,0.06)',
+                          color: mode === 'dark' ? 'white' : 'gray.900',
+                        }
                   }
                   onClick={() => selectDay(day)}
                 >

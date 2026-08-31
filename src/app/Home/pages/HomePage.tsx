@@ -18,6 +18,8 @@ import {
 import NextLink from 'next/link';
 import GlassCard from '../../../../components/Cards/GlassCard/GlassCard';
 import { useHomeViewModel } from '../viewModels/HomeViewModel';
+import { useThemeStore } from '../../Menus/store/useThemeStore';
+import { useThemeColors } from '../../Menus/store/themeColors';
 
 const featureStyles = [
   { icon: InfoIcon, color: '#60a5fa' },
@@ -32,14 +34,23 @@ const statStyles = [
   { icon: CalendarIcon, color: '#60a5fa' },
 ];
 
+const dateFormatter = new Intl.DateTimeFormat('id-ID', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
 export default function HomePage() {
   const { features, stats, statsLoading } = useHomeViewModel();
-  const today = new Intl.DateTimeFormat('id-ID', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date());
+  const mode = useThemeStore((state) => state.mode);
+  const theme = useThemeColors();
+  const today = dateFormatter.format(new Date());
+
+  const iconBoxBg =
+    mode === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.05)';
+  const iconBoxBorder =
+    mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(15,23,42,0.12)';
 
   return (
     <>
@@ -57,12 +68,12 @@ export default function HomePage() {
             fontWeight="black"
             letterSpacing="tight"
             lineHeight="shorter"
-            color="white"
+            color={theme.textPrimary}
             fontFamily="sans-serif"
           >
             Overview
           </Heading>
-          <Text color="whiteAlpha.600" mt={2} fontSize="sm" maxW="lg">
+          <Text color={theme.textSecondary} mt={2} fontSize="sm" maxW="lg">
             Pilih menu untuk mulai mengelola aktivitas laboratorium, inventaris,
             peminjaman, dan jadwal ruangan.
           </Text>
@@ -83,7 +94,7 @@ export default function HomePage() {
               bg="blue.400"
               boxShadow="0 0 12px rgba(59,130,246,.9)"
             />
-            <Text fontSize="xs" color="whiteAlpha.800">
+            <Text fontSize="xs" color={theme.textSecondary}>
               {today}
             </Text>
           </Flex>
@@ -109,9 +120,8 @@ export default function HomePage() {
                     position="absolute"
                     inset={-3}
                     borderRadius="full"
-                    bg={style.color}
-                    opacity={0.14}
-                    filter="blur(18px)"
+                    bg={`radial-gradient(circle, ${style.color}, transparent 68%)`}
+                    opacity={0.5}
                   />
                   <Flex
                     w={{ base: 9, md: 12 }}
@@ -120,9 +130,9 @@ export default function HomePage() {
                     justify="center"
                     position="relative"
                     borderRadius="2xl"
-                    bg="rgba(255,255,255,0.06)"
+                    bg={iconBoxBg}
                     borderWidth="1px"
-                    borderColor="rgba(255,255,255,0.12)"
+                    borderColor={iconBoxBorder}
                     color={style.color}
                   >
                     <Icon as={style.icon} boxSize={{ base: 4, md: 6 }} />
@@ -130,7 +140,7 @@ export default function HomePage() {
                 </Box>
                 <Box minW={0}>
                   <Text
-                    color="whiteAlpha.500"
+                    color={theme.textMuted}
                     fontSize="xs"
                     fontWeight="semibold"
                     letterSpacing="wide"
@@ -140,7 +150,7 @@ export default function HomePage() {
                     {stat.label}
                   </Text>
                   <Text
-                    color="white"
+                    color={theme.textPrimary}
                     fontSize={{ base: '2xl', md: '3xl' }}
                     fontWeight="black"
                     letterSpacing="tight"
@@ -150,7 +160,7 @@ export default function HomePage() {
                     {statsLoading ? '…' : stat.value.toLocaleString('id-ID')}
                   </Text>
                   <Text
-                    color="whiteAlpha.600"
+                    color={theme.textSecondary}
                     fontSize="xs"
                     mt={1}
                     display={{ base: 'none', md: 'block' }}
@@ -186,9 +196,8 @@ export default function HomePage() {
                         position="absolute"
                         inset={-3}
                         borderRadius="full"
-                        bg={style.color}
-                        opacity={0.14}
-                        filter="blur(18px)"
+                        bg={`radial-gradient(circle, ${style.color}, transparent 68%)`}
+                        opacity={0.5}
                       />
                       <Flex
                         w={12}
@@ -197,20 +206,24 @@ export default function HomePage() {
                         justify="center"
                         position="relative"
                         borderRadius="2xl"
-                        bg="rgba(255,255,255,0.06)"
+                        bg={iconBoxBg}
                         borderWidth="1px"
-                        borderColor="rgba(255,255,255,0.12)"
+                        borderColor={iconBoxBorder}
                         color={style.color}
                       >
                         <Icon as={style.icon} boxSize={6} />
                       </Flex>
                     </Box>
                     <Box>
-                      <Heading size="sm" color="white" letterSpacing="tight">
+                      <Heading
+                        size="sm"
+                        color={theme.textPrimary}
+                        letterSpacing="tight"
+                      >
                         {feature.label}
                       </Heading>
                       <Text
-                        color="whiteAlpha.600"
+                        color={theme.textSecondary}
                         mt={1}
                         fontSize="xs"
                         lineHeight="tall"
@@ -232,7 +245,7 @@ export default function HomePage() {
                       bg="rgba(37, 99, 235, 0.18)"
                       borderWidth="1px"
                       borderColor="rgba(59, 130, 246, 0.45)"
-                      color="blue.100"
+                      color={mode === 'dark' ? 'blue.100' : 'blue.700'}
                       borderRadius="full"
                       rightIcon={<ArrowForwardIcon boxSize={3} />}
                       _hover={{

@@ -18,7 +18,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { useState, type FormEvent } from 'react';
+import { useState, type FocusEvent, type FormEvent } from 'react';
 import { useLoginViewModel } from '../viewModels/LoginViewModel';
 import { useRegisterViewModel } from '../viewModels/RegisterViewModel';
 
@@ -46,6 +46,73 @@ function StudioOrnaments() {
   );
 }
 
+const SPOTLIGHTS = [
+  {
+    left: '6%',
+    width: '11vw',
+    duration: 9,
+    delay: 0,
+    opacity: 0.28,
+    color: 'rgba(125, 211, 252, 0.32)',
+  },
+  {
+    left: '31%',
+    width: '10vw',
+    duration: 11,
+    delay: 1.4,
+    opacity: 0.24,
+    color: 'rgba(196, 181, 253, 0.3)',
+  },
+  {
+    left: '60%',
+    width: '11vw',
+    duration: 10,
+    delay: 0.7,
+    opacity: 0.26,
+    color: 'rgba(103, 232, 249, 0.26)',
+  },
+  {
+    left: '80%',
+    width: '10vw',
+    duration: 9.5,
+    delay: 2.1,
+    opacity: 0.22,
+    color: 'rgba(125, 211, 252, 0.28)',
+  },
+];
+
+function StudioSpotlights({ paused }: { paused: boolean }) {
+  return (
+    <Box
+      aria-hidden="true"
+      position="absolute"
+      inset={0}
+      overflow="hidden"
+      pointerEvents="none"
+      zIndex={0}
+    >
+      {SPOTLIGHTS.map((spotlight, index) => (
+        <Box
+          key={index}
+          position="absolute"
+          top="-20%"
+          left={spotlight.left}
+          w={spotlight.width}
+          h="150%"
+          bg={`linear-gradient(to bottom, ${spotlight.color} 0%, transparent 80%)`}
+          clipPath="polygon(43% 0, 57% 0, 100% 100%, 0 100%)"
+          opacity={spotlight.opacity}
+          transformOrigin="top center"
+          animation={`spotlightSway ${spotlight.duration}s ease-in-out ${spotlight.delay}s infinite`}
+          style={{
+            animationPlayState: paused ? 'paused' : 'running',
+          }}
+        />
+      ))}
+    </Box>
+  );
+}
+
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -54,11 +121,23 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isRegister, setIsRegister] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleAuthFormFocus = () => setIsTyping(true);
+
+  const handleAuthFormBlur = (event: FocusEvent<HTMLElement>) => {
+    const target = event.currentTarget;
+    requestAnimationFrame(() => {
+      if (!target.contains(document.activeElement)) {
+        setIsTyping(false);
+      }
+    });
+  };
   const router = useRouter();
   const toast = useToast();
 
   const pageBg =
-    'radial-gradient(circle at 86% 10%, rgba(124, 96, 222, 0.30), transparent 32%), radial-gradient(circle at 10% 88%, rgba(34, 211, 238, 0.16), transparent 36%), radial-gradient(circle at 52% 44%, rgba(99, 102, 241, 0.14), transparent 46%), linear-gradient(135deg, #0b1121 0%, #0a0f1e 46%, #070b15 100%)';
+    'linear-gradient(to right, #0b1026 0%, #0a1026 38%, #04060d 100%)';
   const cardBg = 'rgba(255,255,255,0.045)';
   const inputBg = 'rgba(255,255,255,0.06)';
   const textColor = 'whiteAlpha.900';
@@ -172,6 +251,7 @@ export default function Login() {
       overflow="hidden"
       px={{ base: 4, md: 8 }}
       py={{ base: 8, md: 12 }}
+      fontFamily="'Poppins', sans-serif"
     >
       <StudioOrnaments />
       <Box
@@ -186,6 +266,7 @@ export default function Login() {
         opacity={0.5}
         zIndex={0}
       />
+      <StudioSpotlights paused={isTyping} />
       <MotionBox
         position="absolute"
         top="-120px"
@@ -246,17 +327,19 @@ export default function Login() {
           <Heading
             as="h1"
             fontSize={{ base: '4xl', sm: '5xl', md: '7xl', xl: '8xl' }}
-            fontWeight="black"
+            fontWeight="extrabold"
             letterSpacing="tight"
-            lineHeight="0.95"
+            lineHeight="1.05"
             maxW="3xl"
-            mb={6}
+            mb={3}
           >
             <MotionBox
               as="span"
               display="inline-block"
               bgGradient="linear(to-b, white 16%, blue.100 54%, blue.300 100%)"
               bgClip="text"
+              pr={2}
+              pb={4}
               // animate={{
               //   textShadow: [
               //     '0 0 10px rgba(103, 232, 249, 0.16)',
@@ -275,7 +358,7 @@ export default function Login() {
             </MotionBox>
           </Heading>
 
-          <Text fontSize="lg" maxW="2xl" color="whiteAlpha.700">
+          <Text fontSize="md" maxW="2xl" color="whiteAlpha.700">
             Temukan informasi peralatan, lakukan peminjaman, cek jadwal, dan
             akses berbagai layanan Laboratorium Studio Pertunjukan dengan lebih
             cepat dan mudah.
@@ -298,30 +381,38 @@ export default function Login() {
           maxH={{ base: 'auto', md: '700px' }}
         >
           <Stack spacing={4} textAlign="center" mb={6}>
-            <Text fontSize="sm" fontWeight="semibold" color="whiteAlpha.700">
+            <Text fontSize="xs" fontWeight="semibold" color="whiteAlpha.700">
               Selamat datang di Studio Pertunjukan
             </Text>
             <Heading size="lg" color={textColor}>
               {isRegister ? 'Buat akun baru' : 'Masuk untuk melanjutkan'}
             </Heading>
-            <Text fontSize="sm" color="whiteAlpha.700">
+            <Text fontSize="xs" color="whiteAlpha.700">
               {isRegister
                 ? 'Daftarkan akun Anda untuk mulai mengakses fitur studio.'
                 : 'Gunakan akun Anda untuk mengakses informasi peralatan, peminjaman, jadwal, dan layanan laboratorium.'}
             </Text>
           </Stack>
 
-          <Box as="form" onSubmit={handleSubmit}>
+          <Box
+            as="form"
+            onSubmit={handleSubmit}
+            onFocus={handleAuthFormFocus}
+            onBlurCapture={handleAuthFormBlur}
+          >
             <Stack spacing={4}>
               {isRegister && (
                 <FormControl isRequired>
-                  <FormLabel color={mutedText}>Nama</FormLabel>
+                  <FormLabel color={mutedText} fontSize="xs">
+                    Nama
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder="Masukkan nama lengkap"
                     bg={inputBg}
                     border="none"
                     borderRadius="2xl"
+                    fontSize="sm"
                     _focus={{ boxShadow: 'none', bg: inputBg }}
                     value={name}
                     onChange={(event) => setName(event.target.value)}
@@ -331,13 +422,16 @@ export default function Login() {
               )}
 
               <FormControl>
-                <FormLabel color={mutedText}>Email</FormLabel>
+                <FormLabel color={mutedText} fontSize="xs">
+                  Email
+                </FormLabel>
                 <Input
                   type="email"
                   placeholder="nama@laboratorium.id"
                   bg={inputBg}
                   border="none"
                   borderRadius="2xl"
+                  fontSize="sm"
                   _focus={{ boxShadow: 'none', bg: inputBg }}
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
@@ -346,7 +440,9 @@ export default function Login() {
               </FormControl>
 
               <FormControl>
-                <FormLabel color={mutedText}>Password</FormLabel>
+                <FormLabel color={mutedText} fontSize="xs">
+                  Password
+                </FormLabel>
                 <InputGroup>
                   <Input
                     type={showPassword ? 'text' : 'password'}
@@ -354,6 +450,7 @@ export default function Login() {
                     bg={inputBg}
                     border="none"
                     borderRadius="2xl"
+                    fontSize="sm"
                     _focus={{ boxShadow: 'none', bg: inputBg }}
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
@@ -377,7 +474,9 @@ export default function Login() {
 
               {isRegister && (
                 <FormControl>
-                  <FormLabel color={mutedText}>Konfirmasi Password</FormLabel>
+                  <FormLabel color={mutedText} fontSize="xs">
+                    Konfirmasi Password
+                  </FormLabel>
                   <InputGroup>
                     <Input
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -385,6 +484,7 @@ export default function Login() {
                       bg={inputBg}
                       border="none"
                       borderRadius="2xl"
+                      fontSize="sm"
                       _focus={{ boxShadow: 'none', bg: inputBg }}
 
                       value={confirmPassword}
@@ -416,7 +516,7 @@ export default function Login() {
                 <Text
                   as="button"
                   type="button"
-                  fontSize="sm"
+                  fontSize="xs"
                   color={mutedText}
                   _hover={{ color: 'blue.300' }}
                   cursor="pointer"
@@ -433,7 +533,8 @@ export default function Login() {
               <Button
                 type="submit"
                 w="full"
-                size="lg"
+                size="md"
+                fontSize="sm"
                 borderRadius="full"
                 color="white"
                 bg="rgba(37, 99, 235, 0.25)"

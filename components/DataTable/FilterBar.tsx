@@ -1,5 +1,6 @@
 import { Button, Flex, Input, Select } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
 
 export interface FilterField {
   key: string;
@@ -24,6 +25,7 @@ export default function FilterBar<TFilters extends object>({
   onReset,
   debounceMs = DEFAULT_DEBOUNCE_MS,
 }: FilterBarProps<TFilters>) {
+  const mode = useThemeStore((state) => state.mode);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
@@ -58,8 +60,8 @@ export default function FilterBar<TFilters extends object>({
             value={String(filters[field.key as keyof TFilters] ?? '')}
             onChange={(event) => onChange(field.key, event.target.value)}
             maxW={{ base: 'full', md: '180px', xl: '200px' }}
-            bg="rgba(0,0,0,0.40)"
-            borderColor="whiteAlpha.300"
+            bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'white'}
+            borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
             flexShrink={0}
           >
             {field.options.map((option) => (
@@ -81,8 +83,8 @@ export default function FilterBar<TFilters extends object>({
               handleTextChange(field.key, event.target.value)
             }
             maxW={{ base: 'full', md: '160px', xl: '220px' }}
-            bg="rgba(0,0,0,0.40)"
-            borderColor="whiteAlpha.300"
+            bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'white'}
+            borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
             flexShrink={0}
           />
         )
