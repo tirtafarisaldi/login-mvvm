@@ -1,4 +1,4 @@
-# BANNER MANAGEMENT SYSTEM FRONTEND
+# CONTENT MANAGEMENT SYSTEM FRONTEND STUDIO PERTUNJUKAN
 
 ## Pattern
  - [Design Pattern - MVVM](https://reactjsexample.com/clean-architecture-for-react/)
