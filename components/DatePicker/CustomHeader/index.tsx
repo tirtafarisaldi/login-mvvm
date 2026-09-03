@@ -29,7 +29,7 @@ const CustomHeader: FC<CustomHeaderProps> = ({
         _hover={{ bg: 'unset' }}
         _focus={{ bg: 'unset', outline: 'none' }}
       />
-      <Box fontFamily="lato" flex={1} color="darkWillow" fontSize="14px" fontWeight={700}>
+      <Box fontFamily="poppins" flex={1} color="darkWillow" fontSize="14px" fontWeight={700}>
         {format(date, 'MMMM yyyy')}
       </Box>
       <IconButton

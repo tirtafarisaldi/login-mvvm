@@ -23,7 +23,7 @@ const ReactQueryDevtools = dynamic(
   { ssr: false }
 );
 
-const menuRoutes = ['/', '/inventory', '/schedule'];
+const menuRoutes = ['/', '/inventory', '/booking', '/schedule'];
 
 type AppPropsWithDehydratedState = AppProps & {
   pageProps: AppProps['pageProps'] & { dehydratedState?: DehydratedState };

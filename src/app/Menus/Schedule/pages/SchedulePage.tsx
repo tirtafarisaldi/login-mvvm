@@ -23,7 +23,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import {
-  CALENDAR_COLORS,
+  colorFromKey,
   Calendar,
   buildSampleEvents,
   palette,
@@ -139,7 +139,7 @@ export default function SchedulePage() {
           end: schedule.end_time,
           location: schedule.location,
           organizer: schedule.peminjam,
-          color: CALENDAR_COLORS[index % CALENDAR_COLORS.length],
+          color: colorFromKey(schedule.title),
           ...(schedule.note ? { note: schedule.note } : {}),
         })
       );
@@ -339,10 +339,9 @@ export default function SchedulePage() {
         size="md"
         motionPreset="none"
       >
-        <ModalOverlay backdropFilter="blur(8px)" bg="blackAlpha.700" />
+        <ModalOverlay bg="blackAlpha.700" />
         <ModalContent
           bg={mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'}
-          backdropFilter="blur(16px)"
           color={theme.textPrimary}
           borderWidth="1px"
           borderColor={theme.panelBorder}

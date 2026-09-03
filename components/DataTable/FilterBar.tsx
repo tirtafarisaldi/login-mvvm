@@ -63,6 +63,7 @@ export default function FilterBar<TFilters extends object>({
             bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'white'}
             borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
             flexShrink={0}
+            fontSize="sm"
           >
             {field.options.map((option) => (
               <option key={option} value={option} style={{ color: '#111827' }}>
@@ -86,15 +87,23 @@ export default function FilterBar<TFilters extends object>({
             bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'white'}
             borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
             flexShrink={0}
+            fontSize="sm"
           />
         )
       )}
       <Button
         variant="outline"
         colorScheme="blue"
+        color={mode === 'dark' ? undefined : 'blue.800'}
+        borderColor={mode === 'dark' ? undefined : 'blue.800'}
         fontSize="sm"
         borderRadius="full"
         flexShrink={0}
+        _hover={
+          mode === 'dark'
+            ? undefined
+            : { bg: 'blue.800', color: 'white', borderColor: 'blue.800' }
+        }
         onClick={handleReset}
       >
         Reset Filter

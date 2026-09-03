@@ -21,9 +21,8 @@ export interface ThemeColors {
 }
 
 const dark: ThemeColors = {
-  pageBg: '#060a14',
-  pageBgImage:
-    'radial-gradient(ellipse 55% 40% at 12% -10%, rgba(99,102,241,0.32), transparent 60%), radial-gradient(ellipse 45% 35% at 100% -5%, rgba(34,211,238,0.26), transparent 55%), radial-gradient(ellipse 60% 45% at 88% 108%, rgba(168,85,247,0.24), transparent 60%), radial-gradient(ellipse 50% 40% at -5% 100%, rgba(59,130,246,0.24), transparent 55%), linear-gradient(180deg, #0b1121 0%, #0a0f1e 50%, #070b15 100%)',
+  pageBg: '#191b20',
+  pageBgImage: 'none',
   panelBg: 'rgba(0,0,0,0.30)',
   panelBorder: 'rgba(255,255,255,0.12)',
   panelShadow:

@@ -69,13 +69,13 @@ export default function HomePage() {
             letterSpacing="tight"
             lineHeight="shorter"
             color={theme.textPrimary}
-            fontFamily="sans-serif"
+            fontFamily="poppins"
           >
             Overview
           </Heading>
           <Text color={theme.textSecondary} mt={2} fontSize="sm" maxW="lg">
             Pilih menu untuk mulai mengelola aktivitas laboratorium, inventaris,
-            peminjaman, dan jadwal ruangan.
+            booking, dan jadwal ruangan.
           </Text>
         </Box>
         <GlassCard radius="full" depth={10} maxTilt={6}>
@@ -116,13 +116,15 @@ export default function HomePage() {
                 p={{ base: 4, md: 6 }}
               >
                 <Box position="relative" flexShrink={0}>
-                  <Box
-                    position="absolute"
-                    inset={-3}
-                    borderRadius="full"
-                    bg={`radial-gradient(circle, ${style.color}, transparent 68%)`}
-                    opacity={0.5}
-                  />
+                  {mode === 'dark' && (
+                    <Box
+                      position="absolute"
+                      inset={-3}
+                      borderRadius="full"
+                      bg={`radial-gradient(circle, ${style.color}, transparent 68%)`}
+                      opacity={0.5}
+                    />
+                  )}
                   <Flex
                     w={{ base: 9, md: 12 }}
                     h={{ base: 9, md: 12 }}
@@ -192,13 +194,15 @@ export default function HomePage() {
                 <Box>
                   <Flex align="flex-start" gap={3}>
                     <Box position="relative" flexShrink={0}>
-                      <Box
-                        position="absolute"
-                        inset={-3}
-                        borderRadius="full"
-                        bg={`radial-gradient(circle, ${style.color}, transparent 68%)`}
-                        opacity={0.5}
-                      />
+                      {mode === 'dark' && (
+                        <Box
+                          position="absolute"
+                          inset={-3}
+                          borderRadius="full"
+                          bg={`radial-gradient(circle, ${style.color}, transparent 68%)`}
+                          opacity={0.5}
+                        />
+                      )}
                       <Flex
                         w={12}
                         h={12}

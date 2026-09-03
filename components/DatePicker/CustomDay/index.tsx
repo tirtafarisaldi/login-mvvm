@@ -38,7 +38,7 @@ const CustomDay: FC<CustomDayProps> = ({ date }) => {
         width="32px"
         height="32px"
         lineHeight="32px"
-        fontFamily="lato"
+        fontFamily="poppins"
         fontStyle="normal"
         fontWeight="400"
         fontSize="14px"

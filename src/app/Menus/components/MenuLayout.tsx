@@ -6,7 +6,7 @@ import {
   HamburgerIcon,
   InfoIcon,
   MoonIcon,
-  SettingsIcon,
+  RepeatIcon,
   SunIcon,
   ViewIcon,
 } from '@chakra-ui/icons';
@@ -24,7 +24,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Spinner,
   Stack,
   Text,
   useDisclosure,
@@ -36,6 +35,7 @@ import { useState, type ReactNode } from 'react';
 import { useLogout } from '../../../data/repositories/AuthRepositoryImpl';
 import { useThemeStore } from '../store/useThemeStore';
 import { useThemeColors } from '../store/themeColors';
+import MenuLoadingScreen from './MenuLoadingScreen';
 
 const menuItems: Array<{
   label: string;
@@ -43,18 +43,21 @@ const menuItems: Array<{
   icon: typeof ViewIcon;
 }> = [
   { label: 'Dashboard', href: '/', icon: ViewIcon },
-  { label: 'Inventaris Barang', href: '/inventory', icon: InfoIcon },
-  { label: 'Peminjaman', icon: SettingsIcon },
-  { label: 'Schedule', href: '/schedule', icon: CalendarIcon },
-];
-
-const glowSpots = [
-  { top: '18%', left: '12%', size: 420, color: 'rgba(168,85,247,0.14)' },
-  { top: '12%', left: '80%', size: 460, color: 'rgba(34,211,238,0.14)' },
-  { top: '52%', left: '40%', size: 500, color: 'rgba(59,130,246,0.14)' },
-  { top: '76%', left: '82%', size: 440, color: 'rgba(251,146,60,0.10)' },
-  { top: '84%', left: '10%', size: 400, color: 'rgba(52,211,153,0.10)' },
-  { top: '40%', left: '92%', size: 380, color: 'rgba(244,114,182,0.10)' },
+  {
+    label: 'Inventaris Alat',
+    href: '/inventory',
+    icon: InfoIcon,
+  },
+  {
+    label: 'Peminjaman',
+    href: '/booking',
+    icon: RepeatIcon,
+  },
+  {
+    label: 'Jadwal Studio',
+    href: '/schedule',
+    icon: CalendarIcon,
+  },
 ];
 
 export default function MenuLayout({
@@ -108,6 +111,7 @@ export default function MenuLayout({
 
   return (
     <Flex
+      data-theme={mode}
       minH="100vh"
       h={{ base: '100dvh', md: '100vh' }}
       direction="column"
@@ -117,25 +121,7 @@ export default function MenuLayout({
       overflow="hidden"
       p={{ base: 0, md: 10 }}
     >
-      {!hasHydrated && (
-        <Box
-          position="absolute"
-          inset={{ base: 0, md: 10 }}
-          borderRadius="2xl"
-          bg={theme.pageBg}
-          zIndex={90}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Flex align="center" justify="center" direction="column" gap={3}>
-            <Spinner color="blue.400" />
-            <Text color={theme.textMuted} fontSize="sm">
-              Memuat…
-            </Text>
-          </Flex>
-        </Box>
-      )}
+      {!hasHydrated && <MenuLoadingScreen />}
       <Box
         position="absolute"
         inset={{ base: 0, md: 10 }}
@@ -146,28 +132,6 @@ export default function MenuLayout({
         boxShadow={theme.panelShadow}
         pointerEvents="none"
       />
-      <Box
-        position="absolute"
-        inset={{ base: 0, md: 10 }}
-        borderRadius="2xl"
-        pointerEvents="none"
-      >
-        {mode === 'dark' &&
-          glowSpots.map((spot) => (
-            <Box
-              key={`${spot.top}-${spot.left}`}
-              position="absolute"
-              top={spot.top}
-              left={spot.left}
-              w={`${spot.size}px`}
-              h={`${spot.size}px`}
-              borderRadius="full"
-              bg={`radial-gradient(circle, ${spot.color}, transparent 65%)`}
-              pointerEvents="none"
-            />
-          ))}
-      </Box>
-
       <Flex flex="1" minH={0} position="relative" zIndex={1} overflow="hidden">
         <Flex
           direction="column"
@@ -382,7 +346,7 @@ export default function MenuLayout({
             </Box>
           </Box>
 
-          <Divider borderColor={theme.panelBorder} my={7} />
+          <Divider borderColor={theme.panelBorder} my={4} />
 
           <Flex align="center" justify="space-between" mt={3}>
             <Button
@@ -432,7 +396,6 @@ export default function MenuLayout({
           pb={{ base: 5, md: 10 }}
           overflow="auto"
           bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'rgba(255,255,255,0.55)'}
-          backdropFilter="blur(10px)"
           borderRightRadius={{ base: 0, md: '2xl' }}
           color={theme.textPrimary}
           zIndex={1}
@@ -466,15 +429,97 @@ export default function MenuLayout({
               alignItems="center"
               justifyContent="center"
               bg={
-                mode === 'dark' ? 'rgba(5,6,8,0.55)' : 'rgba(255,255,255,0.55)'
+                mode === 'dark' ? 'rgba(5,6,8,0.45)' : 'rgba(255,255,255,0.45)'
               }
-              backdropFilter="blur(2px)"
+              backdropFilter="blur(6px)"
             >
-              <Spinner
-                thickness="3px"
-                size="lg"
-                color={mode === 'dark' ? 'blue.300' : 'blue.500'}
-              />
+              <Flex
+                align="center"
+                gap={4}
+                px={6}
+                py={5}
+                borderRadius="2xl"
+                bg={
+                  mode === 'dark'
+                    ? 'rgba(16,19,26,0.7)'
+                    : 'rgba(255,255,255,0.75)'
+                }
+                borderWidth="1px"
+                borderColor={
+                  mode === 'dark'
+                    ? 'rgba(96,165,250,0.25)'
+                    : 'rgba(37,99,235,0.2)'
+                }
+                boxShadow={
+                  mode === 'dark'
+                    ? '0 8px 32px rgba(0,0,0,0.4)'
+                    : '0 8px 32px rgba(37,99,235,0.14)'
+                }
+                backdropFilter="blur(16px)"
+              >
+                <Box position="relative" w={9} h={9}>
+                  <Box
+                    position="absolute"
+                    inset={0}
+                    borderRadius="full"
+                    borderWidth="3px"
+                    borderColor={
+                      mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100'
+                    }
+                  />
+                  <Box
+                    position="absolute"
+                    inset={0}
+                    borderRadius="full"
+                    borderWidth="3px"
+                    borderColor="transparent"
+                    borderTopColor={mode === 'dark' ? '#60a5fa' : '#2563eb'}
+                    borderRightColor={mode === 'dark' ? '#60a5fa' : '#2563eb'}
+                    sx={{
+                      '@keyframes spin360': {
+                        to: { transform: 'rotate(360deg)' },
+                      },
+                      animation: 'spin360 0.9s linear infinite',
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <Text
+                    color={mode === 'dark' ? 'blue.100' : 'slate.700'}
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    fontFamily="poppins"
+                  >
+                    Memuat…
+                  </Text>
+                  <Box
+                    mt={1.5}
+                    h="3px"
+                    w="140px"
+                    borderRadius="full"
+                    overflow="hidden"
+                    bg={mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100'}
+                  >
+                    <Box
+                      h="full"
+                      borderRadius="full"
+                      width="40%"
+                      background={
+                        mode === 'dark'
+                          ? 'linear-gradient(90deg, transparent, #60a5fa, transparent)'
+                          : 'linear-gradient(90deg, transparent, #2563eb, transparent)'
+                      }
+                      sx={{
+                        '@keyframes slideShimmer': {
+                          '0%': { transform: 'translateX(-110%)' },
+                          '100%': { transform: 'translateX(360%)' },
+                        },
+                        animation: 'slideShimmer 1.1s ease-in-out infinite',
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Flex>
             </Box>
           )}
         </Box>

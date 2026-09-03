@@ -33,7 +33,7 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
                 margin: 0,
                 padding: 0,
                 textTransform: 'uppercase',
-                fontFamily: 'Lato',
+                fontFamily: 'Poppins',
                 fontStyle: 'normal',
                 fontWeight: 700,
                 fontSize: '11px',

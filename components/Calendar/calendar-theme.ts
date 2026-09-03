@@ -54,3 +54,15 @@ export const CALENDAR_COLORS: EventColor[] = [
   'violet',
   'rose',
 ];
+
+const hashKey = (key: string): number => {
+  let hash = 0;
+  const value = key.trim().toLowerCase();
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+};
+
+export const colorFromKey = (key: string): EventColor =>
+  CALENDAR_COLORS[hashKey(key) % CALENDAR_COLORS.length] ?? 'blue';

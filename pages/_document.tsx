@@ -7,19 +7,15 @@ const MyDocument = () => (
       <meta name="theme-color" content="#000000" />
       <link rel="icon" href="/img/Logo_PENS_putih.png" />
       <link rel="apple-touch-icon" href="/img/Logo_PENS_putih.png" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link
-        rel="preload"
-        href="/assets/fonts/Lato/Lato-Regular.ttf"
-        as="font"
-        type="font/ttf"
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
         crossOrigin="anonymous"
       />
       <link
-        rel="preload"
-        href="/assets/fonts/Lato/Lato-Bold.ttf"
-        as="font"
-        type="font/ttf"
-        crossOrigin="anonymous"
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
       />
     </Head>
     <body className="text-blueGray-700 bg-calla_lily antialiased">

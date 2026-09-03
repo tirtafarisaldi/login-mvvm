@@ -130,7 +130,7 @@ const customStyles = (size: Size) => {
     multiValueLabel: (styles: any, { data }: { data: any }) => ({
       ...styles,
       color: colors.ottomanRed,
-      font: 'Lato',
+      font: 'Poppins',
       fontSize: '12px',
       fontWeight: 'bold'
     }),

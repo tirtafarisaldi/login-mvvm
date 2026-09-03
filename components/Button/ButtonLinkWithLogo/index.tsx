@@ -15,7 +15,7 @@ const ButtonLinkWithLogo: FC<ButtonLinkWithLogoProps> = ({
 }) => {
   const getClassName = () => {
     let className =
-      'inline-block font-lato font-bold text-size14 leading-17px focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all';
+      'inline-block font-poppins font-bold text-size14 leading-17px focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all';
 
     if (!textColor) {
       className += ' text-deep_skyblue hover:text-deep_skyblue_dark';

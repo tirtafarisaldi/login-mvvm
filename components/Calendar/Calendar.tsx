@@ -80,7 +80,6 @@ function Calendar({
       borderColor={
         mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.10)'
       }
-      backdropFilter="blur(8px)"
       boxShadow={
         mode === 'dark'
           ? 'inset 0 1px 0 rgba(255,255,255,0.06)'
@@ -148,7 +147,7 @@ function Calendar({
         </Flex>
       </Flex>
 
-      <Box px={2} pt={1.5} display="grid" gridTemplateColumns="repeat(7, 1fr)">
+      <Box px={2} pt={2.5} display="grid" gridTemplateColumns="repeat(7, 1fr)">
         {WEEKDAYS.map((weekday) => (
           <Text
             key={weekday}
@@ -171,7 +170,7 @@ function Calendar({
         display="grid"
         gridTemplateColumns="repeat(7, 1fr)"
         gap={1}
-        bg={mode === 'dark' ? 'rgba(0,0,0,0.20)' : 'rgba(15,23,42,0.03)'}
+        bg={mode === 'dark' ? 'rgba(0,0,0,0.20)' : 'transparent'}
       >
         {monthDays.map((day) => {
           const dayKey = toDateKey(day);
@@ -225,7 +224,7 @@ function Calendar({
                     : 'rgba(15,23,42,0.16)',
               }}
             >
-              <Flex align="center" justify="space-between" mb={1}>
+              <Flex align="center" justify="space-between" mb={2}>
                 <Flex
                   w={6}
                   h={6}
@@ -278,6 +277,7 @@ function Calendar({
                       label={`${event.title} · ${event.start}–${event.end}`}
                       placement="top"
                       hasArrow
+                      motionProps={{ transition: { duration: 0 } }}
                     >
                       <Button
                         w="full"

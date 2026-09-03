@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        lato: ['Lato', ...defaultTheme.fontFamily.serif]
+        poppins: ['Poppins', ...defaultTheme.fontFamily.sans]
       },
       minWidth: {
         8: '2rem',

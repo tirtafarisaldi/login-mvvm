@@ -49,6 +49,7 @@ import type {
 } from '../../../../domain/models/InventoryModel';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
+import { shortId } from 'utility/string';
 
 const categories = ['Kamera', 'Audio', 'Pencahayaan', 'Aksesori', 'Properti'];
 const locations = [
@@ -77,11 +78,73 @@ const emptyInventory: InventoryInput = {
   information: '',
   image: '',
 };
-const statusColor = {
-  Tersedia: 'green',
-  Dipinjam: 'orange',
-  'Perlu Perawatan': 'red',
-} as const;
+const STATUS_BADGE: Record<
+  InventoryStatus,
+  { light: string; dark: string; text: string }
+> = {
+  Tersedia: {
+    light: '#bbf7d0',
+    dark: 'rgba(34,197,94,0.16)',
+    text: 'green',
+  },
+  Dipinjam: {
+    light: '#fed7aa',
+    dark: 'rgba(249,115,22,0.16)',
+    text: 'orange',
+  },
+  'Perlu Perawatan': {
+    light: '#fecaca',
+    dark: 'rgba(239,68,68,0.16)',
+    text: 'red',
+  },
+};
+
+const statusTextColor = (
+  status: InventoryStatus,
+  mode: 'dark' | 'light'
+): string => {
+  const t = STATUS_BADGE[status].text;
+  return mode === 'dark' ? `${t}.200` : `${t}.900`;
+};
+
+const badgeBg = (status: InventoryStatus, mode: 'dark' | 'light'): string =>
+  mode === 'dark' ? STATUS_BADGE[status].dark : STATUS_BADGE[status].light;
+
+const badgeBorder = (
+  status: InventoryStatus,
+  mode: 'dark' | 'light'
+): string => {
+  const t = STATUS_BADGE[status].text;
+  return mode === 'dark' ? `${t}.400` : `${t}.600`;
+};
+
+const CATEGORY_BADGE: Record<
+  string,
+  { light: string; dark: string; text: string }
+> = {
+  Kamera: { light: '#bfdbfe', dark: 'rgba(59,130,246,0.16)', text: 'blue' },
+  Audio: { light: '#e9d5ff', dark: 'rgba(168,85,247,0.16)', text: 'purple' },
+  Pencahayaan: {
+    light: '#fed7aa',
+    dark: 'rgba(249,115,22,0.16)',
+    text: 'orange',
+  },
+  Aksesori: { light: '#a5f3fc', dark: 'rgba(6,182,212,0.16)', text: 'cyan' },
+  Properti: { light: '#fbcfe8', dark: 'rgba(236,72,153,0.16)', text: 'pink' },
+};
+const FALLBACK_CATEGORY: {
+  light: string;
+  dark: string;
+  text: string;
+} = { light: '#e2e8f0', dark: 'rgba(148,163,184,0.16)', text: 'gray' };
+const categoryBadge = (category: string, mode: 'dark' | 'light') => {
+  const tone = CATEGORY_BADGE[category] ?? FALLBACK_CATEGORY;
+  return {
+    bg: mode === 'dark' ? tone.dark : tone.light,
+    color: mode === 'dark' ? `${tone.text}.200` : `${tone.text}.900`,
+    borderColor: mode === 'dark' ? `${tone.text}.400` : `${tone.text}.600`,
+  };
+};
 const toInput = (inventory: InventoryModel): InventoryInput => ({
   name: inventory.name,
   category: inventory.category,
@@ -199,6 +262,51 @@ export default function InventoryPage() {
   const remove = async (inventory: InventoryModel) => {
     if (!window.confirm(`Hapus ${inventory.name}?`)) return;
     await deleteInventory(inventory.id);
+  };
+
+  const renderStatus = (item: InventoryModel) => (
+    <Badge
+      bg={badgeBg(item.status, mode)}
+      color={statusTextColor(item.status, mode)}
+      border="1px solid"
+      borderColor={badgeBorder(item.status, mode)}
+      borderRadius="full"
+      px={3}
+      py={1}
+      fontSize="11px"
+      fontWeight="bold"
+    >
+      {item.status}
+    </Badge>
+  );
+
+  const renderCategory = (category: string) => {
+    const style = categoryBadge(category, mode);
+    return (
+      <Badge
+        bg={style.bg}
+        color={style.color}
+        border="1px solid"
+        borderColor={style.borderColor}
+        borderRadius="full"
+        px={2.5}
+        py={1}
+        fontSize="10px"
+        fontWeight="bold"
+        display="inline-flex"
+        alignItems="center"
+        gap={1.5}
+      >
+        <Box
+          w={1.5}
+          h={1.5}
+          borderRadius="full"
+          bg="currentColor"
+          opacity={0.7}
+        />
+        {category}
+      </Badge>
+    );
   };
 
   return (
@@ -319,37 +427,15 @@ export default function InventoryPage() {
                       }}
                     >
                       <Td color={theme.textMuted} fontWeight="semibold">
-                        {item.id}
+                        {shortId(item.id)}
                       </Td>
                       <Td color={theme.textPrimary} fontWeight="semibold">
                         {item.name}
                       </Td>
-                      <Td>
-                        <Badge
-                          bg={
-                            mode === 'dark'
-                              ? 'whiteAlpha.200'
-                              : 'blackAlpha.100'
-                          }
-                          color={theme.textPrimary}
-                          fontWeight="semibold"
-                        >
-                          {item.category}
-                        </Badge>
-                      </Td>
+                      <Td>{renderCategory(item.category)}</Td>
                       <Td color={theme.textSecondary}>{item.stock} unit</Td>
                       <Td color={theme.textSecondary}>{item.location}</Td>
-                      <Td>
-                        <Badge
-                          colorScheme={statusColor[item.status]}
-                          borderRadius="full"
-                          px={3}
-                          py={1}
-                          fontWeight="bold"
-                        >
-                          {item.status}
-                        </Badge>
-                      </Td>
+                      <Td>{renderStatus(item)}</Td>
                       <Td>
                         <Button
                           variant="link"
@@ -412,19 +498,10 @@ export default function InventoryPage() {
                         {item.name}
                       </Text>
                       <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
-                        ID {item.id} · {item.category}
+                        ID {shortId(item.id)} · {item.category}
                       </Text>
                     </Box>
-                    <Badge
-                      colorScheme={statusColor[item.status]}
-                      borderRadius="full"
-                      px={3}
-                      py={1}
-                      flexShrink={0}
-                      fontWeight="bold"
-                    >
-                      {item.status}
-                    </Badge>
+                    {renderStatus(item)}
                   </Flex>
                   <Flex
                     mt={3}

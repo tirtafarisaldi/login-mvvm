@@ -198,7 +198,7 @@ export default function ScheduleFormModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" motionPreset="none">
-      <ModalOverlay backdropFilter="blur(8px)" bg="blackAlpha.700" />
+      <ModalOverlay bg="blackAlpha.700" />
       <ModalContent
         as="form"
         onSubmit={(event: React.FormEvent) => {
@@ -208,7 +208,6 @@ export default function ScheduleFormModal({
         bg={
           themeMode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'
         }
-        backdropFilter="blur(16px)"
         color={theme.textPrimary}
         borderWidth="1px"
         borderColor={theme.panelBorder}

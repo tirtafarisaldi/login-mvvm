@@ -7,9 +7,10 @@ import Switch from 'components/Switch/styleConfig';
 
 const theme = extendTheme({
   fonts: {
-    heading: "'Inter', sans-serif",
-    poppins: 'Inter',
-    body: "'Inter', sans-serif"
+    heading: "'Poppins', sans-serif",
+    poppins: 'Poppins',
+    body: "'Poppins', sans-serif",
+    mono: "'Poppins', sans-serif"
   },
   components: {
     CustomAlert: Alert,

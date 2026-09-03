@@ -2,6 +2,7 @@ import { TimeIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  Flex,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -65,6 +66,7 @@ export default function TimePickerField({
           }
           fontSize="sm"
           fontWeight="medium"
+          fontFamily="mono"
           _hover={{
             bg: mode === 'dark' ? 'whiteAlpha.200' : 'gray.50',
             borderColor: mode === 'dark' ? 'whiteAlpha.400' : 'gray.400',
@@ -80,7 +82,7 @@ export default function TimePickerField({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        w="256px"
+        w="248px"
         bg={mode === 'dark' ? 'rgba(10,12,18,0.95)' : 'rgba(255,255,255,0.98)'}
         color={mode === 'dark' ? 'white' : 'gray.800'}
         borderWidth="1px"
@@ -88,20 +90,34 @@ export default function TimePickerField({
           mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(15,23,42,0.12)'
         }
         borderRadius="2xl"
-        boxShadow="0 24px 80px rgba(0,0,0,.6)"
+        boxShadow="0 24px 80px rgba(0,0,0,.55)"
         backdropFilter="blur(20px)"
       >
         <PopoverBody p={3}>
-          <Text
-            color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
-            fontSize="xs"
-            fontWeight="bold"
-            letterSpacing="wide"
-            textTransform="uppercase"
-            mb={2}
+          <Flex
+            align="center"
+            justify="space-between"
+            mb={3}
+            px={3}
+            py={2}
+            borderRadius="xl"
+            bg={mode === 'dark' ? 'whiteAlpha.100' : 'rgba(15,23,42,0.04)'}
           >
-            Jam
-          </Text>
+            <TimeIcon
+              color={mode === 'dark' ? 'blue.300' : 'blue.600'}
+              boxSize={4}
+            />
+            <Text
+              fontSize="2xl"
+              fontWeight="bold"
+              fontFamily="mono"
+              color={mode === 'dark' ? 'white' : 'gray.800'}
+            >
+              {pad(hour)}:{pad(minute)}
+            </Text>
+            <Box w={4} />
+          </Flex>
+
           <Box display="grid" gridTemplateColumns="repeat(6, 1fr)" gap={1}>
             {HOURS.map((pickedHour) => (
               <Button
@@ -126,7 +142,6 @@ export default function TimePickerField({
                           mode === 'dark'
                             ? 'whiteAlpha.100'
                             : 'rgba(15,23,42,0.06)',
-                        color: mode === 'dark' ? 'white' : 'gray.900',
                       }
                 }
                 onClick={() => pickHour(pickedHour)}
@@ -136,23 +151,13 @@ export default function TimePickerField({
             ))}
           </Box>
 
-          <Text
-            color={mode === 'dark' ? 'whiteAlpha.500' : 'gray.500'}
-            fontSize="xs"
-            fontWeight="bold"
-            letterSpacing="wide"
-            textTransform="uppercase"
-            mt={3}
-            mb={2}
-          >
-            Menit
-          </Text>
-          <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={1}>
+          <Flex gap={1} mt={2}>
             {MINUTES.map((pickedMinute) => (
               <Button
                 key={pickedMinute}
                 size="xs"
                 h={7}
+                flex="1"
                 borderRadius="md"
                 bg={pickedMinute === minute ? 'blue.600' : 'transparent'}
                 color={
@@ -162,6 +167,14 @@ export default function TimePickerField({
                       ? 'whiteAlpha.700'
                       : 'gray.600'
                 }
+                border="1px solid"
+                borderColor={
+                  pickedMinute === minute
+                    ? 'blue.600'
+                    : mode === 'dark'
+                      ? 'whiteAlpha.200'
+                      : 'gray.300'
+                }
                 _hover={
                   pickedMinute === minute
                     ? undefined
@@ -170,7 +183,6 @@ export default function TimePickerField({
                           mode === 'dark'
                             ? 'whiteAlpha.100'
                             : 'rgba(15,23,42,0.06)',
-                        color: mode === 'dark' ? 'white' : 'gray.900',
                       }
                 }
                 onClick={() => pickMinute(pickedMinute)}
@@ -178,7 +190,7 @@ export default function TimePickerField({
                 {pad(pickedMinute)}
               </Button>
             ))}
-          </Box>
+          </Flex>
         </PopoverBody>
       </PopoverContent>
     </Popover>

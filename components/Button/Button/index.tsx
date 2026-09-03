@@ -20,7 +20,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
   const getClassName = () => {
     let className =
-      'inline-block text-center font-lato rounded-lg disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none transition-all';
+      'inline-block text-center font-poppins rounded-lg disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none transition-all';
 
     switch (size) {
       case 'large':

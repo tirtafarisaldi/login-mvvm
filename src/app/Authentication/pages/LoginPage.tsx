@@ -137,7 +137,7 @@ export default function Login() {
   const toast = useToast();
 
   const pageBg =
-    'linear-gradient(to right, #0b1026 0%, #0a1026 38%, #04060d 100%)';
+    'linear-gradient(to right, #0b1026 0%, #0a1026 38%, #04060d 80%)';
   const cardBg = 'rgba(255,255,255,0.045)';
   const inputBg = 'rgba(255,255,255,0.06)';
   const textColor = 'whiteAlpha.900';
@@ -244,6 +244,7 @@ export default function Login() {
 
   return (
     <Flex
+      data-theme="dark"
       minH="100vh"
       bgImage={pageBg}
       bgColor="#070b15"
@@ -254,18 +255,58 @@ export default function Login() {
       fontFamily="'Poppins', sans-serif"
     >
       <StudioOrnaments />
+      <svg
+        width="0"
+        height="0"
+        style={{ position: 'absolute' }}
+        aria-hidden="true"
+        focusable="false"
+      >
+        <filter id="neutralize-purple" colorInterpolationFilters="sRGB">
+          <feColorMatrix
+            type="matrix"
+            values="0.90 0 0 0 0
+                    0.18 0.88 0.12 0 0
+                    0 0 0.92 0 0
+                    0 0 0 1 0"
+          />
+          <feColorMatrix type="saturate" values="0.85" />
+          <feComponentTransfer>
+            <feFuncR type="linear" slope="1.05" intercept="0.01" />
+            <feFuncG type="linear" slope="1.05" intercept="0.01" />
+            <feFuncB type="linear" slope="1.05" intercept="0.01" />
+          </feComponentTransfer>
+        </filter>
+      </svg>
       <Box
         position="absolute"
         left={0}
         top={0}
         h="100%"
-        w={{ base: '100%', lg: '100%' }}
-        bgImage="linear-gradient(90deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.88) 92%), linear-gradient(180deg, rgba(8, 47, 73, 0.22), rgba(2, 6, 23, 0.68)), url('/img/studio-pertunjukan.jpg')"
-        bgSize="cover"
-        bgPos="center"
-        opacity={0.5}
-        zIndex={0}
-      />
+        w="full"
+        overflow="hidden"
+      >
+        <Image
+          src="/img/studio-pertunjukan.jpg"
+          alt="Panggung Studio Pertunjukan"
+          position="absolute"
+          left={0}
+          top={0}
+          h="100%"
+          w="120%"
+          objectFit="cover"
+          objectPosition="35% center"
+          filter="url(#neutralize-purple)"
+          opacity={0.6}
+        />
+        <Box
+          position="absolute"
+          inset={0}
+          w="full"
+          h="full"
+          bgImage="linear-gradient(90deg, rgba(2, 6, 23, 0.14), rgba(2, 6, 23, 0.6) 92%), linear-gradient(180deg, rgba(8, 47, 73, 0.18), rgba(2, 6, 23, 0.5))"
+        />
+      </Box>
       <StudioSpotlights paused={isTyping} />
       <MotionBox
         position="absolute"
@@ -359,7 +400,7 @@ export default function Login() {
           </Heading>
 
           <Text fontSize="md" maxW="2xl" color="whiteAlpha.700">
-            Temukan informasi peralatan, lakukan peminjaman, cek jadwal, dan
+            Temukan informasi peralatan, lakukan booking, cek jadwal, dan
             akses berbagai layanan Laboratorium Studio Pertunjukan dengan lebih
             cepat dan mudah.
           </Text>
@@ -390,7 +431,7 @@ export default function Login() {
             <Text fontSize="xs" color="whiteAlpha.700">
               {isRegister
                 ? 'Daftarkan akun Anda untuk mulai mengakses fitur studio.'
-                : 'Gunakan akun Anda untuk mengakses informasi peralatan, peminjaman, jadwal, dan layanan laboratorium.'}
+                : 'Gunakan akun Anda untuk mengakses informasi peralatan, booking, jadwal, dan layanan laboratorium.'}
             </Text>
           </Stack>
 

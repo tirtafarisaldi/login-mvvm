@@ -1,5 +1,5 @@
 .filter-date .react-datepicker {
-  font-family: 'Lato', "Helvetica Neue", helvetica, arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
   font-weight: bold;
   background-color: #fff;
@@ -13,7 +13,7 @@
 .filter-date .react-datepicker__current-month,
 .filter-date .react-datepicker-time__header,
 .filter-date .react-datepicker-year-header {
-  font-family: 'Lato', "Helvetica Neue", helvetica, arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin-top: 0;
   color: #14171A;
   font-weight: bold;

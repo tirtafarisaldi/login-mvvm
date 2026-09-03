@@ -2,7 +2,7 @@ import { defineStyleConfig } from '@chakra-ui/react';
 
 const Modal = defineStyleConfig({
   baseStyle: {
-    fontFamily: 'lato'
+    fontFamily: 'poppins'
   },
   variants: {
     sidebar: {
