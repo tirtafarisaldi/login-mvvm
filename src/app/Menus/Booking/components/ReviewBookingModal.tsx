@@ -119,7 +119,7 @@ export default function ReviewBookingModal({
         borderRadius="2xl"
         mx={4}
       >
-        <ModalHeader fontSize="lg">Detail Booking</ModalHeader>
+        <ModalHeader fontSize="lg">Detail Peminjaman</ModalHeader>
         <ModalCloseButton
           color={theme.textSecondary}
           _hover={{
@@ -401,7 +401,7 @@ export default function ReviewBookingModal({
               }}
               onClick={complete}
             >
-              Selesaikan Booking
+              Selesaikan Peminjaman
             </Button>
           )}
 

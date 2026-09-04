@@ -42,7 +42,7 @@ const menuItems: Array<{
   href?: string;
   icon: typeof ViewIcon;
 }> = [
-  { label: 'Dashboard', href: '/', icon: ViewIcon },
+  { label: 'Overview', href: '/', icon: ViewIcon },
   {
     label: 'Inventaris Alat',
     href: '/inventory',
@@ -149,14 +149,18 @@ export default function MenuLayout({
             md: 'none',
           }}
           transition={{ base: 'transform 200ms ease', md: 'none' }}
-          bg={mode === 'dark' ? 'rgba(0,0,0,0.50)' : 'rgba(255,255,255,0.78)'}
-          backdropFilter="blur(12px)"
+          bg={mode === 'dark' ? '#191b20' : 'rgba(255,255,255,0.15)'}
+          backdropFilter="blur(14px)"
+          boxShadow={
+            mode === 'dark'
+              ? 'inset 0 1px 0 rgba(255,255,255,0.06)'
+              : 'inset 0 1px 0 rgba(255,255,255,0.9)'
+          }
           borderRightWidth="1px"
           borderRightColor={
             mode === 'dark' ? 'rgba(255,255,255,0.10)' : 'rgba(15,23,42,0.10)'
           }
           borderLeftRadius={{ base: 0, md: '2xl' }}
-          boxShadow={{ base: '0 0 40px rgba(0,0,0,0.55)', md: 'none' }}
           flexShrink={0}
         >
           <IconButton
@@ -395,7 +399,7 @@ export default function MenuLayout({
           p={{ base: 5, md: 10 }}
           pb={{ base: 5, md: 10 }}
           overflow="auto"
-          bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'rgba(255,255,255,0.55)'}
+          bg={mode === 'dark' ? 'rgba(0,0,0,0.62)' : 'rgba(255,255,255,0.55)'}
           borderRightRadius={{ base: 0, md: '2xl' }}
           color={theme.textPrimary}
           zIndex={1}

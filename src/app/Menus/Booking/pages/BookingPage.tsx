@@ -4,20 +4,15 @@ import {
   Button,
   Flex,
   Heading,
-  Spinner,
-  Stack,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useAuth } from 'service/auth';
+import DataTable, {
+  type Column,
+} from '../../../../../components/DataTable/DataTable';
 import FilterBar, {
   type FilterField,
 } from '../../../../../components/DataTable/FilterBar';
@@ -51,7 +46,10 @@ const baseFilterFields: FilterField[] = [
   {
     key: 'type',
     label: 'Semua jenis',
-    options: ['equipment', 'room'],
+    options: [
+      { value: 'equipment', label: 'Peralatan' },
+      { value: 'room', label: 'Ruangan' },
+    ],
   },
   {
     key: 'status',
@@ -92,9 +90,9 @@ const toInput = (values: BookingFormValues): BookingPayload => {
 export default function BookingPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
-  const filterFields = getFilterFields(isAdmin);
   const mode = useThemeStore((state) => state.mode);
   const theme = useThemeColors();
+  const filterFields = getFilterFields(isAdmin);
   const toast = useToast();
   const formModal = useDisclosure();
   const [filters, setFilters] = useState<BookingFilters>(initialFilters);
@@ -194,6 +192,95 @@ export default function BookingPage() {
     await deleteBooking(booking.id);
   };
 
+  const bookingColumns: Column<BookingModel>[] = [
+    {
+      header: 'ID',
+      accessor: (item) => (
+        <Text color={theme.textSecondary} fontFamily="mono">
+          {shortId(item.id)}
+        </Text>
+      ),
+    },
+    {
+      header: 'Judul',
+      accessor: (item) => (
+        <Text color={theme.textSecondary} fontWeight="semibold">
+          {item.title ?? '—'}
+        </Text>
+      ),
+    },
+    {
+      header: 'Peminjam',
+      accessor: (item) => (
+        <Text color={theme.textPrimary}>{item.borrower}</Text>
+      ),
+    },
+    {
+      header: 'Jenis',
+      accessor: (item) => (
+        <Text color={theme.textSecondary}>{TYPE_LABELS[item.type]}</Text>
+      ),
+    },
+    {
+      header: 'Tanggal',
+      accessor: (item) => (
+        <Text color={theme.textSecondary}>
+          {item.type === 'room'
+            ? item.date
+            : item.end_date
+              ? `${item.date} – ${item.end_date}`
+              : item.date}
+        </Text>
+      ),
+    },
+    {
+      header: 'Waktu',
+      accessor: (item) => (
+        <Text color={theme.textSecondary}>
+          {item.type === 'room' && item.start_time && item.end_time
+            ? `${item.start_time}–${item.end_time}`
+            : '—'}
+        </Text>
+      ),
+    },
+    {
+      header: 'Status',
+      accessor: (item) => <BookingStatusBadge status={item.status} />,
+    },
+    {
+      header: 'Aksi',
+      textAlign: 'right',
+      accessor: (item) => (
+        <Flex justify="flex-end" gap={1} align="center">
+          <Button
+            aria-label="Detail Peminjaman"
+            variant="ghost"
+            colorScheme="blue"
+            color={mode === 'dark' ? undefined : 'blue.800'}
+            size="xs"
+            leftIcon={<InfoOutlineIcon />}
+            onClick={() => openReview(item)}
+          >
+            Detail
+          </Button>
+          {isAdmin && (
+            <Button
+              aria-label="Hapus booking"
+              variant="ghost"
+              color={mode === 'dark' ? 'red.200' : 'red.600'}
+              _hover={{ bg: 'red.500' }}
+              size="sm"
+              isLoading={isDeleting}
+              onClick={() => remove(item)}
+            >
+              <DeleteIcon />
+            </Button>
+          )}
+        </Flex>
+      ),
+    },
+  ];
+
   return (
     <Box>
       <Flex
@@ -206,7 +293,7 @@ export default function BookingPage() {
         <Box>
           <Heading
             as="h1"
-            size={{ base: 'xl', md: '2xl' }}
+            size={{ base: 'lg', md: 'xl' }}
             color={theme.textPrimary}
             letterSpacing="tight"
           >
@@ -252,204 +339,77 @@ export default function BookingPage() {
         onChange={updateFilters}
         onReset={() => setFilters(initialFilters)}
       />
-      {isLoading ? (
-        <Flex minH="300px" justify="center" align="center">
-          <Spinner thickness="3px" color="blue.400" />
-        </Flex>
-      ) : (
-        <>
-          <Box display={{ base: 'none', md: 'block' }}>
-            <Box
-              borderWidth="1px"
-              borderColor={
-                mode === 'dark' ? 'rgba(255,255,255,0.12)' : 'gray.200'
-              }
-              borderRadius="2xl"
-              overflow="hidden"
-              bg={theme.cardBg}
-            >
-              <Box overflowX="auto">
-                <Table
-                  variant="simple"
-                  minW="1040px"
-                  sx={{
-                    th: {
-                      fontSize: 'xs',
-                      borderColor:
-                        mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'gray.200',
-                    },
-                    td: {
-                      fontSize: 'xs',
-                      borderColor:
-                        mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'gray.200',
-                    },
-                  }}
+      <DataTable
+        data={bookings}
+        loading={isLoading}
+        minW="1040px"
+        keyExtractor={(item) => item.id}
+        columns={bookingColumns}
+        renderMobileCard={(item) => (
+          <>
+            <Flex align="flex-start" justify="space-between" gap={2}>
+              <Box minW={0}>
+                <Text
+                  color={theme.textSecondary}
+                  fontSize="xs"
+                  fontFamily="mono"
                 >
-                  <Thead
-                    bg={mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
-                  >
-                    <Tr>
-                      <Th color={theme.textMuted}>ID</Th>
-                      <Th color={theme.textMuted}>Judul</Th>
-                      <Th color={theme.textMuted}>Peminjam</Th>
-                      <Th color={theme.textMuted}>Jenis</Th>
-                      <Th color={theme.textMuted}>Tanggal</Th>
-                      <Th color={theme.textMuted}>Waktu</Th>
-                      <Th color={theme.textMuted}>Status</Th>
-                      <Th color={theme.textMuted} textAlign="right">
-                        Aksi
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {bookings.map((item) => (
-                      <Tr
-                        key={item.id}
-                        _hover={{
-                          bg:
-                            mode === 'dark'
-                              ? 'whiteAlpha.200'
-                              : 'blackAlpha.100',
-                        }}
-                      >
-                        <Td color={theme.textSecondary} fontFamily="mono">
-                          {shortId(item.id)}
-                        </Td>
-                        <Td color={theme.textSecondary} fontWeight="semibold">
-                          {item.title ?? '—'}
-                        </Td>
-                        <Td color={theme.textPrimary}>{item.borrower}</Td>
-                        <Td color={theme.textSecondary}>
-                          {TYPE_LABELS[item.type]}
-                        </Td>
-                        <Td color={theme.textSecondary}>
-                          {item.type === 'room'
-                            ? item.date
-                            : item.end_date
-                              ? `${item.date} – ${item.end_date}`
-                              : item.date}
-                        </Td>
-                        <Td color={theme.textSecondary}>
-                          {item.type === 'room' &&
-                          item.start_time &&
-                          item.end_time
-                            ? `${item.start_time}–${item.end_time}`
-                            : '—'}
-                        </Td>
-                        <Td>
-                          <BookingStatusBadge status={item.status} />
-                        </Td>
-                        <Td>
-                          <Flex justify="flex-end" gap={1} align="center">
-                            <Button
-                              aria-label="Detail booking"
-                              variant="ghost"
-                              colorScheme="blue"
-                              color={mode === 'dark' ? undefined : 'blue.800'}
-                              size="xs"
-                              leftIcon={<InfoOutlineIcon />}
-                              onClick={() => openReview(item)}
-                            >
-                              Detail
-                            </Button>
-                            {isAdmin && (
-                              <Button
-                                aria-label="Hapus booking"
-                                variant="ghost"
-                                color={mode === 'dark' ? 'red.200' : 'red.600'}
-                                _hover={{ bg: 'red.500' }}
-                                size="sm"
-                                isLoading={isDeleting}
-                                onClick={() => remove(item)}
-                              >
-                                <DeleteIcon />
-                              </Button>
-                            )}
-                          </Flex>
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
+                  {shortId(item.id)}
+                </Text>
+                <Text
+                  color={theme.textPrimary}
+                  fontWeight="semibold"
+                  noOfLines={1}
+                >
+                  {item.borrower}
+                </Text>
+                <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
+                  {TYPE_LABELS[item.type]}
+                </Text>
+                <Text
+                  color={theme.textMuted}
+                  fontSize="xs"
+                  mt={0.5}
+                  noOfLines={1}
+                >
+                  {item.title ?? 'Tanpa judul'}
+                </Text>
+                <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
+                  {item.type === 'room'
+                    ? `${item.date} · ${item.start_time ?? ''}–${item.end_time ?? ''}`
+                    : item.end_date
+                      ? `${item.date} – ${item.end_date}`
+                      : item.date}
+                </Text>
               </Box>
-            </Box>
-          </Box>
-
-          <Stack spacing={3} display={{ base: 'flex', md: 'none' }}>
-            {bookings.map((item) => (
-              <Box
-                key={item.id}
-                bg={theme.cardBg}
-                borderWidth="1px"
-                borderColor={theme.cardBorder}
-                borderRadius="2xl"
-                p={4}
+              <BookingStatusBadge status={item.status} />
+            </Flex>
+            <Flex justify="flex-end" gap={1} mt={3}>
+              <Button
+                variant="ghost"
+                colorScheme="blue"
+                color={mode === 'dark' ? undefined : 'blue.800'}
+                size="xs"
+                leftIcon={<InfoOutlineIcon />}
+                onClick={() => openReview(item)}
               >
-                <Flex align="flex-start" justify="space-between" gap={2}>
-                  <Box minW={0}>
-                    <Text
-                      color={theme.textSecondary}
-                      fontSize="xs"
-                      fontFamily="mono"
-                    >
-                      {shortId(item.id)}
-                    </Text>
-                    <Text
-                      color={theme.textPrimary}
-                      fontWeight="semibold"
-                      noOfLines={1}
-                    >
-                      {item.borrower}
-                    </Text>
-                    <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
-                      {TYPE_LABELS[item.type]}
-                    </Text>
-                    <Text
-                      color={theme.textMuted}
-                      fontSize="xs"
-                      mt={0.5}
-                      noOfLines={1}
-                    >
-                      {item.title ?? 'Tanpa judul'}
-                    </Text>
-                    <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
-                      {item.type === 'room'
-                        ? `${item.date} · ${item.start_time ?? ''}–${item.end_time ?? ''}`
-                        : item.end_date
-                          ? `${item.date} – ${item.end_date}`
-                          : item.date}
-                    </Text>
-                  </Box>
-                  <BookingStatusBadge status={item.status} />
-                </Flex>
-                <Flex justify="flex-end" gap={1} mt={3}>
-                  <Button
-                    variant="ghost"
-                    colorScheme="blue"
-                    color={mode === 'dark' ? undefined : 'blue.800'}
-                    size="xs"
-                    leftIcon={<InfoOutlineIcon />}
-                    onClick={() => openReview(item)}
-                  >
-                    Detail
-                  </Button>
-                  {isAdmin && (
-                    <Button
-                      variant="ghost"
-                      color={mode === 'dark' ? 'red.200' : 'red.600'}
-                      size="xs"
-                      isLoading={isDeleting}
-                      onClick={() => remove(item)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  )}
-                </Flex>
-              </Box>
-            ))}
-          </Stack>
-        </>
-      )}
+                Detail
+              </Button>
+              {isAdmin && (
+                <Button
+                  variant="ghost"
+                  color={mode === 'dark' ? 'red.200' : 'red.600'}
+                  size="xs"
+                  isLoading={isDeleting}
+                  onClick={() => remove(item)}
+                >
+                  <DeleteIcon />
+                </Button>
+              )}
+            </Flex>
+          </>
+        )}
+      />
       <DataTablePagination
         currentPage={pagination.current}
         totalPages={pagination.total}

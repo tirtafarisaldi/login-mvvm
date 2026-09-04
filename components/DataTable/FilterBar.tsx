@@ -5,7 +5,7 @@ import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
 export interface FilterField {
   key: string;
   label: string;
-  options?: string[];
+  options?: Array<string | { value: string; label: string }>;
 }
 
 interface FilterBarProps<TFilters extends object> {
@@ -62,14 +62,34 @@ export default function FilterBar<TFilters extends object>({
             maxW={{ base: 'full', md: '180px', xl: '200px' }}
             bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'white'}
             borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
+            _hover={
+              mode === 'dark'
+                ? { bg: 'rgba(0,0,0,0.55)', borderColor: 'whiteAlpha.400' }
+                : { bg: 'gray.50', borderColor: 'blue.400' }
+            }
+            focusBorderColor="blue.400"
             flexShrink={0}
             fontSize="sm"
           >
-            {field.options.map((option) => (
-              <option key={option} value={option} style={{ color: '#111827' }}>
-                {option}
-              </option>
-            ))}
+            {field.options.map((option) =>
+              typeof option === 'string' ? (
+                <option
+                  key={option}
+                  value={option}
+                  style={{ color: '#111827' }}
+                >
+                  {option}
+                </option>
+              ) : (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  style={{ color: '#111827' }}
+                >
+                  {option.label}
+                </option>
+              )
+            )}
           </Select>
         ) : (
           <Input
@@ -86,6 +106,12 @@ export default function FilterBar<TFilters extends object>({
             maxW={{ base: 'full', md: '160px', xl: '220px' }}
             bg={mode === 'dark' ? 'rgba(0,0,0,0.40)' : 'white'}
             borderColor={mode === 'dark' ? 'whiteAlpha.300' : 'gray.300'}
+            _hover={
+              mode === 'dark'
+                ? { bg: 'rgba(0,0,0,0.55)', borderColor: 'whiteAlpha.400' }
+                : { bg: 'gray.50', borderColor: 'blue.400' }
+            }
+            focusBorderColor="blue.400"
             flexShrink={0}
             fontSize="sm"
           />

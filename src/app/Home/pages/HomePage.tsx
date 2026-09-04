@@ -64,7 +64,7 @@ export default function HomePage() {
         <Box>
           <Heading
             as="h1"
-            size={{ base: '3xl', md: '4xl' }}
+            size={{ base: '2xl', md: '3xl' }}
             fontWeight="black"
             letterSpacing="tight"
             lineHeight="shorter"
@@ -153,7 +153,7 @@ export default function HomePage() {
                   </Text>
                   <Text
                     color={theme.textPrimary}
-                    fontSize={{ base: '2xl', md: '3xl' }}
+                    fontSize={{ base: 'xl', md: '2xl' }}
                     fontWeight="black"
                     letterSpacing="tight"
                     lineHeight="shorter"
@@ -220,7 +220,7 @@ export default function HomePage() {
                     </Box>
                     <Box>
                       <Heading
-                        size="sm"
+                        size="xs"
                         color={theme.textPrimary}
                         letterSpacing="tight"
                       >

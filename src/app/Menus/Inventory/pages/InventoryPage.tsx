@@ -15,23 +15,23 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   Select,
   SimpleGrid,
-  Spinner,
-  Stack,
-  Table,
-  Tbody,
   Text,
   Textarea,
-  Td,
-  Th,
-  Thead,
-  Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { useState, type FormEvent } from 'react';
 import { useAuth } from 'service/auth';
+import DataTable, {
+  type Column,
+} from '../../../../../components/DataTable/DataTable';
 import FilterBar, {
   type FilterField,
 } from '../../../../../components/DataTable/FilterBar';
@@ -309,6 +309,88 @@ export default function InventoryPage() {
     );
   };
 
+  const inventoryColumns: Column<InventoryModel>[] = [
+    {
+      header: 'ID',
+      accessor: (item) => (
+        <Text color={theme.textMuted} fontWeight="semibold">
+          {shortId(item.id)}
+        </Text>
+      ),
+    },
+    {
+      header: 'Nama Barang',
+      accessor: (item) => (
+        <Text color={theme.textPrimary} fontWeight="semibold">
+          {item.name}
+        </Text>
+      ),
+    },
+    {
+      header: 'Kategori',
+      accessor: (item) => renderCategory(item.category),
+    },
+    {
+      header: 'Stok',
+      accessor: (item) => (
+        <Text color={theme.textSecondary}>{item.stock} unit</Text>
+      ),
+    },
+    {
+      header: 'Lokasi',
+      accessor: (item) => (
+        <Text color={theme.textSecondary}>{item.location}</Text>
+      ),
+    },
+    {
+      header: 'Status',
+      accessor: (item) => renderStatus(item),
+    },
+    {
+      header: 'Gambar',
+      accessor: (item) => (
+        <Button
+          variant="link"
+          color={mode === 'dark' ? 'blue.200' : 'blue.600'}
+          fontSize="xs"
+          onClick={() => openImage(item)}
+          isDisabled={!item.image}
+        >
+          Lihat Gambar
+        </Button>
+      ),
+    },
+    {
+      header: 'Aksi',
+      textAlign: 'right',
+      accessor: (item) => (
+        <Flex justify="flex-end" gap={1}>
+          <Button
+            aria-label="Ubah inventaris"
+            variant="ghost"
+            color={theme.textPrimary}
+            _hover={{ bg: theme.hoverBg }}
+            fontSize="xs"
+            onClick={() => openEdit(item)}
+          >
+            <EditIcon />
+          </Button>
+          <Button
+            aria-label="Hapus inventaris"
+            variant="ghost"
+            color={mode === 'dark' ? 'red.200' : 'red.600'}
+            _hover={{ bg: 'red.500' }}
+            fontSize="xs"
+            isLoading={isDeleting}
+            onClick={() => remove(item)}
+          >
+            <DeleteIcon />
+          </Button>
+        </Flex>
+      ),
+    },
+  ];
+
   return (
     <Box>
       <>
@@ -322,7 +404,7 @@ export default function InventoryPage() {
           <Box>
             <Heading
               as="h1"
-              size={{ base: 'xl', md: '2xl' }}
+              size={{ base: 'lg', md: 'xl' }}
               color={theme.textPrimary}
               letterSpacing="tight"
             >
@@ -355,7 +437,7 @@ export default function InventoryPage() {
               leftIcon={<AddIcon />}
               onClick={openCreate}
             >
-              Tambah Barang
+              Tambah Peralatan
             </Button>
           )}
         </Flex>
@@ -370,197 +452,84 @@ export default function InventoryPage() {
           onChange={updateFilters}
           onReset={() => setFilters(initialFilters)}
         />
-        {isLoading ? (
-          <Flex minH="300px" justify="center" align="center">
-            <Spinner thickness="3px" color="blue.400" />
-          </Flex>
-        ) : (
-          <>
-            <Box
-              display={{ base: 'none', md: 'block' }}
-              overflowX="auto"
-              borderRadius="2xl"
-              bg={theme.cardBg}
-              borderWidth="1px"
-              borderColor={theme.cardBorder}
-              backdropFilter="blur(8px)"
-            >
-              <Table
-                variant="simple"
-                minW="920px"
-                sx={{
-                  th: {
-                    fontSize: 'xs',
-                    borderColor:
-                      mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'gray.200',
-                  },
-                  td: {
-                    fontSize: 'xs',
-                    borderColor:
-                      mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'gray.200',
-                  },
-                }}
-              >
-                <Thead
-                  bg={mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
-                >
-                  <Tr>
-                    <Th color={theme.textMuted}>ID</Th>
-                    <Th color={theme.textMuted}>Nama Barang</Th>
-                    <Th color={theme.textMuted}>Kategori</Th>
-                    <Th color={theme.textMuted}>Stok</Th>
-                    <Th color={theme.textMuted}>Lokasi</Th>
-                    <Th color={theme.textMuted}>Status</Th>
-                    <Th color={theme.textMuted}>Gambar</Th>
-                    <Th color={theme.textMuted} textAlign="right">
-                      Aksi
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {inventories.map((item) => (
-                    <Tr
-                      key={item.id}
-                      _hover={{
-                        bg:
-                          mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100',
-                      }}
-                    >
-                      <Td color={theme.textMuted} fontWeight="semibold">
-                        {shortId(item.id)}
-                      </Td>
-                      <Td color={theme.textPrimary} fontWeight="semibold">
-                        {item.name}
-                      </Td>
-                      <Td>{renderCategory(item.category)}</Td>
-                      <Td color={theme.textSecondary}>{item.stock} unit</Td>
-                      <Td color={theme.textSecondary}>{item.location}</Td>
-                      <Td>{renderStatus(item)}</Td>
-                      <Td>
-                        <Button
-                          variant="link"
-                          color={mode === 'dark' ? 'blue.200' : 'blue.600'}
-                          fontSize="xs"
-                          onClick={() => openImage(item)}
-                          isDisabled={!item.image}
-                        >
-                          Lihat Gambar
-                        </Button>
-                      </Td>
-                      <Td>
-                        <Flex justify="flex-end" gap={1}>
-                          <Button
-                            aria-label="Ubah inventaris"
-                            variant="ghost"
-                            color={theme.textPrimary}
-                            _hover={{ bg: theme.hoverBg }}
-                            fontSize="xs"
-                            onClick={() => openEdit(item)}
-                          >
-                            <EditIcon />
-                          </Button>
-                          <Button
-                            aria-label="Hapus inventaris"
-                            variant="ghost"
-                            color={mode === 'dark' ? 'red.200' : 'red.600'}
-                            _hover={{ bg: 'red.500' }}
-                            fontSize="xs"
-                            isLoading={isDeleting}
-                            onClick={() => remove(item)}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Box>
-
-            <Stack spacing={3} display={{ base: 'flex', md: 'none' }}>
-              {inventories.map((item) => (
-                <Box
-                  key={item.id}
-                  borderRadius="2xl"
-                  bg={theme.cardBg}
-                  borderWidth="1px"
-                  borderColor={theme.cardBorder}
-                  p={4}
-                >
-                  <Flex align="start" justify="space-between" gap={3}>
-                    <Box minW={0}>
-                      <Text
-                        color={theme.textPrimary}
-                        fontWeight="semibold"
-                        noOfLines={1}
-                      >
-                        {item.name}
-                      </Text>
-                      <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
-                        ID {shortId(item.id)} · {item.category}
-                      </Text>
-                    </Box>
-                    {renderStatus(item)}
-                  </Flex>
-                  <Flex
-                    mt={3}
-                    gap={4}
-                    fontSize="xs"
-                    color={theme.textSecondary}
-                    wrap="wrap"
+        <DataTable
+          data={inventories}
+          columns={inventoryColumns}
+          loading={isLoading}
+          keyExtractor={(item) => item.id}
+          renderMobileCard={(item) => (
+            <>
+              <Flex align="start" justify="space-between" gap={3}>
+                <Box minW={0}>
+                  <Text
+                    color={theme.textPrimary}
+                    fontWeight="semibold"
+                    noOfLines={1}
                   >
-                    <Text>
-                      Stok:{' '}
-                      <Text as="span" color={theme.textPrimary}>
-                        {item.stock} unit
-                      </Text>
-                    </Text>
-                    <Text>
-                      Lokasi:{' '}
-                      <Text as="span" color={theme.textPrimary}>
-                        {item.location}
-                      </Text>
-                    </Text>
-                  </Flex>
-                  <Flex mt={3} align="center" gap={2}>
-                    <Button
-                      variant="link"
-                      color={mode === 'dark' ? 'blue.200' : 'blue.600'}
-                      size="sm"
-                      onClick={() => openImage(item)}
-                      isDisabled={!item.image}
-                    >
-                      Lihat Gambar
-                    </Button>
-                    <Box flex="1" />
-                    <Button
-                      aria-label="Ubah inventaris"
-                      variant="ghost"
-                      color={theme.textPrimary}
-                      _hover={{ bg: theme.hoverBg }}
-                      size="sm"
-                      onClick={() => openEdit(item)}
-                    >
-                      <EditIcon />
-                    </Button>
-                    <Button
-                      aria-label="Hapus inventaris"
-                      variant="ghost"
-                      color={mode === 'dark' ? 'red.200' : 'red.600'}
-                      _hover={{ bg: 'red.500' }}
-                      size="sm"
-                      isLoading={isDeleting}
-                      onClick={() => remove(item)}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </Flex>
+                    {item.name}
+                  </Text>
+                  <Text color={theme.textMuted} fontSize="xs" mt={0.5}>
+                    ID {shortId(item.id)} · {item.category}
+                  </Text>
                 </Box>
-              ))}
-            </Stack>
-          </>
-        )}
+                {renderStatus(item)}
+              </Flex>
+              <Flex
+                mt={3}
+                gap={4}
+                fontSize="xs"
+                color={theme.textSecondary}
+                wrap="wrap"
+              >
+                <Text>
+                  Stok:{' '}
+                  <Text as="span" color={theme.textPrimary}>
+                    {item.stock} unit
+                  </Text>
+                </Text>
+                <Text>
+                  Lokasi:{' '}
+                  <Text as="span" color={theme.textPrimary}>
+                    {item.location}
+                  </Text>
+                </Text>
+              </Flex>
+              <Flex mt={3} align="center" gap={2}>
+                <Button
+                  variant="link"
+                  color={mode === 'dark' ? 'blue.200' : 'blue.600'}
+                  size="sm"
+                  onClick={() => openImage(item)}
+                  isDisabled={!item.image}
+                >
+                  Lihat Gambar
+                </Button>
+                <Box flex="1" />
+                <Button
+                  aria-label="Ubah inventaris"
+                  variant="ghost"
+                  color={theme.textPrimary}
+                  _hover={{ bg: theme.hoverBg }}
+                  size="sm"
+                  onClick={() => openEdit(item)}
+                >
+                  <EditIcon />
+                </Button>
+                <Button
+                  aria-label="Hapus inventaris"
+                  variant="ghost"
+                  color={mode === 'dark' ? 'red.200' : 'red.600'}
+                  _hover={{ bg: 'red.500' }}
+                  size="sm"
+                  isLoading={isDeleting}
+                  onClick={() => remove(item)}
+                >
+                  <DeleteIcon />
+                </Button>
+              </Flex>
+            </>
+          )}
+        />
         <DataTablePagination
           currentPage={pagination.current}
           totalPages={pagination.total}
@@ -636,23 +605,39 @@ export default function InventoryPage() {
                   <FormLabel fontSize="xs" letterSpacing="wide">
                     Stok
                   </FormLabel>
-                  <Input
+                  <NumberInput
                     size="sm"
-                    type="number"
+                    value={form.stock}
                     min={0}
-                    value={form.stock === 0 ? '' : form.stock}
+                    clampValueOnBlur={false}
+                    onChange={(_, num) => {
+                      if (Number.isInteger(num)) updateForm({ stock: num });
+                    }}
                     bg={inputBg}
                     borderColor={inputBorder}
                     borderRadius="xl"
-                    onChange={(event) =>
-                      updateForm({
-                        stock:
-                          event.target.value === ''
-                            ? 0
-                            : Number(event.target.value),
-                      })
-                    }
-                  />
+                    focusBorderColor="blue.400"
+                  >
+                    <NumberInputField
+                      bg={inputBg}
+                      borderRadius="xl"
+                      _hover={{ borderColor: 'blue.300' }}
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper
+                        _active={{ bg: 'blue.100' }}
+                        bg={
+                          mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'
+                        }
+                      />
+                      <NumberDecrementStepper
+                        _active={{ bg: 'blue.100' }}
+                        bg={
+                          mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'
+                        }
+                      />
+                    </NumberInputStepper>
+                  </NumberInput>
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel fontSize="xs" letterSpacing="wide">

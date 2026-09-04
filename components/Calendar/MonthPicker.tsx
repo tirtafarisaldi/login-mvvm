@@ -42,6 +42,7 @@ export default function MonthPicker({
   return (
     <Popover
       placement="bottom-start"
+      flip={false}
       isOpen={popover.isOpen}
       onOpen={popover.onOpen}
       onClose={popover.onClose}
@@ -74,6 +75,7 @@ export default function MonthPicker({
               mode === 'dark'
                 ? 'rgba(255,255,255,0.14)'
                 : 'rgba(15,23,42,0.12)',
+            color: mode === 'dark' ? 'white' : 'gray.900',
           }}
           rightIcon={
             <ChevronDownIcon
@@ -83,9 +85,10 @@ export default function MonthPicker({
           }
         >
           <Heading
-            size="sm"
+            size="xs"
             color={mode === 'dark' ? 'white' : 'gray.800'}
             letterSpacing="tight"
+            fontSize="sm"
           >
             {monthLabel}
           </Heading>
@@ -154,7 +157,7 @@ export default function MonthPicker({
                   key={monthName}
                   size="sm"
                   py={2.5}
-                  px={2}
+                  px={4}
                   borderRadius="xl"
                   bg={
                     active
@@ -174,7 +177,13 @@ export default function MonthPicker({
                   }
                   _hover={
                     active
-                      ? undefined
+                      ? {
+                          bg:
+                            mode === 'dark'
+                              ? 'rgba(255,255,255,0.08)'
+                              : 'rgba(15,23,42,0.07)',
+                          color: mode === 'dark' ? 'white' : 'gray.900',
+                        }
                       : {
                           bg:
                             mode === 'dark'

@@ -21,12 +21,12 @@ export interface ThemeColors {
 }
 
 const dark: ThemeColors = {
-  pageBg: '#191b20',
+  pageBg: 'rgba(25, 27, 32, 0.85)',
   pageBgImage: 'none',
   panelBg: 'rgba(0,0,0,0.30)',
   panelBorder: 'rgba(255,255,255,0.12)',
   panelShadow:
-    '0 0 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(255,255,255,0.04)',
+    '0 30px 60px rgba(0,0,0,0.65), 0 8px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(255,255,255,0.05)',
   cardBg: 'rgba(0,0,0,0.55)',
   cardBorder: 'rgba(255,255,255,0.08)',
   inputBg: 'whiteAlpha.100',
@@ -42,12 +42,12 @@ const dark: ThemeColors = {
 };
 
 const light: ThemeColors = {
-  pageBg: '#eef2f7',
+  pageBg: 'rgba(15,23,42,0.06)',
   pageBgImage: 'none',
   panelBg: 'rgba(255,255,255,0.72)',
   panelBorder: 'rgba(15,23,42,0.10)',
   panelShadow:
-    '0 10px 40px rgba(15,23,42,0.10), inset 0 1px 0 rgba(255,255,255,0.9)',
+    '0 24px 50px rgba(15,23,42,0.18), 0 6px 16px rgba(15,23,42,0.10), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(15,23,42,0.04)',
   cardBg: 'rgba(255,255,255,0.92)',
   cardBorder: 'rgba(15,23,42,0.10)',
   inputBg: 'white',

@@ -36,6 +36,7 @@ const features: CmsFeature[] = [
     id: 'booking',
     label: 'Peminjaman',
     description: 'Pantau permohonan dan pengembalian barang.',
+    href: '/booking',
   },
   {
     id: 'schedules',

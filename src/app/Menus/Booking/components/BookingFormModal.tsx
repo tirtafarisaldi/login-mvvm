@@ -265,6 +265,7 @@ export default function BookingFormModal({
       <ModalOverlay backdropFilter="blur(8px)" bg="blackAlpha.700" />
       <ModalContent
         as="form"
+        noValidate
         onSubmit={(event: React.FormEvent) => {
           event.preventDefault();
           submit();
@@ -351,18 +352,18 @@ export default function BookingFormModal({
               />
             )}
 
-            <Flex gap={3} direction={{ base: 'column', sm: 'row' }}>
-              <FormControl isRequired>
-                <FormLabel fontSize="xs" letterSpacing="wide">
-                  Tanggal Peminjaman
-                </FormLabel>
-                <DatePickerField
-                  value={values.date}
-                  onChange={(date) => update({ date })}
-                  min={toDateKey(new Date())}
-                />
-              </FormControl>
-              {values.type === 'equipment' ? (
+            {values.type === 'equipment' ? (
+              <Flex gap={3} direction={{ base: 'column', sm: 'row' }}>
+                <FormControl isRequired>
+                  <FormLabel fontSize="xs" letterSpacing="wide">
+                    Tanggal Peminjaman
+                  </FormLabel>
+                  <DatePickerField
+                    value={values.date}
+                    onChange={(date) => update({ date })}
+                    min={toDateKey(new Date())}
+                  />
+                </FormControl>
                 <FormControl isRequired>
                   <FormLabel fontSize="xs" letterSpacing="wide">
                     Tanggal Selesai
@@ -373,30 +374,40 @@ export default function BookingFormModal({
                     min={values.date || toDateKey(new Date())}
                   />
                 </FormControl>
-              ) : (
-                <FormControl isRequired>
-                  <FormLabel fontSize="xs" letterSpacing="wide">
-                    Waktu Mulai
-                  </FormLabel>
-                  <TimePickerField
-                    value={values.start_time}
-                    onChange={(start_time) => update({ start_time })}
-                  />
-                </FormControl>
-              )}
-            </Flex>
-
-            {values.type === 'room' && (
+              </Flex>
+            ) : (
               <>
                 <FormControl isRequired>
                   <FormLabel fontSize="xs" letterSpacing="wide">
-                    Waktu Selesai
+                    Tanggal Peminjaman
                   </FormLabel>
-                  <TimePickerField
-                    value={values.end_time}
-                    onChange={(end_time) => update({ end_time })}
+                  <DatePickerField
+                    value={values.date}
+                    onChange={(date) => update({ date })}
+                    min={toDateKey(new Date())}
                   />
                 </FormControl>
+
+                <Flex gap={3} direction={{ base: 'column', sm: 'row' }}>
+                  <FormControl isRequired>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Waktu Mulai
+                    </FormLabel>
+                    <TimePickerField
+                      value={values.start_time}
+                      onChange={(start_time) => update({ start_time })}
+                    />
+                  </FormControl>
+                  <FormControl isRequired>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Waktu Selesai
+                    </FormLabel>
+                    <TimePickerField
+                      value={values.end_time}
+                      onChange={(end_time) => update({ end_time })}
+                    />
+                  </FormControl>
+                </Flex>
 
                 <FormControl>
                   <FormLabel fontSize="xs" letterSpacing="wide">
@@ -547,7 +558,8 @@ function EquipmentSelect({
   const theme = useThemeColors();
   const toast = useToast();
   const [selectedId, setSelectedId] = useState('');
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState('1');
+  const qtyNum = Number(qty) || 0;
 
   const addedIds = useMemo(
     () => new Set(selectedItems.map((it) => it.inventory_id)),
@@ -568,7 +580,7 @@ function EquipmentSelect({
       });
       return;
     }
-    if (!Number.isInteger(qty) || qty < 1) {
+    if (!Number.isInteger(qtyNum) || qtyNum < 1) {
       toast({
         status: 'warning',
         title: 'Jumlah tidak valid',
@@ -577,13 +589,13 @@ function EquipmentSelect({
       });
       return;
     }
-    const safeQty = Math.min(qty, selectedStock);
+    const safeQty = Math.min(qtyNum, selectedStock);
     onChange([
       ...selectedItems,
       { inventory_id: selectedId, quantity: safeQty },
     ]);
     setSelectedId('');
-    setQty(1);
+    setQty('1');
   };
 
   const removeItem = (id: string) =>
@@ -597,7 +609,7 @@ function EquipmentSelect({
     );
 
   return (
-    <FormControl isRequired>
+    <FormControl>
       <Flex gap={3} direction={{ base: 'column', sm: 'row' }} align="flex-end">
         <FormControl isRequired>
           <FormLabel fontSize="xs">Peralatan</FormLabel>
@@ -611,7 +623,7 @@ function EquipmentSelect({
             placeholder={loading ? 'Memuat…' : 'Pilih peralatan'}
             onChange={(e) => {
               setSelectedId(e.target.value);
-              setQty(1);
+              setQty('1');
             }}
           >
             {options.map((item) => (
@@ -626,25 +638,32 @@ function EquipmentSelect({
           </Select>
         </FormControl>
 
-        <FormControl isRequired w={{ base: 'full', sm: '120px' }}>
+        <FormControl w={{ base: 'full', sm: '120px' }} isRequired>
           <FormLabel fontSize="xs">Jumlah</FormLabel>
           <NumberInput
             size="sm"
             value={qty}
-            min={1}
-            max={selectedStock}
             clampValueOnBlur={false}
-            onChange={(_, num) => {
-              if (Number.isInteger(num)) setQty(num);
-            }}
+            onChange={setQty}
             bg={inputBg}
             borderColor={inputBorder}
             borderRadius="xl"
+            focusBorderColor="blue.400"
           >
-            <NumberInputField bg={inputBg} borderRadius="xl" />
+            <NumberInputField
+              bg={inputBg}
+              borderRadius="xl"
+              _hover={{ borderColor: 'blue.300' }}
+            />
             <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
+              <NumberIncrementStepper
+                _active={{ bg: 'blue.100' }}
+                bg={themeMode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
+              />
+              <NumberDecrementStepper
+                _active={{ bg: 'blue.100' }}
+                bg={themeMode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
+              />
             </NumberInputStepper>
           </NumberInput>
         </FormControl>
@@ -743,11 +762,30 @@ function EquipmentSelect({
                       bg={inputBg}
                       borderColor={inputBorder}
                       borderRadius="xl"
+                      focusBorderColor="blue.400"
                     >
-                      <NumberInputField bg={inputBg} borderRadius="xl" />
+                      <NumberInputField
+                        bg={inputBg}
+                        borderRadius="xl"
+                        _hover={{ borderColor: 'blue.300' }}
+                      />
                       <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
+                        <NumberIncrementStepper
+                          _active={{ bg: 'blue.100' }}
+                          bg={
+                            themeMode === 'dark'
+                              ? 'whiteAlpha.100'
+                              : 'blackAlpha.50'
+                          }
+                        />
+                        <NumberDecrementStepper
+                          _active={{ bg: 'blue.100' }}
+                          bg={
+                            themeMode === 'dark'
+                              ? 'whiteAlpha.100'
+                              : 'blackAlpha.50'
+                          }
+                        />
                       </NumberInputStepper>
                     </NumberInput>
                     <Button
@@ -874,7 +912,7 @@ function FileDropzone({
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+        accept=".pdf"
         hidden
         onChange={(e) => {
           const file = e.target.files?.[0];
@@ -891,7 +929,7 @@ function FileDropzone({
         Klik atau seret file ke sini
       </Text>
       <Text fontSize="xs" color={theme.textMuted} mt={1}>
-        PDF, JPG, PNG, DOC, DOCX (maks. 2 MB)
+        PDF (maks. 2 MB)
       </Text>
     </Box>
   );

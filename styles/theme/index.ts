@@ -10,7 +10,7 @@ const theme = extendTheme({
     heading: "'Poppins', sans-serif",
     poppins: 'Poppins',
     body: "'Poppins', sans-serif",
-    mono: "'Poppins', sans-serif"
+    mono: "'Poppins', sans-serif",
   },
   components: {
     CustomAlert: Alert,
@@ -21,14 +21,58 @@ const theme = extendTheme({
         sidebar: {
           content: {
             display: 'flex',
-            justifyContent: 'flex-end'
-          }
-        }
-      }
-    }
+            justifyContent: 'flex-end',
+          },
+        },
+      },
+    },
+    Input: {
+      baseStyle: {
+        field: {
+          _hover: {
+            borderColor: 'blue.400',
+          },
+        },
+      },
+    },
+    Select: {
+      baseStyle: {
+        field: {
+          _hover: {
+            borderColor: 'blue.400',
+          },
+        },
+      },
+    },
+    Textarea: {
+      baseStyle: {
+        _hover: {
+          borderColor: 'blue.400',
+        },
+      },
+    },
+    NumberInput: {
+      baseStyle: {
+        field: {
+          _hover: {
+            borderColor: 'blue.400',
+          },
+        },
+      },
+    },
+    Popover: {
+      defaultProps: {
+        flip: false,
+      },
+    },
+    Menu: {
+      defaultProps: {
+        flip: false,
+      },
+    },
   },
   colors,
-  breakpoints
+  breakpoints,
 });
 
 export default theme;

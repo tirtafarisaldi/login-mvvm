@@ -275,11 +275,11 @@ export default function SchedulePage() {
         <Box>
           <Heading
             as="h1"
-            size={{ base: '2xl', md: '4xl' }}
+            size={{ base: 'lg', md: '2xl' }}
             color={theme.textPrimary}
             letterSpacing="tight"
           >
-            Schedule
+            Jadwal Studio
           </Heading>
           <Text color={theme.textSecondary} mt={2} fontSize="sm">
             Lihat secara langsung jadwal penggunaan ruangan di Laboratorium
