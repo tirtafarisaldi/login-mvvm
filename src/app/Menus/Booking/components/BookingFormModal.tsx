@@ -1,7 +1,6 @@
 import {
   AddIcon,
   AttachmentIcon,
-  CloseIcon,
   DeleteIcon,
 } from '@chakra-ui/icons';
 import {
@@ -32,7 +31,7 @@ import {
 import { toDateKey } from 'components/Calendar';
 import DatePickerField from '../../../../../components/Pickers/DatePickerField';
 import TimePickerField from '../../../../../components/Pickers/TimePickerField';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from 'service/auth';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
@@ -46,8 +45,6 @@ import type {
 export interface BookingFormValues {
   borrower: string;
   type: BookingType;
-  letter_file: string;
-  letterFile?: File | null;
   title: string;
   items: BookingItemInput[];
   date: string;
@@ -73,7 +70,8 @@ export const TYPE_LABELS: Record<BookingType, string> = {
 };
 
 export const STATUS_LABELS: Record<string, string> = {
-  process: 'Process',
+  pending: 'Pending',
+  reviewing: 'Reviewing',
   approved: 'Approved',
   rejected: 'Rejected',
   completed: 'Completed',
@@ -89,8 +87,6 @@ export const REPEAT_LABELS: Array<{ value: BookingRepeat; label: string }> = [
 const emptyValues = (): BookingFormValues => ({
   borrower: '',
   type: 'equipment',
-  letter_file: '',
-  letterFile: null,
   title: '',
   items: [],
   date: toDateKey(new Date()),
@@ -115,9 +111,10 @@ export default function BookingFormModal({
   const { user } = useAuth();
   const inputBg = themeMode === 'dark' ? 'whiteAlpha.100' : 'white';
   const inputBorder = themeMode === 'dark' ? 'whiteAlpha.300' : 'gray.300';
+  const borrowerName = user?.role === 'admin' ? 'Admin' : (user?.name ?? '');
   const [values, setValues] = useState<BookingFormValues>(() => ({
     ...emptyValues(),
-    borrower: user?.name ?? '',
+    borrower: borrowerName,
   }));
 
   const { inventories: equipmentList, loading: equipmentLoading } =
@@ -129,8 +126,9 @@ export default function BookingFormModal({
   );
 
   useEffect(() => {
-    if (isOpen) setValues({ ...emptyValues(), borrower: user?.name ?? '' });
-  }, [isOpen, user]);
+    if (isOpen)
+      setValues({ ...emptyValues(), borrower: borrowerName });
+  }, [isOpen, borrowerName]);
 
   const update = (patch: Partial<BookingFormValues>): void =>
     setValues((current) => ({ ...current, ...patch }));
@@ -188,24 +186,6 @@ export default function BookingFormModal({
     }
     return count;
   }, [values.repeat, values.date, values.repeat_end]);
-
-  const handleFile = useCallback(
-    (file: File | undefined): void => {
-      if (!file) return;
-      if (file.size > 2 * 1024 * 1024) {
-        toast({
-          status: 'warning',
-          title: 'File terlalu besar',
-          description: 'Ukuran surat maksimal 2 MB.',
-          position: 'top',
-        });
-        return;
-      }
-      update({ letter_file: file.name, letterFile: file });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
 
   const submit = (): void => {
     if (!values.borrower.trim() || !values.date) {
@@ -291,7 +271,7 @@ export default function BookingFormModal({
               </FormLabel>
               <Input
                 size="sm"
-                value={isAdmin ? 'Admin' : values.borrower}
+                value={values.borrower}
                 bg={inputBg}
                 borderColor={inputBorder}
                 borderRadius="xl"
@@ -457,19 +437,6 @@ export default function BookingFormModal({
 
             <FormControl>
               <FormLabel fontSize="xs" letterSpacing="wide">
-                Surat Booking
-              </FormLabel>
-              <FileDropzone
-                fileName={values.letter_file}
-                onFile={handleFile}
-                onClear={() => update({ letter_file: '', letterFile: null })}
-                inputBg={inputBg}
-                inputBorder={inputBorder}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel fontSize="xs" letterSpacing="wide">
                 Keterangan
               </FormLabel>
               <Textarea
@@ -600,13 +567,6 @@ function EquipmentSelect({
 
   const removeItem = (id: string) =>
     onChange(selectedItems.filter((it) => it.inventory_id !== id));
-
-  const changeListQty = (id: string, value: number) =>
-    onChange(
-      selectedItems.map((it) =>
-        it.inventory_id === id ? { ...it, quantity: value } : it
-      )
-    );
 
   return (
     <FormControl>
@@ -748,46 +708,15 @@ function EquipmentSelect({
                     >
                       {eq?.name ?? sel.inventory_id}
                     </Text>
-                    <NumberInput
-                      size="xs"
+                    <Text
                       w="64px"
-                      value={sel.quantity}
-                      min={1}
-                      max={eq?.stock ?? 1}
-                      clampValueOnBlur={false}
-                      onChange={(_, num) => {
-                        if (Number.isInteger(num))
-                          changeListQty(sel.inventory_id, num);
-                      }}
-                      bg={inputBg}
-                      borderColor={inputBorder}
-                      borderRadius="xl"
-                      focusBorderColor="blue.400"
+                      textAlign="center"
+                      fontSize="xs"
+                      fontWeight="semibold"
+                      color={theme.textSecondary}
                     >
-                      <NumberInputField
-                        bg={inputBg}
-                        borderRadius="xl"
-                        _hover={{ borderColor: 'blue.300' }}
-                      />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper
-                          _active={{ bg: 'blue.100' }}
-                          bg={
-                            themeMode === 'dark'
-                              ? 'whiteAlpha.100'
-                              : 'blackAlpha.50'
-                          }
-                        />
-                        <NumberDecrementStepper
-                          _active={{ bg: 'blue.100' }}
-                          bg={
-                            themeMode === 'dark'
-                              ? 'whiteAlpha.100'
-                              : 'blackAlpha.50'
-                          }
-                        />
-                      </NumberInputStepper>
-                    </NumberInput>
+                      {sel.quantity}
+                    </Text>
                     <Button
                       size="xs"
                       variant="ghost"
@@ -812,125 +741,5 @@ function EquipmentSelect({
         </Stack>
       )}
     </FormControl>
-  );
-}
-/* ── Modern drag-drop file upload ──────────────────────────── */
-
-interface FileDropzoneProps {
-  fileName: string;
-  onFile: (file: File) => void;
-  onClear: () => void;
-  inputBg: string;
-  inputBorder: string;
-}
-
-function FileDropzone({
-  fileName,
-  onFile,
-  onClear,
-  inputBg,
-  inputBorder,
-}: FileDropzoneProps) {
-  const themeMode = useThemeStore((state) => state.mode);
-  const theme = useThemeColors();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [dragging, setDragging] = useState(false);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      setDragging(false);
-      const file = e.dataTransfer.files?.[0];
-      if (file) onFile(file);
-    },
-    [onFile]
-  );
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback(() => setDragging(false), []);
-
-  if (fileName) {
-    return (
-      <Flex
-        align="center"
-        gap={3}
-        p={3}
-        bg={themeMode === 'dark' ? 'rgba(59,130,246,0.08)' : 'blue.50'}
-        borderWidth="1px"
-        borderColor={themeMode === 'dark' ? 'rgba(59,130,246,0.3)' : 'blue.200'}
-        borderRadius="xl"
-      >
-        <AttachmentIcon color="blue.400" boxSize={4} />
-        <Text fontSize="sm" flex={1} noOfLines={1} color={theme.textPrimary}>
-          {fileName}
-        </Text>
-        <Button
-          size="xs"
-          variant="ghost"
-          color={themeMode === 'dark' ? 'red.200' : 'red.500'}
-          _hover={{ bg: 'rgba(239,68,68,0.12)' }}
-          borderRadius="full"
-          onClick={onClear}
-          leftIcon={<CloseIcon boxSize={2.5} />}
-        >
-          Hapus
-        </Button>
-      </Flex>
-    );
-  }
-
-  return (
-    <Box
-      borderWidth="2px"
-      borderStyle="dashed"
-      borderColor={dragging ? 'blue.400' : inputBorder}
-      bg={
-        dragging
-          ? themeMode === 'dark'
-            ? 'rgba(59,130,246,0.08)'
-            : 'blue.50'
-          : inputBg
-      }
-      borderRadius="xl"
-      p={6}
-      textAlign="center"
-      cursor="pointer"
-      transition="all 0.15s"
-      _hover={{
-        borderColor: 'blue.400',
-        bg: themeMode === 'dark' ? 'rgba(59,130,246,0.06)' : 'blue.50',
-      }}
-      onClick={() => inputRef.current?.click()}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-    >
-      <input
-        ref={inputRef}
-        type="file"
-        accept=".pdf"
-        hidden
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) onFile(file);
-          e.target.value = '';
-        }}
-      />
-      <AttachmentIcon
-        boxSize={5}
-        color={dragging ? 'blue.400' : theme.textMuted}
-        mb={2}
-      />
-      <Text fontSize="sm" fontWeight="medium" color={theme.textPrimary}>
-        Klik atau seret file ke sini
-      </Text>
-      <Text fontSize="xs" color={theme.textMuted} mt={1}>
-        PDF (maks. 2 MB)
-      </Text>
-    </Box>
   );
 }

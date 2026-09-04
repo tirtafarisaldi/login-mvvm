@@ -1,4 +1,6 @@
 import {
+  ArrowUpIcon,
+  AttachmentIcon,
   CheckIcon,
   CheckCircleIcon,
   CloseIcon,
@@ -16,13 +18,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Text,
   Textarea,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type {
   BookingModel,
   BookingStatus,
@@ -40,6 +43,8 @@ interface ReviewBookingModalProps {
   onDecide: (status: BookingStatus, reason?: string) => Promise<void> | void;
   deciding?: boolean;
   isAdmin: boolean;
+  onUploadLetter?: (file: File) => Promise<void> | void;
+  uploadingLetter?: boolean;
 }
 
 export default function ReviewBookingModal({
@@ -49,14 +54,19 @@ export default function ReviewBookingModal({
   onDecide,
   deciding = false,
   isAdmin,
+  onUploadLetter,
+  uploadingLetter = false,
 }: ReviewBookingModalProps) {
   const mode = useThemeStore((state) => state.mode);
   const theme = useThemeColors();
   const toast = useToast();
   const { getBookingLetter } = useGetBookingLetterViewModel();
   const rejectDisclosure = useDisclosure();
+  const letterInputRef = useRef<HTMLInputElement>(null);
   const [reason, setReason] = useState('');
   const [opening, setOpening] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const openLetter = async () => {
     if (!booking) return;
@@ -76,6 +86,63 @@ export default function ReviewBookingModal({
     }
   };
 
+  const selectFile = (file: File | undefined) => {
+    if (!file || !onUploadLetter) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast({
+        status: 'warning',
+        title: 'File terlalu besar',
+        description: 'Ukuran surat maksimal 2 MB.',
+        position: 'top',
+      });
+      return;
+    }
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      toast({
+        status: 'warning',
+        title: 'Format tidak didukung',
+        description: 'Surat harus berformat PDF.',
+        position: 'top',
+      });
+      return;
+    }
+    setSelectedFile(file);
+  };
+
+  const handleLetterFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    selectFile(file);
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    setDragging(false);
+    selectFile(event.dataTransfer.files?.[0]);
+  };
+
+  const resetSelectedFile = () => setSelectedFile(null);
+
+  const submitLetter = async () => {
+    if (!selectedFile || !onUploadLetter) return;
+    try {
+      await onUploadLetter(selectedFile);
+      toast({
+        status: 'success',
+        title: 'Surat berhasil diunggah',
+        description: 'Peminjaman kini menunggu persetujuan admin.',
+        position: 'top',
+      });
+      onClose();
+    } catch {
+      toast({
+        status: 'error',
+        title: 'Gagal mengunggah surat',
+        position: 'top',
+      });
+    }
+  };
+
   const approve = () => void onDecide('approved');
   const complete = () => void onDecide('completed');
   const reject = () => {
@@ -92,9 +159,12 @@ export default function ReviewBookingModal({
   };
 
   const status = booking?.status;
-  const canApprove = Boolean(isAdmin && status === 'process');
+  const canApprove = Boolean(isAdmin && status === 'reviewing');
   const canComplete = Boolean(isAdmin && status === 'approved');
-  const canReject = Boolean(isAdmin && status === 'process');
+  const canReject = Boolean(isAdmin && status === 'reviewing');
+  const canUploadLetter = Boolean(
+    status === 'pending' && !booking?.letter_file && onUploadLetter
+  );
 
   return (
     <Modal
@@ -102,6 +172,7 @@ export default function ReviewBookingModal({
       onClose={() => {
         rejectDisclosure.onClose();
         setReason('');
+        setSelectedFile(null);
         onClose();
       }}
       size="md"
@@ -152,12 +223,18 @@ export default function ReviewBookingModal({
                 </Box>
               )}
 
-              <Flex justify="space-between" align="center">
-                <Box>
+              <Flex justify="space-between" align="flex-start" gap={3}>
+                <Box minW={0}>
                   <Text fontSize="xs" color={theme.textMuted}>
-                    Peminjam
+                    Judul
                   </Text>
-                  <Text fontWeight="semibold">{booking.borrower}</Text>
+                  <Text
+                    fontWeight="bold"
+                    fontSize="md"
+                    noOfLines={2}
+                  >
+                    {booking.title || 'Tanpa judul'}
+                  </Text>
                 </Box>
                 <BookingStatusBadge status={booking.status} />
               </Flex>
@@ -165,6 +242,10 @@ export default function ReviewBookingModal({
               <Divider borderColor={theme.panelBorder} />
 
               <Stack spacing={2} fontSize="sm">
+                <Flex justify="space-between">
+                  <Text color={theme.textMuted}>Peminjam</Text>
+                  <Text fontWeight="medium">{booking.borrower}</Text>
+                </Flex>
                 <Flex justify="space-between">
                   <Text color={theme.textMuted}>Jenis</Text>
                   <Text>{TYPE_LABELS[booking.type]}</Text>
@@ -280,6 +361,234 @@ export default function ReviewBookingModal({
                   </Button>
                 )}
               </Flex>
+
+              {canUploadLetter && (
+                <Box>
+                  <input
+                    ref={letterInputRef}
+                    type="file"
+                    accept=".pdf"
+                    hidden
+                    onChange={handleLetterFile}
+                  />
+                  {selectedFile && !uploadingLetter ? (
+                    <>
+                      <Flex
+                        align="center"
+                        gap={3}
+                        p={3.5}
+                        borderRadius="2xl"
+                        bg={
+                          mode === 'dark'
+                            ? 'rgba(59,130,246,0.1)'
+                            : 'blue.50'
+                        }
+                        borderWidth="1px"
+                        borderColor={
+                          mode === 'dark'
+                            ? 'rgba(59,130,246,0.3)'
+                            : 'blue.200'
+                        }
+                      >
+                        <Flex
+                          w={11}
+                          h={11}
+                          flexShrink={0}
+                          borderRadius="lg"
+                          alignItems="center"
+                          justifyContent="center"
+                          bg={
+                            mode === 'dark'
+                              ? 'rgba(59,130,246,0.2)'
+                              : 'white'
+                          }
+                          color="blue.500"
+                        >
+                          <AttachmentIcon boxSize={5} />
+                        </Flex>
+                        <Box minW={0} flex={1}>
+                          <Text
+                            fontWeight="semibold"
+                            fontSize="sm"
+                            color={theme.textPrimary}
+                            noOfLines={1}
+                          >
+                            {selectedFile.name}
+                          </Text>
+                          <Text
+                            fontSize="xs"
+                            color={theme.textMuted}
+                            mt={0.5}
+                          >
+                            {(selectedFile.size / 1024).toFixed(1)} KB · PDF
+                          </Text>
+                        </Box>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          colorScheme="blue"
+                          borderRadius="full"
+                          flexShrink={0}
+                          onClick={resetSelectedFile}
+                          leftIcon={<CloseIcon boxSize={3} />}
+                        >
+                          Ganti
+                        </Button>
+                      </Flex>
+                      <Button
+                        w="full"
+                        mt={3}
+                        color="white"
+                        bg={mode === 'dark' ? 'rgba(37,99,235,0.3)' : 'blue.600'}
+                        borderWidth="1px"
+                        borderColor={
+                          mode === 'dark'
+                            ? 'rgba(59,130,246,0.5)'
+                            : 'blue.600'
+                        }
+                        fontSize="sm"
+                        borderRadius="full"
+                        leftIcon={<CheckIcon />}
+                        _hover={{
+                          bg: mode === 'dark' ? 'rgba(37,99,235,0.5)' : 'blue.700',
+                          boxShadow: '0 0 16px rgba(59,130,246,0.25)',
+                        }}
+                        onClick={submitLetter}
+                      >
+                        Submit Surat
+                      </Button>
+                    </>
+                  ) : (
+                    <Box
+                      role="button"
+                      tabIndex={0}
+                      cursor={uploadingLetter ? 'default' : 'pointer'}
+                      onClick={() => {
+                        if (!uploadingLetter) letterInputRef.current?.click();
+                      }}
+                      onKeyDown={(event) => {
+                        if (
+                          !uploadingLetter &&
+                          (event.key === 'Enter' || event.key === ' ')
+                        ) {
+                          letterInputRef.current?.click();
+                        }
+                      }}
+                      onDrop={handleDrop}
+                      onDragOver={(event) => {
+                        event.preventDefault();
+                        if (!uploadingLetter) setDragging(true);
+                      }}
+                      onDragLeave={() => setDragging(false)}
+                      borderWidth="2px"
+                      borderStyle="dashed"
+                      borderColor={
+                        uploadingLetter
+                          ? theme.panelBorder
+                          : dragging
+                            ? 'blue.400'
+                            : mode === 'dark'
+                              ? 'rgba(255,255,255,0.16)'
+                              : 'gray.300'
+                      }
+                      borderRadius="2xl"
+                      p={6}
+                      textAlign="center"
+                      bg={
+                        uploadingLetter
+                          ? mode === 'dark'
+                            ? 'rgba(59,130,246,0.08)'
+                            : 'blue.50'
+                          : dragging
+                            ? mode === 'dark'
+                              ? 'rgba(59,130,246,0.16)'
+                              : 'blue.50'
+                            : mode === 'dark'
+                              ? 'rgba(255,255,255,0.03)'
+                              : 'gray.50'
+                      }
+                      transition="all 0.18s"
+                      _hover={
+                        uploadingLetter
+                          ? undefined
+                          : {
+                              borderColor: 'blue.400',
+                              bg:
+                                mode === 'dark'
+                                  ? 'rgba(59,130,246,0.1)'
+                                  : 'blue.50',
+                            }
+                      }
+                    >
+                      {uploadingLetter ? (
+                        <>
+                          <Flex justify="center" mb={2}>
+                            <Spinner
+                              thickness="3px"
+                              size="md"
+                              speed="0.7s"
+                              color="blue.400"
+                            />
+                          </Flex>
+                          <Text
+                            fontSize="sm"
+                            fontWeight="semibold"
+                            color={theme.textPrimary}
+                          >
+                            Mengunggah surat…
+                          </Text>
+                          <Text fontSize="xs" color={theme.textMuted} mt={1}>
+                            File sedang diproses
+                          </Text>
+                        </>
+                      ) : (
+                        <>
+                          <Flex justify="center" mb={3}>
+                            <Flex
+                              w={12}
+                              h={12}
+                              borderRadius="2xl"
+                              alignItems="center"
+                              justifyContent="center"
+                              bg={
+                                mode === 'dark'
+                                  ? 'rgba(59,130,246,0.16)'
+                                  : 'blue.50'
+                              }
+                              borderWidth="1px"
+                              borderColor={
+                                mode === 'dark'
+                                  ? 'rgba(59,130,246,0.35)'
+                                  : 'blue.200'
+                              }
+                              color={dragging ? 'blue.400' : 'blue.500'}
+                            >
+                              <ArrowUpIcon boxSize={6} />
+                            </Flex>
+                          </Flex>
+                          <Text
+                            fontSize="sm"
+                            fontWeight="semibold"
+                            color={theme.textPrimary}
+                          >
+                            Klik atau seret file ke sini
+                          </Text>
+                          <Text fontSize="xs" color={theme.textSecondary} mt={1}>
+                            <Text
+                              as="span"
+                              color="blue.400"
+                              fontWeight="medium"
+                            >
+                              Pilih file
+                            </Text>{' '}
+                            atau letakkan surat di sini — PDF, maks. 2 MB
+                          </Text>
+                        </>
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              )}
             </Stack>
           </ModalBody>
         )}

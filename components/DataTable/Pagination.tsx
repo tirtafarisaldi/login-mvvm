@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { Fragment } from 'react';
 import { useThemeStore } from '../../src/app/Menus/store/useThemeStore';
@@ -37,6 +38,7 @@ export default function DataTablePagination({
       <Flex gap={2}>
         <Button
           size="sm"
+          minW="36px"
           borderRadius="full"
           bg={mode === 'dark' ? 'rgba(255,255,255,0.10)' : 'white'}
           color={mode === 'dark' ? 'whiteAlpha.800' : 'gray.700'}
@@ -56,8 +58,9 @@ export default function DataTablePagination({
           }}
           onClick={() => onPageChange(currentPage - 1)}
           isDisabled={currentPage === 1}
+          aria-label="Halaman sebelumnya"
         >
-          Sebelumnya
+          <ChevronLeftIcon boxSize={4} />
         </Button>
         {pages.map((page, index) => (
           <Fragment key={page}>
@@ -115,6 +118,7 @@ export default function DataTablePagination({
         ))}
         <Button
           size="sm"
+          minW="36px"
           borderRadius="full"
           bg={mode === 'dark' ? 'rgba(255,255,255,0.10)' : 'white'}
           color={mode === 'dark' ? 'whiteAlpha.800' : 'gray.700'}
@@ -134,8 +138,9 @@ export default function DataTablePagination({
           }}
           onClick={() => onPageChange(currentPage + 1)}
           isDisabled={currentPage === totalPages}
+          aria-label="Halaman berikutnya"
         >
-          Berikutnya
+          <ChevronRightIcon boxSize={4} />
         </Button>
       </Flex>
     </Flex>

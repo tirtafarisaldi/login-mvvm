@@ -25,6 +25,8 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'studio-theme',
+      version: 1,
+      migrate: () => ({ mode: 'dark' as ThemeMode, hasHydrated: true }),
       onRehydrateStorage: () => (state) => state?.onHydrate(),
     }
   )

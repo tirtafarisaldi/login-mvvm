@@ -75,7 +75,7 @@ export const useHomeViewModel = (): HomeViewModel => {
 
   const totalEquipment = inventoryPagination.total_data ?? inventories.length;
   const activeBookings = bookings.filter(
-    (booking) => booking.status === 'process' || booking.status === 'approved'
+    (booking) => booking.status === 'approved'
   ).length;
   const monthSchedules = schedules.filter(
     (schedule) => schedule.date >= todayKey

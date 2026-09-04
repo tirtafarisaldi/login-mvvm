@@ -362,9 +362,8 @@ export default function InventoryPage() {
     },
     {
       header: 'Aksi',
-      textAlign: 'right',
       accessor: (item) => (
-        <Flex justify="flex-end" gap={1}>
+        <Flex justify="flex-start" gap={1}>
           <Button
             aria-label="Ubah inventaris"
             variant="ghost"

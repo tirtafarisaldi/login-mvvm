@@ -22,6 +22,7 @@ import { useDeleteBookingViewModel } from '../viewModels/deleteBookingViewModel'
 import { useGetBookingByIdViewModel } from '../viewModels/getBookingByIdViewModel';
 import { useGetBookingsViewModel } from '../viewModels/getBookingsViewModel';
 import { useUpdateBookingStatusViewModel } from '../viewModels/updateBookingStatusViewModel';
+import { useUpdateBookingViewModel } from '../viewModels/updateBookingViewModel';
 import type {
   BookingFilters,
   BookingModel,
@@ -54,7 +55,7 @@ const baseFilterFields: FilterField[] = [
   {
     key: 'status',
     label: 'Semua status',
-    options: ['process', 'approved', 'rejected', 'completed'],
+    options: ['pending', 'reviewing', 'approved', 'rejected', 'completed'],
   },
 ];
 
@@ -70,8 +71,6 @@ const toInput = (values: BookingFormValues): BookingPayload => {
   return {
     borrower: values.borrower.trim(),
     type: values.type,
-    letter: values.letterFile ?? null,
-    letter_file: values.letter_file.trim() || undefined,
     title: values.title.trim() || undefined,
     items:
       values.type === 'equipment' && values.items.length > 0
@@ -149,6 +148,11 @@ export default function BookingPage() {
         position: 'top',
       }),
   });
+  const { updateBooking, loading: isUploadingLetter } =
+    useUpdateBookingViewModel({
+      onSuccess: () => {},
+      onFailure: () => {},
+    });
 
   const reviewModal = useDisclosure();
   const [reviewing, setReviewing] = useState<BookingModel | null>(null);
@@ -185,6 +189,37 @@ export default function BookingPage() {
     await updateBookingStatus(reviewing.id, status, reason);
     reviewModal.onClose();
     setReviewing(null);
+  };
+
+  const uploadLetter = async (file: File) => {
+    if (!reviewing) return;
+    const input: BookingPayload = {
+      borrower: reviewing.borrower,
+      type: reviewing.type,
+      letter: file,
+      items: reviewing.items?.map((item) => ({
+        inventory_id: item.inventory_id,
+        quantity: item.quantity,
+      })),
+      date: reviewing.date,
+      end_date: reviewing.end_date,
+      start_time: reviewing.start_time,
+      end_time: reviewing.end_time,
+      repeat: reviewing.repeat,
+      repeat_end: reviewing.repeat_end,
+      note: reviewing.note,
+    };
+    const result = await updateBooking(reviewing.id, input);
+    if (!result.data) {
+      throw new Error('upload letter failed');
+    }
+    // Muat ulang data booking agar status langsung berubah menjadi "Reviewing".
+    try {
+      const latest = await getBookingById(reviewing.id);
+      setReviewing(latest);
+    } catch {
+      setReviewing(result.data);
+    }
   };
 
   const remove = async (booking: BookingModel) => {
@@ -249,9 +284,8 @@ export default function BookingPage() {
     },
     {
       header: 'Aksi',
-      textAlign: 'right',
       accessor: (item) => (
-        <Flex justify="flex-end" gap={1} align="center">
+        <Flex justify="flex-start" gap={1} align="center">
           <Button
             aria-label="Detail Peminjaman"
             variant="ghost"
@@ -435,6 +469,8 @@ export default function BookingPage() {
         onDecide={decide}
         deciding={isUpdatingStatus}
         isAdmin={isAdmin}
+        onUploadLetter={uploadLetter}
+        uploadingLetter={isUploadingLetter}
       />
     </Box>
   );

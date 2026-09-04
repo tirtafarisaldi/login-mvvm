@@ -16,14 +16,16 @@ const getType = (value: unknown): BookingType =>
 
 const getStatus = (value: unknown): BookingStatus => {
   if (
-    value === 'process' ||
+    value === 'pending' ||
+    value === 'reviewing' ||
     value === 'approved' ||
     value === 'rejected' ||
     value === 'completed'
   ) {
     return value;
   }
-  return 'process';
+  // Kompatibilitas status lama ("process") dianggap "pending".
+  return 'pending';
 };
 
 const asNumber = (value: unknown): number | undefined => {
