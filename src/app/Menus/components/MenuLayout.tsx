@@ -24,9 +24,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Text,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
 import { useAuth } from 'service/auth';
 import NextLink from 'next/link';
@@ -98,15 +100,21 @@ export default function MenuLayout({
 
   const handleConfirmLogout = async () => {
     setConfirming(true);
+    // Bersihkan sesi lokal sebelum navigasi penuh ke logout CAS.
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('authUser');
+    // Tandai bahwa user baru saja logout agar bootstrap AuthProvider
+    // tidak mengambil ulang token dari CAS cookie.
+    sessionStorage.setItem('just_logged_out', 'true');
+    // Tidak dispatch auth-change di sini untuk menghindari race condition:
+    // refreshAuth akan set isAuthenticated=false → withProtected redirect
+    // ke /login SEBELUM navigasi penuh ke CAS selesai.
+    // Biarkan navigasi penuh ke CAS yang handle semuanya.
     try {
       await logout();
     } catch {
-      // Sesi lokal tetap dibersihkan bila API logout tidak dapat diakses.
+      router.replace('/login');
     }
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('authUser');
-    window.dispatchEvent(new Event('auth-change'));
-    router.replace('/login');
   };
 
   return (
@@ -597,6 +605,30 @@ export default function MenuLayout({
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {confirming && (
+        <Flex
+          position="fixed"
+          inset={0}
+          zIndex={9999}
+          bg="rgba(7, 11, 21, 0.92)"
+          backdropFilter="blur(8px)"
+          align="center"
+          justify="center"
+          direction="column"
+          gap={5}
+        >
+          <Spinner size="xl" color="red.300" thickness="3px" />
+          <VStack spacing={1}>
+            <Text color="white" fontSize="md" fontWeight="semibold">
+              Keluar dari akun...
+            </Text>
+            <Text color="whiteAlpha.500" fontSize="xs">
+              Mohon tunggu sebentar
+            </Text>
+          </VStack>
+        </Flex>
+      )}
     </Flex>
   );
 }

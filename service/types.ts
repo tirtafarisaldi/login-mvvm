@@ -1,7 +1,7 @@
 export type AuthUser = {
   name: string;
   email: string;
-  role: 'member' | 'admin';
+  role: 'user' | 'admin';
 };
 
 export interface AuthContextValue {

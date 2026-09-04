@@ -21,7 +21,7 @@ export const useLogin = () => {
           JSON.stringify({
             name: userData.name || '',
             email: userData.email || '',
-            role: userData.role === 'admin' ? 'admin' : 'member',
+            role: userData.role === 'admin' ? 'admin' : 'user',
           })
         );
       } catch (e) {

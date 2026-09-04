@@ -41,7 +41,7 @@ const getStoredUser = (): AuthUser | null => {
     return {
       name: parsed.name,
       email: parsed.email,
-      role: parsed.role === 'admin' ? 'admin' : 'member',
+      role: parsed.role === 'admin' ? 'admin' : 'user',
     };
   } catch {
     return null;
@@ -80,16 +80,75 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    applyTokenState(getStoredToken());
-    setIsLoading(false);
+    // Simpan loading sampai bootstrap sesi selesai (agar tidak flash halaman login).
+    if (getStoredToken()) {
+      applyTokenState(getStoredToken());
+      setIsLoading(false);
+    }
   }, [applyTokenState]);
+
+  // Bootstrap sesi: setiap app dimuat, bila belum ada access token di localStorage,
+  // minta /auth/cas/token (backed oleh cookie refresh httpOnly) untuk mendapat
+  // access token + user. Access token tidak pernah lewat URL.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const finish = () => setIsLoading(false);
+
+    if (getStoredToken()) {
+      finish();
+      return;
+    }
+
+    // Jika user baru saja logout, jangan ambil token dari CAS cookie.
+    if (sessionStorage.getItem('just_logged_out')) {
+      sessionStorage.removeItem('just_logged_out');
+      finish();
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    if (error) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      finish();
+      return;
+    }
+
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/cas/token', {
+          credentials: 'include',
+        });
+        const data = await res.json().catch(() => null);
+        if (!res.ok || !data?.accessToken) return;
+
+        localStorage.setItem('accessToken', data.accessToken);
+        if (data.user && (data.user.name || data.user.email)) {
+          localStorage.setItem(
+            'authUser',
+            JSON.stringify({
+              name: data.user.name || 'Pengguna',
+              email: data.user.email || '',
+              role: data.user.role === 'admin' ? 'admin' : 'user',
+            })
+          );
+        }
+        window.dispatchEvent(new Event('auth-change'));
+      } catch (e) {
+        // Tidak ada sesi valid: biarkan user kembali ke halaman login.
+      } finally {
+        finish();
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (checkUserData) {
       const nextUser: AuthUser = {
         name: checkUserData.name || 'Pengguna',
         email: checkUserData.email || '',
-        role: checkUserData.role === 'admin' ? 'admin' : 'member',
+        role: checkUserData.role === 'admin' ? 'admin' : 'user',
       };
       setUser(nextUser);
       setIsAuthenticated(true);
@@ -145,12 +204,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       window.removeEventListener('storage', refreshAuth);
     };
   }, [refreshAuth]);
-
-  useEffect(() => {
-    if (!isLoading && isAuthenticated && router.pathname === '/login') {
-      router.replace('/');
-    }
-  }, [isAuthenticated, isLoading, router]);
 
   return (
     <AuthContext.Provider

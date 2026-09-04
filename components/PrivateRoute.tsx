@@ -9,10 +9,10 @@ import LoadingPage from './Loading';
 export const withProtected = (WrappedComponent: FC<any>) => {
   const WithProtectedComponent = (props: any) => {
     const router = useRouter();
-    const { isAuthenticated, isLoading, isAutoLogin, isAutoLogout } = useAuth();
+    const { isAuthenticated, isLoading, isAutoLogout } = useAuth();
 
     useEffect(() => {
-      if (!isLoading && !isAuthenticated && !isAutoLogin && !isAutoLogout) {
+      if (!isLoading && !isAuthenticated && !isAutoLogout) {
         // handle get redirect back to latest page after success login to dashboard
         // get latest page url when user not authenticated and before redirect to login lage
         const { href, pathname } = window.location;
@@ -23,14 +23,12 @@ export const withProtected = (WrappedComponent: FC<any>) => {
         }
 
         router.push(loginPathname);
-      } else if (isAutoLogin) {
-        Auth.federatedSignIn();
       } else if (isAutoLogout) {
         router.replace('/login');
       }
-    }, [isAuthenticated, isAutoLogin, isAutoLogout, isLoading, router]);
+    }, [isAuthenticated, isAutoLogout, isLoading, router]);
 
-    if (isLoading || !isAuthenticated || isAutoLogin || isAutoLogout) {
+    if (isLoading || !isAuthenticated || isAutoLogout) {
       return null;
     }
 
