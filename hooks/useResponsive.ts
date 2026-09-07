@@ -7,7 +7,7 @@ const useResponsive = () => {
   const [isMobile] = useMediaQuery(`(max-width: ${breakpoints.md})`);
   return useMemo(
     () => ({
-      isMobile
+      isMobile,
     }),
     [isMobile]
   );

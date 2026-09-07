@@ -3,35 +3,35 @@ import { defineStyleConfig } from '@chakra-ui/react';
 const Alert = defineStyleConfig({
   baseStyle: {
     borderRadius: '8px',
-    padding: { base: '12px 16px', md: '8px 16px' }
+    padding: { base: '12px 16px', md: '8px 16px' },
   },
   variants: {
     default: {
       bg: 'transparent',
       color: 'darkWillow',
       border: '1px',
-      borderColor: 'callaLily'
+      borderColor: 'callaLily',
     },
     warning: {
       bg: 'sleepLamp',
-      color: 'oldTrail'
+      color: 'oldTrail',
     },
     info: {
       bg: 'cloudless',
-      color: 'amnesiaBlue'
+      color: 'amnesiaBlue',
     },
     success: {
       bg: 'ottoIce',
-      color: 'jordanJazz'
+      color: 'jordanJazz',
     },
     error: {
       bg: 'maryRose',
-      color: 'sunScarlet'
-    }
+      color: 'sunScarlet',
+    },
   },
   defaultProps: {
-    variant: 'default'
-  }
+    variant: 'default',
+  },
 });
 
 export default Alert;

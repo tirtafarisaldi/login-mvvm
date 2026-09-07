@@ -1,6 +1,10 @@
 import { useRef, type FC } from 'react';
 import type { ModalProps } from './types';
-import { Modal as ChakraUiModal, ModalOverlay, ModalContent } from '@chakra-ui/react';
+import {
+  Modal as ChakraUiModal,
+  ModalOverlay,
+  ModalContent,
+} from '@chakra-ui/react';
 import useResponsive from 'hooks/useResponsive';
 
 export const Modal: FC<ModalProps> = ({
@@ -27,7 +31,7 @@ export const Modal: FC<ModalProps> = ({
         my={{ base: '16px', md: 0 }}
         containerProps={{
           justifyContent: isCentered ? 'center' : 'flex-end',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         {children}

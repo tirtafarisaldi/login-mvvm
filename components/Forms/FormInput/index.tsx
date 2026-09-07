@@ -24,7 +24,7 @@ const FormInput: FC<FormInputProps> = ({
   const ref = useRef<HTMLInputElement>(null);
   useOutsideClick({
     ref,
-    handler: () => handleShow && handleShow(false)
+    handler: () => handleShow && handleShow(false),
   });
 
   return (
@@ -36,7 +36,7 @@ const FormInput: FC<FormInputProps> = ({
             : `h-56px form-input${value ? 'form-input-value' : ''}`
         }`}
         style={{
-          width: width
+          width: width,
         }}
         ref={ref}
       >
@@ -56,7 +56,7 @@ const FormInput: FC<FormInputProps> = ({
           placeholder={placeholder}
           value={value}
           style={{
-            width: width
+            width: width,
           }}
           readOnly={readOnly}
           autoComplete="off"
@@ -74,12 +74,18 @@ const FormInput: FC<FormInputProps> = ({
         ></input>
         <label
           className={`absolute text-silver_charm pointer-events-none transform origin-left transition-all duration-100 ease-in-out ${
-            size === 'small' ? 'text-size14 top-16px left-4' : 'text-size16 top-18px left-4'
+            size === 'small'
+              ? 'text-size14 top-16px left-4'
+              : 'text-size16 top-18px left-4'
           }`}
         >
           <div style={{ display: 'flex' }}>
             {label}
-            {required ? <div style={{ color: 'red', fontSize: '12px' }}>*</div> : ''}
+            {required ? (
+              <div style={{ color: 'red', fontSize: '12px' }}>*</div>
+            ) : (
+              ''
+            )}
           </div>
         </label>
         {icon && (
@@ -95,7 +101,7 @@ const FormInput: FC<FormInputProps> = ({
                 fontSize: '10px',
                 fontWeight: 400,
                 lineHeight: '140%',
-                color: colors.silverCharm
+                color: colors.silverCharm,
               }}
             >
               {`${typeof value === 'string' ? (value ? value.length : 0) : 0}/${

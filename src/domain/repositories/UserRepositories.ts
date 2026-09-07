@@ -4,7 +4,7 @@ import { BaseRepository } from './BaseRepositories';
 
 export type UserResult = Result<UserModel>;
 
-export interface CheckUserResult extends BaseRepository<UserResult> {}
+export type CheckUserResult = BaseRepository<UserResult>;
 
 export interface CreateUserResult extends BaseRepository<UserResult> {
   createUser: (input: UserInput) => Promise<UserResult>;

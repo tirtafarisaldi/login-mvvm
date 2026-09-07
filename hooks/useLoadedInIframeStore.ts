@@ -21,11 +21,11 @@ const useLoadedInIframeStore = create(
       setIsReferrerHostnameWhitelisted: (isWhitelisted) =>
         set((draft) => {
           draft.isReferrerHostnameWhitelisted = isWhitelisted;
-        })
+        }),
     })),
     {
       name: 'iframe-storage',
-      storage: createJSONStorage(() => sessionStorage)
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

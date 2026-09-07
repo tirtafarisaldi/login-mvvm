@@ -9,9 +9,7 @@ import type { GetBookingsResult } from '../../../domain/repositories/BookingRepo
 import { Pagination } from '../../../domain/vo/Pagination';
 import { PaginationResult } from '../../../domain/vo/PaginationResult';
 
-export const useGetBookings = (
-  filters: BookingFilters
-): GetBookingsResult => {
+export const useGetBookings = (filters: BookingFilters): GetBookingsResult => {
   const result = new PaginationResult<BookingModel>();
   const bookingsQuery = useQuery(
     [
@@ -28,9 +26,7 @@ export const useGetBookings = (
 
   if (bookingsQuery.data) {
     result.setData(
-      bookingsQuery.data.bookings.map((booking) =>
-        mapToBookingModel(booking)
-      )
+      bookingsQuery.data.bookings.map((booking) => mapToBookingModel(booking))
     );
     result.setPagination(new Pagination(bookingsQuery.data.page));
   }

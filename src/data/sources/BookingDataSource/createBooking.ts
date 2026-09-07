@@ -6,9 +6,7 @@ import {
   type BookingPayload,
 } from './BookingFormData';
 
-export const createBooking = async (
-  input: BookingPayload
-): Promise<IBooking> =>
+export const createBooking = async (input: BookingPayload): Promise<IBooking> =>
   http.post(
     '/booking',
     toBookingFormData(input),

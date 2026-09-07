@@ -8,13 +8,13 @@ const ApplyResetFilterButton: FC<ApplyResetFilterButtonProps> = ({
   applyButtonOnClick,
   isApplyButtonDisable = false,
   resetButtonOnClick,
-  isResetButtonDisable = false
+  isResetButtonDisable = false,
 }) => (
   <div className="md:flex md:justify-between md:items-center block mb-5">
     <div
       className="flex"
       style={{
-        gap: '10px'
+        gap: '10px',
       }}
     >
       <Button
@@ -28,7 +28,7 @@ const ApplyResetFilterButton: FC<ApplyResetFilterButtonProps> = ({
           height: '30px',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       />
       <Button
@@ -41,7 +41,7 @@ const ApplyResetFilterButton: FC<ApplyResetFilterButtonProps> = ({
           height: '30px',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       />
     </div>

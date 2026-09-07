@@ -8,7 +8,12 @@ const Empty = ({ width = 68, height = 68, fill }: IconProps) => (
     height={height}
     viewBox={`0 0 ${width} ${height}`}
   >
-    <rect width={width.toString()} height={height.toString()} rx="34" fill={fill} />
+    <rect
+      width={width.toString()}
+      height={height.toString()}
+      rx="34"
+      fill={fill}
+    />
     <path
       fillRule="evenodd"
       clipRule="evenodd"

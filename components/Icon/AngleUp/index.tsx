@@ -21,7 +21,11 @@ const AngleUp = ({ width = 24, height = 24, fill }: IconProps) => (
           />
         </g>
       </g>
-      <g id="Group_9579" data-name="Group 9579" transform="translate(3.333 5.667)">
+      <g
+        id="Group_9579"
+        data-name="Group 9579"
+        transform="translate(3.333 5.667)"
+      >
         <path
           id="Path_7687"
           data-name="Path 7687"

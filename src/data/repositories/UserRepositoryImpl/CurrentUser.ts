@@ -12,7 +12,9 @@ export const useCurrentUser = () => {
         result.setLoading(true);
         const res = await UserDataSource.getCurrentUser();
         setResponse(res);
-      } catch {}
+      } catch (error) {
+        result.setError(error);
+      }
     };
 
     currentUser();
@@ -23,6 +25,6 @@ export const useCurrentUser = () => {
   }
 
   return {
-    result
+    result,
   };
 };

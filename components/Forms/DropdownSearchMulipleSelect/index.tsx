@@ -1,7 +1,14 @@
 import type { FC, ReactNode } from 'react';
 import type { DropdownSearchMultipleProps } from './types';
 import type { Size } from 'common-types';
-import { Children, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Children,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Select, { components } from 'react-select';
 import type { PlaceholderProps, ValueContainerProps } from 'react-select';
 import Text from 'components/Typography/Text';
@@ -14,7 +21,7 @@ import {
   InputLeftElement,
   Stack,
   Tooltip,
-  useOutsideClick
+  useOutsideClick,
 } from '@chakra-ui/react';
 import Search from 'components/Icon/Search';
 import Empty from 'components/Icon/Empty';
@@ -29,7 +36,7 @@ const customStyles = (size: Size, hasValue: boolean) => {
   const style = {
     dropdownIndicator: (base: any) => ({
       ...base,
-      color: colors.silverCharm
+      color: colors.silverCharm,
     }),
     control: (provided: any, state: any) => ({
       ...provided,
@@ -42,7 +49,7 @@ const customStyles = (size: Size, hasValue: boolean) => {
       background: state.isDisabled ? colors.callaLily : '#F2F4F6',
       cursor: state.isDisabled ? 'not-allowed' : 'default',
       outline: 'none',
-      boxShadow: 'none'
+      boxShadow: 'none',
     }),
     input: (provided: any, state: any) => ({
       ...provided,
@@ -56,16 +63,16 @@ const customStyles = (size: Size, hasValue: boolean) => {
       borderColor: 'none',
       boxShadow: 'none',
       outline: state.isFocused ? 'none' : 'none',
-      display: 'none'
+      display: 'none',
     }),
     singleValue: (provided: any) => ({
       ...provided,
       lineHeight: '24px',
       zIndex: 0,
-      paddingTop: size === 'small' ? '16px' : '20px'
+      paddingTop: size === 'small' ? '16px' : '20px',
     }),
     container: (provided: any) => ({
-      ...provided
+      ...provided,
     }),
     valueContainer: (provided: any, state: any) => ({
       ...provided,
@@ -73,7 +80,7 @@ const customStyles = (size: Size, hasValue: boolean) => {
       overflow: 'visible',
       paddingTop: 0,
       paddingBottom: hasValue && state.name !== '' && '12px',
-      cursor: 'pointer'
+      cursor: 'pointer',
     }),
     placeholder: (provided: any, state: any) => ({
       ...provided,
@@ -81,24 +88,28 @@ const customStyles = (size: Size, hasValue: boolean) => {
       top: hasValue && '10px',
       zIndex: 1,
       color:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? '#797D7F'
           : '#ADB1B4',
       transition: 'top 0.1s, font-size 0.1s',
       fontSize:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? 11
           : size === 'small'
-          ? 14
-          : 16
+            ? 14
+            : 16,
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,
-      display: 'none'
+      display: 'none',
     }),
     menu: (provided: any) => ({
       ...provided,
-      zIndex: 2
+      zIndex: 2,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
@@ -106,14 +117,14 @@ const customStyles = (size: Size, hasValue: boolean) => {
         color: state.isDisabled ? colors.silverCharm : '#14171A',
         cursor: state.isDisabled ? 'not-allowed' : 'default',
         paddingTop: '4px',
-        paddingBottom: '4px'
+        paddingBottom: '4px',
       },
       ' [type="checkbox"]': {
-        cursor: state.isDisabled ? 'not-allowed' : 'default'
+        cursor: state.isDisabled ? 'not-allowed' : 'default',
       },
       '&:hover': {
         backgroundColor: state.isFocused ? colors.maryRose : '#E5E9EC',
-        color: state.isFocused ? colors.ottomanRed : '#14171A'
+        color: state.isFocused ? colors.ottomanRed : '#14171A',
       },
       cursor: state.isDisabled ? 'not-allowed' : 'default',
       display: 'flex',
@@ -129,21 +140,21 @@ const customStyles = (size: Size, hasValue: boolean) => {
           color: state.isSelected ? colors.flashWhite : 'transparent',
           borderRadius: '4px',
           borderWidth: '2px',
-          borderColor: colors.callaLily
+          borderColor: colors.callaLily,
         },
         backgroundColor: state.isSelected ? colors.ottomanRed : '#FFFFFF',
         color: state.isSelected ? colors.flashWhite : 'transparent',
         borderRadius: '4px',
         borderWidth: '2px',
         borderColor: colors.callaLily,
-        marginRight: '8px'
-      }
+        marginRight: '8px',
+      },
     }),
     multiValue: (styles: any, { data }: { data: any }) => {
       return {
         ...styles,
         backgroundColor: colors.maryRose,
-        borderRadius: '6px'
+        borderRadius: '6px',
       };
     },
     multiValueLabel: (styles: any, { data }: { data: any }) => ({
@@ -151,7 +162,7 @@ const customStyles = (size: Size, hasValue: boolean) => {
       color: colors.ottomanRed,
       font: 'Poppins',
       fontSize: '12px',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     }),
     multiValueRemove: (styles: any, { data }: { data: any }) => ({
       ...styles,
@@ -159,9 +170,9 @@ const customStyles = (size: Size, hasValue: boolean) => {
       ':hover': {
         backgroundColor: colors.ottomanRed,
         color: colors.flashWhite,
-        borderRadius: '6px'
-      }
-    })
+        borderRadius: '6px',
+      },
+    }),
   };
 
   return style;
@@ -169,7 +180,7 @@ const customStyles = (size: Size, hasValue: boolean) => {
 
 const SelectedOptionComponent = ({
   selectedOption,
-  handleRemoveSelectedOption
+  handleRemoveSelectedOption,
 }: {
   selectedOption: {
     label: string;
@@ -190,7 +201,7 @@ const SelectedOptionComponent = ({
         backgroundColor: colors.maryRose,
         borderRadius: '6px',
         margin: '2px',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
       }}
     >
       <div
@@ -202,7 +213,7 @@ const SelectedOptionComponent = ({
           fontSize: '12px',
           padding: '3px 3px 3px 6px',
           boxSizing: 'border-box',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
         }}
       >
         {selectedOption.label}
@@ -219,7 +230,7 @@ const SelectedOptionComponent = ({
           paddingLeft: '4px',
           paddingRight: '4px',
           boxSizing: 'border-box',
-          backgroundColor: isHovering ? colors.ottomanRed : colors.maryRose
+          backgroundColor: isHovering ? colors.ottomanRed : colors.maryRose,
         }}
         onClick={() => {
           handleRemoveSelectedOption(
@@ -266,7 +277,11 @@ const CustomValueContainer = (
           <Text variant="captionRegular" color={colors.tarnishedSilver}>
             <div style={{ display: 'flex' }}>
               {props.selectProps.name}
-              {required ? <div style={{ color: 'red', fontSize: '12px' }}>*</div> : ''}
+              {required ? (
+                <div style={{ color: 'red', fontSize: '12px' }}>*</div>
+              ) : (
+                ''
+              )}
               {tooltipLabel && (
                 <Tooltip
                   label={tooltipLabel}
@@ -287,7 +302,12 @@ const CustomValueContainer = (
                     bgColor={'transparent'}
                     marginLeft={'4px'}
                   >
-                    <Info width={16} height={16} fill={colors.tarnishedSilver} isLine />
+                    <Info
+                      width={16}
+                      height={16}
+                      fill={colors.tarnishedSilver}
+                      isLine
+                    />
                   </Flex>
                 </Tooltip>
               )}
@@ -304,7 +324,10 @@ const CustomValueContainer = (
           display="inline-flex"
         >
           {type === 'filter' ? (
-            <Text variant="paragraphSmallRegular" color={colors.tarnishedSilver}>
+            <Text
+              variant="paragraphSmallRegular"
+              color={colors.tarnishedSilver}
+            >
               {values.join(', ')}
             </Text>
           ) : (
@@ -354,10 +377,16 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
         boxShadow: '0px 8px 16px 0px rgba(20, 23, 26, 0.16)',
         borderRadius: '8px',
         maxHeight: '300px',
-        overflowY: 'scroll'
+        overflowY: 'scroll',
       }}
     >
-      <Stack spacing={4} padding={'12px'} pos={'sticky'} top={0} backgroundColor={'white'}>
+      <Stack
+        spacing={4}
+        padding={'12px'}
+        pos={'sticky'}
+        top={0}
+        backgroundColor={'white'}
+      >
         <InputGroup alignItems={'center'}>
           <InputLeftElement pointerEvents="none" top={'x'}>
             <Search />
@@ -372,7 +401,7 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
             onChange={(e) => {
               setVal(e.currentTarget.value);
               onInputChange(e.currentTarget.value, {
-                action: 'input-change'
+                action: 'input-change',
               });
             }}
             onMouseDown={(e) => {
@@ -386,13 +415,13 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
             }}
             variant="filled"
             _focus={{
-              border: 'none'
+              border: 'none',
             }}
             backgroundColor={'transparent'}
             style={{
               height: '30px',
               borderRadius: '8px',
-              fontSize: '12px'
+              fontSize: '12px',
             }}
           />
         </InputGroup>
@@ -411,7 +440,7 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
         <div
           className="flex"
           style={{
-            gap: '10px'
+            gap: '10px',
           }}
         >
           <Button
@@ -420,10 +449,10 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
             onClick={() => {
               props.clearValue();
               onInputChange('cleared', {
-                action: 'set-value'
+                action: 'set-value',
               });
               onInputChange(val, {
-                action: 'input-change'
+                action: 'input-change',
               });
             }}
             style={{
@@ -432,17 +461,17 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
               height: '30px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
           <Button
             text="Terapkan"
             onClick={() => {
               onInputChange('applied', {
-                action: 'set-value'
+                action: 'set-value',
               });
               onInputChange(val, {
-                action: 'input-change'
+                action: 'input-change',
               });
             }}
             style={{
@@ -451,7 +480,7 @@ const CustomMenuList = ({ selectProps, ...props }: any) => {
               height: '30px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
         </div>
@@ -465,7 +494,7 @@ const CustomOption = ({ selectProps, ...props }: any) => {
     <div
       style={{
         borderBottomWidth: '1px',
-        borderBottomColor: colors.callaLily
+        borderBottomColor: colors.callaLily,
       }}
     >
       <components.Option {...props}>
@@ -483,9 +512,18 @@ const CustomNoOptionsMessage = (
 ) => {
   return (
     <components.NoOptionsMessage {...props}>
-      <Flex justifyContent={'center'} alignItems={'center'} padding={'12px'} direction={'column'}>
+      <Flex
+        justifyContent={'center'}
+        alignItems={'center'}
+        padding={'12px'}
+        direction={'column'}
+      >
         {loading ? (
-          <Text variant="paragraphSmallRegular" flexWrap={'wrap'} maxW={'208px'}>
+          <Text
+            variant="paragraphSmallRegular"
+            flexWrap={'wrap'}
+            maxW={'208px'}
+          >
             Sedang memuat.......
           </Text>
         ) : (
@@ -509,13 +547,22 @@ const CustomNoOptionsMessage = (
 const CustomIndicatorContainer = (isOpen: boolean) => {
   return (
     <Flex alignItems="center" cursor={'pointer'}>
-      {isOpen ? <ChevronUp fill={colors.silverCharm} /> : <ChevronDown fill={colors.silverCharm} />}
+      {isOpen ? (
+        <ChevronUp fill={colors.silverCharm} />
+      ) : (
+        <ChevronDown fill={colors.silverCharm} />
+      )}
     </Flex>
   );
 };
 
 const formatGroupLabel = (data: any) => (
-  <Text variant="headlineBold" color={colors.tarnishedSilver} textTransform={'uppercase'} mb="8px">
+  <Text
+    variant="headlineBold"
+    color={colors.tarnishedSilver}
+    textTransform={'uppercase'}
+    mb="8px"
+  >
     {data.label}
   </Text>
 );
@@ -548,7 +595,7 @@ const DropdownSearchMultipleSelect: FC<DropdownSearchMultipleProps> = ({
   const ref = useRef<HTMLInputElement>(null);
   useOutsideClick({
     ref,
-    handler: () => setIsOpen(false)
+    handler: () => setIsOpen(false),
   });
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -576,12 +623,16 @@ const DropdownSearchMultipleSelect: FC<DropdownSearchMultipleProps> = ({
   const handleRemoveSelectedOption = (id: string) => {
     setTempSelected((prevSelectedOptions: any) => {
       return prevSelectedOptions.filter((option: any) =>
-        typeof option.value === 'string' ? option.value !== id : option.value.id !== id
+        typeof option.value === 'string'
+          ? option.value !== id
+          : option.value.id !== id
       );
     });
     setSelectedOption((prevSelectedOptions: any) => {
       return prevSelectedOptions.filter((option: any) =>
-        typeof option.value === 'string' ? option.value !== id : option.value.id !== id
+        typeof option.value === 'string'
+          ? option.value !== id
+          : option.value.id !== id
       );
     });
     setIsOpen(false);
@@ -591,11 +642,13 @@ const DropdownSearchMultipleSelect: FC<DropdownSearchMultipleProps> = ({
     <>
       <div
         className={`inline-block relative w-full ${
-          size === 'small' ? 'min-h-56px form-input-small' : 'min-h-56px form-input'
+          size === 'small'
+            ? 'min-h-56px form-input-small'
+            : 'min-h-56px form-input'
         }`}
         style={{
           width: containerWidth,
-          cursor: isDisabled ? 'not-allowed' : 'default'
+          cursor: isDisabled ? 'not-allowed' : 'default',
         }}
         ref={ref}
       >
@@ -642,9 +695,10 @@ const DropdownSearchMultipleSelect: FC<DropdownSearchMultipleProps> = ({
               ),
             MenuList: CustomMenuList,
             Option: customOption ? customOption : CustomOption,
-            NoOptionsMessage: (props) => CustomNoOptionsMessage(props, keyName || '', loadOptions),
+            NoOptionsMessage: (props) =>
+              CustomNoOptionsMessage(props, keyName || '', loadOptions),
             Control: (props) => CustomControl(props, toggleOpen),
-            IndicatorsContainer: () => CustomIndicatorContainer(isOpen)
+            IndicatorsContainer: () => CustomIndicatorContainer(isOpen),
           }}
           onMenuOpen={() => setIsOpen(true)}
           onMenuClose={() => setIsOpen(false)}

@@ -2,14 +2,14 @@ import { defineStyleConfig } from '@chakra-ui/react';
 
 const Modal = defineStyleConfig({
   baseStyle: {
-    fontFamily: 'poppins'
+    fontFamily: 'poppins',
   },
   variants: {
     sidebar: {
       display: 'flex',
-      justifyContent: 'flexEnd'
-    }
-  }
+      justifyContent: 'flexEnd',
+    },
+  },
 });
 
 export default Modal;

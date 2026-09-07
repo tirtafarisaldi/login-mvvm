@@ -7,6 +7,6 @@ export const useCurrentUserViewModel = () => {
   return {
     currentUser: result.data,
     loading: result.loading,
-    error: result.error
+    error: result.error,
   };
 };

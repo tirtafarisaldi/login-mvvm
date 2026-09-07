@@ -5,7 +5,10 @@ import { colors } from 'styles/theme/constants';
 
 import type { DatePickerWrapperProps } from './types';
 
-const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }) => (
+const DatePickerWrapper: FC<DatePickerWrapperProps> = ({
+  isDateRange,
+  children,
+}) => (
   <Box
     sx={{
       '.react-datepicker': {
@@ -13,7 +16,7 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
         width: '100%',
         '.react-datepicker__day:hover, .react-datepicker__month-text:hover, .react-datepicker__quarter-text:hover, .react-datepicker__year-text:hover':
           {
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
           },
         '.react-datepicker__month-container': {
           float: 'none',
@@ -39,9 +42,9 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
                 fontSize: '11px',
                 lineHeight: '13px',
                 letterSpacing: '0.1em',
-                color: colors.darkWillow
-              }
-            }
+                color: colors.darkWillow,
+              },
+            },
           },
 
           '.react-datepicker__month': {
@@ -51,10 +54,10 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
               display: 'flex',
               margin: '14px 0',
               '&:first-of-type': {
-                marginTop: 0
+                marginTop: 0,
               },
               '&:last-child': {
-                marginTop: 0
+                marginTop: 0,
               },
 
               '.react-datepicker__day': {
@@ -65,40 +68,40 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
 
                 '&.react-datepicker__day--selected': {
                   '.customDayCircle': {
-                    display: 'block'
+                    display: 'block',
                   },
                   '.customDayText': {
-                    color: '#ffffff'
-                  }
+                    color: '#ffffff',
+                  },
                 },
 
                 '&.react-datepicker__day--disabled': {
-                  opacity: '0.5'
+                  opacity: '0.5',
                 },
 
                 '&.react-datepicker__day--in-range,&.react-datepicker__day--selected,&.react-datepicker__day--in-selecting-range':
                   {
-                    background: 'none'
+                    background: 'none',
                   },
 
                 '&.react-datepicker__day--range-start,&.react-datepicker__day--range-end,&.react-datepicker__day--selecting-range-start':
                   {
                     '.customDayText': {
-                      color: '#ffffff'
+                      color: '#ffffff',
                     },
 
                     '.customDayCircle': {
-                      display: 'block'
+                      display: 'block',
                     },
 
                     '.customDayRectangle': {
-                      width: '50%'
-                    }
+                      width: '50%',
+                    },
                   },
 
                 '&.react-datepicker__day--in-range': {
                   '.customDayRectangle': {
-                    display: `${isDateRange ? 'block' : 'none'}`
+                    display: `${isDateRange ? 'block' : 'none'}`,
                   },
 
                   '&:not(.react-datepicker__day--range-start, .react-datepicker__day--range-end):last-child':
@@ -111,8 +114,8 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
                         right: '-26px',
                         top: 0,
                         backgroundColor: colors.maryRose,
-                        display: `${isDateRange ? 'block' : 'none'}`
-                      }
+                        display: `${isDateRange ? 'block' : 'none'}`,
+                      },
                     },
                   '&:not(.react-datepicker__day--range-start, .react-datepicker__day--range-end):first-of-type':
                     {
@@ -124,15 +127,15 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
                         left: '-26px',
                         top: 0,
                         backgroundColor: colors.maryRose,
-                        display: `${isDateRange ? 'block' : 'none'}`
-                      }
-                    }
+                        display: `${isDateRange ? 'block' : 'none'}`,
+                      },
+                    },
                 },
 
                 '&.react-datepicker__day--range-start': {
                   '.customDayRectangle': {
                     left: 'unset',
-                    right: 0
+                    right: 0,
                   },
 
                   '&:last-child': {
@@ -144,15 +147,15 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
                       right: '-26px',
                       top: 0,
                       backgroundColor: colors.maryRose,
-                      display: `${isDateRange ? 'block' : 'none'}`
-                    }
-                  }
+                      display: `${isDateRange ? 'block' : 'none'}`,
+                    },
+                  },
                 },
 
                 '&.react-datepicker__day--range-end': {
                   '.customDayRectangle': {
                     right: 'unset',
-                    left: 0
+                    left: 0,
                   },
 
                   '&:first-of-type': {
@@ -164,15 +167,15 @@ const DatePickerWrapper: FC<DatePickerWrapperProps> = ({ isDateRange, children }
                       left: '-26px',
                       top: 0,
                       backgroundColor: colors.maryRose,
-                      display: `${isDateRange ? 'block' : 'none'}`
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+                      display: `${isDateRange ? 'block' : 'none'}`,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     }}
   >
     {children}

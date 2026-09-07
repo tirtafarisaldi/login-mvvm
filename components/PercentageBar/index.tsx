@@ -6,15 +6,18 @@ const PercentageBar: FC<PercentageBarProps> = ({
   color = 'green',
   currentData = 0,
   totalData = 0,
-  currentDataLabel
+  currentDataLabel,
 }) => {
   const getPercentage = () => {
-    const percentage = (parseInt(currentData.toString()) / parseInt(totalData.toString())) * 100;
+    const percentage =
+      (parseInt(currentData.toString()) / parseInt(totalData.toString())) * 100;
 
     return percentage.toFixed(2).toString() + '%';
   };
 
-  const numberWithDotFormat = (currentData: PercentageBarProps['currentData']) => {
+  const numberWithDotFormat = (
+    currentData: PercentageBarProps['currentData']
+  ) => {
     return currentData.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
@@ -49,7 +52,9 @@ const PercentageBar: FC<PercentageBarProps> = ({
     <>
       <div className="relative">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-size14 leading-17px text-tarnished_silver">{label}</span>
+          <span className="text-size14 leading-17px text-tarnished_silver">
+            {label}
+          </span>
           <span className="text-size14 leading-22px font-bold text-dark_willow">
             {currentDataLabel
               ? numberWithDotFormat(currentDataLabel)

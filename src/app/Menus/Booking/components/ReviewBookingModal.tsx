@@ -295,7 +295,8 @@ export default function ReviewBookingModal({
                 <Flex justify="space-between" align="flex-start" gap={3}>
                   <Text color={theme.textMuted}>Tanggal</Text>
                   <Text textAlign="right">
-                    {booking.type === 'equipment' && booking.end_date &&
+                    {booking.type === 'equipment' &&
+                    booking.end_date &&
                     booking.end_date !== booking.date
                       ? `${formatDateId(booking.date)} – ${formatDateId(booking.end_date)}`
                       : formatDateId(booking.date)}

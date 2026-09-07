@@ -11,7 +11,7 @@ const { ValueContainer, Placeholder } = components;
 
 const createOption = (label: string) => ({
   label,
-  value: label
+  value: label,
 });
 
 const customStyles = (isFocused: boolean) => ({
@@ -20,21 +20,27 @@ const customStyles = (isFocused: boolean) => ({
     height: '100%',
     overflow: 'visible',
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
   }),
   placeholder: (provided: any, state: any) => ({
     ...provided,
     position: 'absolute',
     zIndex: 1,
-    color: state.hasValue || isFocused || state.selectProps.inputValue ? '#797D7F' : '#ADB1B4',
+    color:
+      state.hasValue || isFocused || state.selectProps.inputValue
+        ? '#797D7F'
+        : '#ADB1B4',
     top:
-      state.hasValue || isFocused || state.selectProps.inputValue ? '8px' : 'translate(50%, 50%)',
+      state.hasValue || isFocused || state.selectProps.inputValue
+        ? '8px'
+        : 'translate(50%, 50%)',
     transition: 'top 0.1s, font-size 0.1s',
-    fontSize: state.hasValue || isFocused || state.selectProps.inputValue ? 11 : 16
+    fontSize:
+      state.hasValue || isFocused || state.selectProps.inputValue ? 11 : 16,
   }),
   indicatorSeparator: (provided: any) => ({
     ...provided,
-    display: 'none'
+    display: 'none',
   }),
   control: (provided: any, state: any) => ({
     ...provided,
@@ -45,7 +51,7 @@ const customStyles = (isFocused: boolean) => ({
     borderRadius: 8,
     background: state.isDisabled ? colors.callaLily : '#F2F4F6',
     outline: 'none',
-    boxShadow: 'none'
+    boxShadow: 'none',
   }),
   input: (provided: any, state: any) => ({
     ...provided,
@@ -57,13 +63,13 @@ const customStyles = (isFocused: boolean) => ({
     boxShadow: 'none',
     outline: state.isFocused ? 'none' : 'none',
     padding: 0,
-    margin: 0
+    margin: 0,
   }),
   multiValue: (styles: any, { data }: { data: any }) => {
     return {
       ...styles,
       backgroundColor: colors.maryRose,
-      borderRadius: '6px'
+      borderRadius: '6px',
     };
   },
   multiValueLabel: (styles: any, { data }: { data: any }) => ({
@@ -71,7 +77,7 @@ const customStyles = (isFocused: boolean) => ({
     color: colors.ottomanRed,
     font: 'Poppins',
     fontSize: '12px',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   }),
   multiValueRemove: (styles: any, { data }: { data: any }) => ({
     ...styles,
@@ -79,13 +85,13 @@ const customStyles = (isFocused: boolean) => ({
     ':hover': {
       backgroundColor: colors.ottomanRed,
       color: colors.flashWhite,
-      borderRadius: '6px'
-    }
+      borderRadius: '6px',
+    },
   }),
   menu: (provided: any) => ({
     ...provided,
-    zIndex: 2
-  })
+    zIndex: 2,
+  }),
 });
 
 const CustomValueContainer = ({ children, ...props }: any) => {
@@ -116,7 +122,7 @@ const ReactCreatableSelect: FC<ReactCreatableSelectProps> = ({
   placeholder,
   selectedOption,
   setSelectedOption,
-  isDisabled
+  isDisabled,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -144,7 +150,7 @@ const ReactCreatableSelect: FC<ReactCreatableSelectProps> = ({
         styles={customStyles(isFocused)}
         components={{
           ValueContainer: CustomValueContainer,
-          DropdownIndicator: null
+          DropdownIndicator: null,
         }}
         inputValue={inputValue}
         isClearable

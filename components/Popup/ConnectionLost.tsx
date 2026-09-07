@@ -51,7 +51,12 @@ const ConnectionLost = () => {
             unoptimized
           />
         </div>
-        <Text variant="headingLargeBlack" color={colors.darkWillow} mb="8px" mt="8px">
+        <Text
+          variant="headingLargeBlack"
+          color={colors.darkWillow}
+          mb="8px"
+          mt="8px"
+        >
           Koneksi internet terputus
         </Text>
         <Text variant="bodySmallRegular" color={colors.tarnishedSilver}>
@@ -69,7 +74,7 @@ const ConnectionLost = () => {
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
           <Button
@@ -88,7 +93,7 @@ const ConnectionLost = () => {
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
         </div>

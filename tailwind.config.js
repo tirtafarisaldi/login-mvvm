@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
@@ -5,13 +6,13 @@ module.exports = {
   purge: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
-    './layouts/**/*.js'
+    './layouts/**/*.js',
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       fontFamily: {
-        poppins: ['Poppins', ...defaultTheme.fontFamily.sans]
+        poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
       },
       minWidth: {
         8: '2rem',
@@ -25,7 +26,7 @@ module.exports = {
         '200px': '200px',
         '250px': '250px',
         '300px': '300px',
-        '312px': '312px'
+        '312px': '312px',
       },
       maxWidth: {
         '1/2': '50%',
@@ -38,10 +39,10 @@ module.exports = {
         '320px': '320px',
         '312px': '312px',
         'cms-content': 'calc(100% - 300px)',
-        'add-role-form': 'calc(100% - 64px)'
+        'add-role-form': 'calc(100% - 64px)',
       },
       maxHeight: {
-        '28px': '28px'
+        '28px': '28px',
       },
       width: {
         '24px': '24px',
@@ -56,7 +57,7 @@ module.exports = {
         // '335px': '335px',
         '300px': '300px',
         '312px': '312px',
-        'cms-header': 'calc(100% - 300px)'
+        'cms-header': 'calc(100% - 300px)',
       },
       height: {
         '24px': '24px',
@@ -67,24 +68,24 @@ module.exports = {
         '68px': '68px',
         '72px': '72px',
         '120px': '120px',
-        'fit-content': 'fit-content'
+        'fit-content': 'fit-content',
       },
       margin: {
         '10px': '10px',
         '72px': '72px',
         '104px': '104px',
-        '300px': '300px'
+        '300px': '300px',
       },
       padding: {
         '8px': '8px',
         '24px': '24px',
-        '72px': '72px'
+        '72px': '72px',
       },
       inset: {
         '15px': '15px',
         '16px': '16px',
         '18px': '18px',
-        '20px': '20px'
+        '20px': '20px',
       },
       colors: {
         /*  Example use for text: text-tarnished_silver
@@ -112,7 +113,7 @@ module.exports = {
         circumorbital: '#6654C0',
         chinese_silver: '#6654C0',
         burning_trail: '#F49522',
-        oldTrail: '#C3840D'
+        oldTrail: '#C3840D',
       },
       fontSize: {
         /*	Example use: text-size20
@@ -126,7 +127,7 @@ module.exports = {
         size12: ['12px'],
         size11: ['11px'],
         size10: ['10px'],
-        size8: ['8px']
+        size8: ['8px'],
       },
       lineHeight: {
         '13px': '13px',
@@ -136,31 +137,31 @@ module.exports = {
         '20px': '20px',
         '22px': '22px',
         '24px': '24px',
-        '28px': '28px'
+        '28px': '28px',
       },
       boxShadow: {
         btn_default: '0px 8px 16px #ED222729',
         option_custom: '8px 8px 16px #ADB1B429',
         btn_transfer_account: '4px 4px 16px rgba(237, 34, 39, 0.16)',
-        btn_circle: '4px 4px 16px rgba(0, 0, 0, 0.16)'
+        btn_circle: '4px 4px 16px rgba(0, 0, 0, 0.16)',
       },
       letterSpacing: {
-        'form-head': '0.88px'
+        'form-head': '0.88px',
       },
       backgroundImage: {
         'filter-icon': "url('/assets/images/filter-icon.svg')",
-        'download-icon': "url('/assets/images/download-icon.svg')"
+        'download-icon': "url('/assets/images/download-icon.svg')",
       },
       animation: {
-        fade: 'fadeOut 5s ease-in-out'
+        fade: 'fadeOut 5s ease-in-out',
       },
       keyframes: () => ({
         fadeOut: {
           '0%': { opacity: '100%' },
-          '100%': { opacity: '0%' }
-        }
-      })
-    }
+          '100%': { opacity: '0%' },
+        },
+      }),
+    },
   },
   variants: {
     extend: {
@@ -168,8 +169,8 @@ module.exports = {
       backgroundColor: ['disabled'],
       textColor: ['disabled'],
       cursor: ['disabled'],
-      fontWeight: ['hover']
-    }
+      fontWeight: ['hover'],
+    },
   },
-  plugins: []
+  plugins: [],
 };

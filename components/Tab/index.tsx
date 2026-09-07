@@ -20,7 +20,8 @@ const Tab: FC<TabProps> = ({ type, items, isBordered = true, ...props }) => {
         className = 'text-size16 leading-24px px-3 py-0.5';
         break;
       case 'rounded':
-        className = 'font-bold text-size12 leading-19px px-4 py-1.5 rounded-full';
+        className =
+          'font-bold text-size12 leading-19px px-4 py-1.5 rounded-full';
         break;
       default:
         break;
@@ -33,7 +34,8 @@ const Tab: FC<TabProps> = ({ type, items, isBordered = true, ...props }) => {
     } else if (type === 'rounded' && item?.isActive) {
       className += ' text-white bg-dark_willow border border-dark_willow';
     } else if (type === 'rounded' && !item?.isActive) {
-      className += ' text-silver_charm bg-transparent border border-silver_charm';
+      className +=
+        ' text-silver_charm bg-transparent border border-silver_charm';
     }
 
     return className;

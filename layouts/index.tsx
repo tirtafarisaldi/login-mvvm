@@ -3,12 +3,17 @@ import { ReactNode, createContext, useState } from 'react';
 
 export const LayoutContext = createContext(true);
 
-const Layout = ({ children, ...props }: { children?: ReactNode } & BoxProps) => {
+const Layout = ({
+  children,
+  ...props
+}: { children?: ReactNode } & BoxProps) => {
   const [expandedSidebar, setExpandedSidebar] = useState(true);
   return (
     <>
       <Box {...props}>
-        <LayoutContext.Provider value={expandedSidebar}>{children}</LayoutContext.Provider>
+        <LayoutContext.Provider value={expandedSidebar}>
+          {children}
+        </LayoutContext.Provider>
       </Box>
     </>
   );

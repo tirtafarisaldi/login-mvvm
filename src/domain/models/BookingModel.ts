@@ -3,7 +3,8 @@ import type { IPaginationResponse } from '../vo/Pagination';
 
 export type BookingType = 'equipment' | 'room';
 
-export type BookingStatus = 'pending' | 'reviewing' | 'approved' | 'rejected' | 'completed';
+export type BookingStatus =
+  'pending' | 'reviewing' | 'approved' | 'rejected' | 'completed';
 
 export type BookingRepeat = 'none' | 'daily' | 'weekly' | 'monthly';
 

@@ -19,7 +19,7 @@ const Input = ({
   placeholder,
   name,
   error,
-  loading
+  loading,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -70,7 +70,9 @@ const Input = ({
             onChange={(val: string) => {
               handleChange(parseInt(val));
             }}
-            onKeyDown={(evt) => ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()}
+            onKeyDown={(evt) =>
+              ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
+            }
             maxLength={15}
             showMaxLength={false}
             required
@@ -102,7 +104,7 @@ const Input = ({
             height: '48px',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         />
       </ModalBody>

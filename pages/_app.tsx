@@ -30,7 +30,13 @@ type AppPropsWithDehydratedState = AppProps & {
   pageProps: AppProps['pageProps'] & { dehydratedState?: DehydratedState };
 };
 
-function AppContent({ Component, pageProps }: AppPropsWithDehydratedState) {
+function AppContent({
+  Component,
+  pageProps,
+}: {
+  Component: AppProps['Component'];
+  pageProps: AppProps['pageProps'];
+}) {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
   const [isRouteChanging, setIsRouteChanging] = useState(false);

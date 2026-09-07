@@ -26,8 +26,17 @@ const ProfileCard: FC<ProfileCardProps> = ({ avatar, name, email, phone }) => {
             <Skeleton />
           </Then>
           <Else>
-            <Flex align={'center'} mb={{ base: '16px', md: 0 }} className="user-profile">
-              <Box borderRadius={'80px'} overflow={'hidden'} mr="24px" flexShrink={0}>
+            <Flex
+              align={'center'}
+              mb={{ base: '16px', md: 0 }}
+              className="user-profile"
+            >
+              <Box
+                borderRadius={'80px'}
+                overflow={'hidden'}
+                mr="24px"
+                flexShrink={0}
+              >
                 <img
                   src={avatar ?? '/empty-avatar.png'}
                   width="80"
@@ -36,7 +45,12 @@ const ProfileCard: FC<ProfileCardProps> = ({ avatar, name, email, phone }) => {
                 />
               </Box>
               <Box wordBreak={'break-all'}>
-                <Text as="h3" variant="headingXLargeBlack" color={colors.darkWillow} mb="8px">
+                <Text
+                  as="h3"
+                  variant="headingXLargeBlack"
+                  color={colors.darkWillow}
+                  mb="8px"
+                >
                   {name ?? '-'}
                 </Text>
                 <HStack divider={<StackDivider />}>

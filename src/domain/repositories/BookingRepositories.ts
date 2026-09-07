@@ -19,10 +19,7 @@ export interface BookingRepository {
   getBookingById: (id: string) => Promise<BookingModel>;
   getBookingLetter: (id: string) => Promise<Blob>;
   createBooking: (input: BookingPayload) => Promise<BookingModel>;
-  updateBooking: (
-    id: string,
-    input: BookingPayload
-  ) => Promise<BookingModel>;
+  updateBooking: (id: string, input: BookingPayload) => Promise<BookingModel>;
   updateBookingStatus: (
     id: string,
     status: BookingStatus,

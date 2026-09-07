@@ -9,7 +9,12 @@ const Desktop = ({ width = 24, height = 24, active }: IconProps) => (
     fill={'white'}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect width={width} height={height} rx="16" fill={active ? 'white' : '#F4A511'} />
+    <rect
+      width={width}
+      height={height}
+      rx="16"
+      fill={active ? 'white' : '#F4A511'}
+    />
     <path
       fillRule="evenodd"
       clipRule="evenodd"

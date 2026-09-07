@@ -11,7 +11,7 @@ const ButtonLinkWithLogo: FC<ButtonLinkWithLogoProps> = ({
   mergeClass,
   onClick,
   disabled,
-  textColor
+  textColor,
 }) => {
   const getClassName = () => {
     let className =

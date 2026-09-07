@@ -9,7 +9,12 @@ const Mobile = ({ width = 24, height = 24, active }: IconProps) => (
     fill={'none'}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect width={width} height={height} rx="16" fill={active ? 'white' : '#1B78EB'} />
+    <rect
+      width={width}
+      height={height}
+      rx="16"
+      fill={active ? 'white' : '#1B78EB'}
+    />
     <path
       fillRule="evenodd"
       clipRule="evenodd"
@@ -19,7 +24,13 @@ const Mobile = ({ width = 24, height = 24, active }: IconProps) => (
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <rect x="11.5" y="19" width="9" height="1.5" fill={active ? colors.ottomanRed : 'white'} />
+    <rect
+      x="11.5"
+      y="19"
+      width="9"
+      height="1.5"
+      fill={active ? colors.ottomanRed : 'white'}
+    />
   </svg>
 );
 

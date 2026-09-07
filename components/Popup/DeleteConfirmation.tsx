@@ -10,7 +10,7 @@ const DeleteConfirmation = ({
   isOpen,
   onClose,
   handleDeleteSubmition,
-  nameData
+  nameData,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -37,11 +37,17 @@ const DeleteConfirmation = ({
             unoptimized
           />
         </div>
-        <Text variant="headingLargeBlack" color={colors.darkWillow} mb="8px" mt="8px">
+        <Text
+          variant="headingLargeBlack"
+          color={colors.darkWillow}
+          mb="8px"
+          mt="8px"
+        >
           Yakin ingin menghapus data?
         </Text>
         <Text variant="bodySmallRegular" color={colors.tarnishedSilver}>
-          Seluruh data {nameData} akan terhapus dan tidak bisa dikembalikan lagi.
+          Seluruh data {nameData} akan terhapus dan tidak bisa dikembalikan
+          lagi.
         </Text>
         <div className="flex mt-6 gap-2 w-full justify-ce">
           <Button
@@ -55,7 +61,7 @@ const DeleteConfirmation = ({
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
           <Button
@@ -72,7 +78,7 @@ const DeleteConfirmation = ({
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
         </div>

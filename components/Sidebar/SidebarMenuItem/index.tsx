@@ -48,7 +48,9 @@ const SidebarItem: FC<SidebarItemProps> = ({
     }
   }, [href, item.childrenHrefs, router]);
 
-  const isHasChildHrefs = (childrenHrefs: SidebarItemProps['item']['childrenHrefs']) => {
+  const isHasChildHrefs = (
+    childrenHrefs: SidebarItemProps['item']['childrenHrefs']
+  ) => {
     if (childrenHrefs) {
       return childrenHrefs.includes(router.pathname);
       // return childrenHrefs.toString().indexOf(router.pathname) > -1;
@@ -78,7 +80,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
   const handleLogout = async () => {
     try {
       await Auth.signOut({
-        global: true
+        global: true,
       });
       router.push('/login');
     } catch (error: any) {
@@ -106,12 +108,15 @@ const SidebarItem: FC<SidebarItemProps> = ({
         onClick={onClickAction}
         style={{
           marginTop: `${name === 'logout' && '100px'}`,
-          marginBottom: `${name === 'logout' && '50px'}`
+          marginBottom: `${name === 'logout' && '50px'}`,
         }}
         {...rest}
       >
         {href ? (
-          <div style={{ paddingLeft: depth * depthStep }} className="flex items-center">
+          <div
+            style={{ paddingLeft: depth * depthStep }}
+            className="flex items-center"
+          >
             {icon && (
               <>
                 <span
@@ -121,7 +126,9 @@ const SidebarItem: FC<SidebarItemProps> = ({
                 >
                   <Image
                     src={`/assets/images/sidebar/${icon}${
-                      (isHovering || active) && icon !== 'master-management' && icon !== 'logout'
+                      (isHovering || active) &&
+                      icon !== 'master-management' &&
+                      icon !== 'logout'
                         ? '-red'
                         : ''
                     }.png`}
@@ -135,11 +142,18 @@ const SidebarItem: FC<SidebarItemProps> = ({
             {/* Using SVG Icon instead background image */}
             {!!MenuIcon && (
               <span className="mr-4 flex items-center justify-center">
-                <MenuIcon isLine={true} width={24} height={24} fill={colors.darkWillow} />
+                <MenuIcon
+                  isLine={true}
+                  width={24}
+                  height={24}
+                  fill={colors.darkWillow}
+                />
               </span>
             )}
             {expanded ? (
-              <span className="sidebar-item-text text-size14 leading-17px align-left">{label}</span>
+              <span className="sidebar-item-text text-size14 leading-17px align-left">
+                {label}
+              </span>
             ) : null}
           </div>
         ) : (
@@ -165,7 +179,9 @@ const SidebarItem: FC<SidebarItemProps> = ({
               </>
             )}
             {expanded ? (
-              <span className="sidebar-item-text text-size14 leading-17px align-left">{label}</span>
+              <span className="sidebar-item-text text-size14 leading-17px align-left">
+                {label}
+              </span>
             ) : null}
           </div>
         )}
@@ -174,7 +190,9 @@ const SidebarItem: FC<SidebarItemProps> = ({
       </li>
       <div
         hidden={collapsed}
-        className={!expanded ? 'fixed left-24 top-48 w-60 bg-white rounded-xl' : ''}
+        className={
+          !expanded ? 'fixed left-24 top-48 w-60 bg-white rounded-xl' : ''
+        }
       >
         {Array.isArray(items) ? (
           <ul>
@@ -188,7 +206,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
                         depthStep={depthStep}
                         item={{
                           ...subItem,
-                          href: `/master${subItem.href}`
+                          href: `/master${subItem.href}`,
                         }}
                         expanded={expanded}
                       />

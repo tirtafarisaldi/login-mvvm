@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import type { FilterItem } from './Filter/types';
 
-export type FilterOption = 'all' | 'today' | 'yesterday' | 'last week' | 'custom' | number;
+export type FilterOption =
+  'all' | 'today' | 'yesterday' | 'last week' | 'custom' | number;
 
 export interface DatePickerProps {
   queryStartDate: string | string[] | undefined;

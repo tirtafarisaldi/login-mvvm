@@ -3,7 +3,11 @@ import type { ReactSelectFilterProps } from './types';
 import type { Size } from 'common-types';
 import { Children, ReactElement, useRef, useState } from 'react';
 import Select, { components } from 'react-select';
-import type { IndicatorsContainerProps, PlaceholderProps, ValueContainerProps } from 'react-select';
+import type {
+  IndicatorsContainerProps,
+  PlaceholderProps,
+  ValueContainerProps,
+} from 'react-select';
 import { colors } from 'styles/theme/constants';
 import { Flex, Tooltip, useOutsideClick } from '@chakra-ui/react';
 import ChevronUp from 'components/Icon/ChevronUp';
@@ -27,7 +31,7 @@ const customStyles = (size: Size) => {
       background: state.isDisabled ? colors.callaLily : '#F2F4F6',
       cursor: state.isDisabled ? 'not-allowed' : 'pointer',
       outline: 'none',
-      boxShadow: 'none'
+      boxShadow: 'none',
     }),
     input: (provided: any, state: any) => ({
       ...provided,
@@ -41,23 +45,27 @@ const customStyles = (size: Size) => {
       borderRadius: 8,
       borderColor: 'none',
       boxShadow: 'none',
-      outline: state.isFocused ? 'none' : 'none'
+      outline: state.isFocused ? 'none' : 'none',
     }),
     singleValue: (provided: any, state: any) => ({
       ...provided,
       lineHeight: '24px',
       zIndex: 0,
-      paddingTop: !state.selectProps.name ? '' : size === 'small' ? '16px' : '20px'
+      paddingTop: !state.selectProps.name
+        ? ''
+        : size === 'small'
+          ? '16px'
+          : '20px',
     }),
     container: (provided: any) => ({
-      ...provided
+      ...provided,
     }),
     valueContainer: (provided: any) => ({
       ...provided,
       height: '100%',
       overflow: 'visible',
       paddingTop: 0,
-      paddingBottom: 0
+      paddingBottom: 0,
     }),
     placeholder: (provided: any, state: any) => ({
       ...provided,
@@ -87,29 +95,29 @@ const customStyles = (size: Size) => {
         state.selectProps.name
           ? 11
           : size === 'small'
-          ? 14
-          : 16
+            ? 14
+            : 16,
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,
-      display: 'none'
+      display: 'none',
     }),
     menu: (provided: any) => ({
       ...provided,
-      zIndex: 3
+      zIndex: 3,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       '&:hover': {
         backgroundColor: state.isFocused ? colors.maryRose : '#E5E9EC',
-        color: state.isFocused ? colors.ottomanRed : '#14171A'
+        color: state.isFocused ? colors.ottomanRed : '#14171A',
       },
       fontSize: '14px',
       fontWeight: '700',
       color: state.isSelected ? '#14171A' : state.isDisabled ? '' : '#14171A',
       backgroundColor: '#FFFFFF',
-      cursor: state.isDisabled ? 'not-allowed' : 'default'
-    })
+      cursor: state.isDisabled ? 'not-allowed' : 'default',
+    }),
   };
 
   return style;
@@ -130,7 +138,11 @@ const CustomValueContainer = (
         <Text variant="captionRegular" color={colors.tarnishedSilver}>
           <div style={{ display: 'flex' }}>
             {props.selectProps.name}
-            {required ? <div style={{ color: 'red', fontSize: '12px' }}>*</div> : ''}
+            {required ? (
+              <div style={{ color: 'red', fontSize: '12px' }}>*</div>
+            ) : (
+              ''
+            )}
             {tooltipLabel && (
               <Tooltip
                 label={tooltipLabel}
@@ -151,7 +163,12 @@ const CustomValueContainer = (
                   bgColor={'transparent'}
                   marginLeft={'4px'}
                 >
-                  <Info width={16} height={16} fill={colors.tarnishedSilver} isLine />
+                  <Info
+                    width={16}
+                    height={16}
+                    fill={colors.tarnishedSilver}
+                    isLine
+                  />
                 </Flex>
               </Tooltip>
             )}
@@ -212,7 +229,7 @@ const ReactSelectFilter: FC<ReactSelectFilterProps> = ({
   const ref = React.useRef<HTMLInputElement>(null);
   useOutsideClick({
     ref,
-    handler: () => setIsOpen(false)
+    handler: () => setIsOpen(false),
   });
 
   const toggleOpen = () => {
@@ -226,7 +243,7 @@ const ReactSelectFilter: FC<ReactSelectFilterProps> = ({
         }`}
         style={{
           width: containerWidth,
-          cursor: isDisabled ? 'not-allowed' : 'pointer'
+          cursor: isDisabled ? 'not-allowed' : 'pointer',
         }}
         onClick={isDisabled ? undefined : toggleOpen}
         ref={ref}
@@ -247,11 +264,16 @@ const ReactSelectFilter: FC<ReactSelectFilterProps> = ({
             ...(name
               ? {
                   ValueContainer: (props) =>
-                    CustomValueContainer(placeholder, props, required, tooltipLabel)
+                    CustomValueContainer(
+                      placeholder,
+                      props,
+                      required,
+                      tooltipLabel
+                    ),
                 }
               : undefined),
             IndicatorsContainer: (props) =>
-              CustomIndicatorContainer(isClearable || false, props, isClear)
+              CustomIndicatorContainer(isClearable || false, props, isClear),
           }}
           {...otherProps}
         />

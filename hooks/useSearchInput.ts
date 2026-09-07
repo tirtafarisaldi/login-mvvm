@@ -2,7 +2,7 @@ import type { BaseSyntheticEvent } from 'react';
 import React from 'react';
 
 export type UseSearchInputProps = {
-  onChange: Function;
+  onChange: (value: string) => void;
 };
 
 const DEBOUNCE_TIMEOUT = 700;

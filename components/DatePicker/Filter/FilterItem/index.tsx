@@ -6,7 +6,12 @@ import { colors } from 'styles/theme/constants';
 
 import type { FilterItemProps } from './types';
 
-const FilterItem: FC<FilterItemProps> = ({ isBordered, isActive, handleClick, label }) => {
+const FilterItem: FC<FilterItemProps> = ({
+  isBordered,
+  isActive,
+  handleClick,
+  label,
+}) => {
   return (
     <>
       <When condition={isBordered}>
@@ -21,7 +26,7 @@ const FilterItem: FC<FilterItemProps> = ({ isBordered, isActive, handleClick, la
         color={isActive ? colors.ottomanRed : colors.darkWillow}
         _hover={{
           bgColor: colors.maryRose,
-          color: colors.ottomanRed
+          color: colors.ottomanRed,
         }}
         onClick={handleClick}
       >

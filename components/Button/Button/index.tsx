@@ -16,7 +16,7 @@ const Button: FC<ButtonProps> = ({
   disabled,
   icon,
   iconPosition,
-  style
+  style,
 }) => {
   const getClassName = () => {
     let className =

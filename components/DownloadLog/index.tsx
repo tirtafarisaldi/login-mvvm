@@ -2,7 +2,13 @@ import type { FC, MouseEvent } from 'react';
 import type { DownloadLogProps, Type } from './types';
 import { useState } from 'react';
 import ButtonLinkWithLogo from 'components/Button/ButtonLinkWithLogo';
-import { LinkBox, LinkOverlay, Portal, Text, useBoolean } from '@chakra-ui/react';
+import {
+  LinkBox,
+  LinkOverlay,
+  Portal,
+  Text,
+  useBoolean,
+} from '@chakra-ui/react';
 import Info from 'components/Icon/Info';
 import { When } from 'react-if';
 import Alert from 'components/Alert';
@@ -14,7 +20,7 @@ const DownloadLog: FC<DownloadLogProps> = ({
   isRequiredPayloadFilled,
   endpoint,
   handleValidation,
-  types
+  types,
 }) => {
   const [isDownloadError, setIsDownloadError] = useState(false);
   const [showDropdownDownloadLog, setShowDropdownDownloadLog] = useBoolean();

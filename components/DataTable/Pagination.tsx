@@ -50,8 +50,7 @@ export default function DataTablePagination({
             transform: 'translateY(-1px)',
             bg: mode === 'dark' ? 'rgba(59,130,246,0.22)' : 'blue.50',
             color: mode === 'dark' ? 'white' : 'blue.700',
-            borderColor:
-              mode === 'dark' ? 'rgba(96,165,250,0.5)' : 'blue.400',
+            borderColor: mode === 'dark' ? 'rgba(96,165,250,0.5)' : 'blue.400',
             boxShadow: '0 0 10px rgba(59,130,246,0.25)',
           }}
           _disabled={{
@@ -103,9 +102,7 @@ export default function DataTablePagination({
               }
               borderWidth={page === currentPage ? 0 : '1px'}
               borderColor={
-                mode === 'dark'
-                  ? 'rgba(255,255,255,0.14)'
-                  : 'gray.300'
+                mode === 'dark' ? 'rgba(255,255,255,0.14)' : 'gray.300'
               }
               fontWeight={page === currentPage ? 'bold' : 'medium'}
               boxShadow={
@@ -164,8 +161,7 @@ export default function DataTablePagination({
             transform: 'translateY(-1px)',
             bg: mode === 'dark' ? 'rgba(59,130,246,0.22)' : 'blue.50',
             color: mode === 'dark' ? 'white' : 'blue.700',
-            borderColor:
-              mode === 'dark' ? 'rgba(96,165,250,0.5)' : 'blue.400',
+            borderColor: mode === 'dark' ? 'rgba(96,165,250,0.5)' : 'blue.400',
             boxShadow: '0 0 10px rgba(59,130,246,0.25)',
           }}
           _disabled={{

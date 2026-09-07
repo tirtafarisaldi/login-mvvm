@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useCallback,
   Dispatch,
-  SetStateAction
+  SetStateAction,
 } from 'react';
 import Text from 'components/Typography/Text';
 import { colors } from 'styles/theme/constants';
@@ -18,7 +18,7 @@ const CustomPopup = ({
   description,
   img,
   isError,
-  setError
+  setError,
 }: {
   title: string;
   description: string;
@@ -52,9 +52,20 @@ const CustomPopup = ({
     >
       <ModalBody>
         <div className="w-253 flex justify-center">
-          <Image src={img} width="253" height="138" alt="error-popup" unoptimized />
+          <Image
+            src={img}
+            width="253"
+            height="138"
+            alt="error-popup"
+            unoptimized
+          />
         </div>
-        <Text variant="headingLargeBlack" color={colors.darkWillow} mb="8px" mt="8px">
+        <Text
+          variant="headingLargeBlack"
+          color={colors.darkWillow}
+          mb="8px"
+          mt="8px"
+        >
           {title}
         </Text>
         <Text variant="bodySmallRegular" color={colors.tarnishedSilver}>
@@ -71,7 +82,7 @@ const CustomPopup = ({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '24px'
+            marginTop: '24px',
           }}
         />
       </ModalBody>

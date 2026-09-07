@@ -28,7 +28,7 @@ export enum ErrorReason {
   UNAUTHORIZED = 'unauthorized',
   UNKNOWN = 'unknown',
   BAD_REQUEST = 'bad_request',
-  DUPLICATED = 'Duplicated'
+  DUPLICATED = 'Duplicated',
 }
 
 export enum ErrorType {
@@ -36,7 +36,7 @@ export enum ErrorType {
   UNAUTHORIZED = 'UNAUTHORIZED',
   UNKNOWN = 'UNKNOWN',
   BAD_REQUEST = 'BAD_REQUEST',
-  DUPLICATED = 'DUPLICATED'
+  DUPLICATED = 'DUPLICATED',
 }
 
 export type ErrorMessage = string | string[];
@@ -58,7 +58,10 @@ export class ErrorState implements IErrorState {
   public type;
   public message;
 
-  constructor(type: ErrorType = ErrorType.UNKNOWN, message: string | string[] = '') {
+  constructor(
+    type: ErrorType = ErrorType.UNKNOWN,
+    message: string | string[] = ''
+  ) {
     this.type = type;
     this.message = message;
   }

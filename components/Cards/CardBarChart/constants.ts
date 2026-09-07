@@ -11,7 +11,7 @@ export const CHART_CONFIG: ChartConfiguration = {
         borderColor: '#ed64a6',
         data: [30, 78, 56, 34, 100, 45, 13],
         fill: false,
-        barThickness: 8
+        barThickness: 8,
       },
       {
         label: (new Date().getFullYear() - 1).toString(),
@@ -19,9 +19,9 @@ export const CHART_CONFIG: ChartConfiguration = {
         backgroundColor: '#4c51bf',
         borderColor: '#4c51bf',
         data: [27, 68, 86, 74, 10, 4, 87],
-        barThickness: 8
-      }
-    ]
+        barThickness: 8,
+      },
+    ],
   },
   options: {
     maintainAspectRatio: false,
@@ -29,30 +29,30 @@ export const CHART_CONFIG: ChartConfiguration = {
     plugins: {
       title: {
         display: false,
-        text: 'Orders Chart'
+        text: 'Orders Chart',
       },
       tooltip: {
         mode: 'index',
-        intersect: false
+        intersect: false,
       },
       legend: {
         title: {
-          color: 'rgba(0,0,0,.4)'
+          color: 'rgba(0,0,0,.4)',
         },
         align: 'end',
-        position: 'bottom'
-      }
+        position: 'bottom',
+      },
     },
     hover: {
       mode: 'nearest',
-      intersect: true
+      intersect: true,
     },
     scales: {
       x: {
         display: false,
         title: {
           display: true,
-          text: 'Month'
+          text: 'Month',
         },
         grid: {
           borderDash: [2],
@@ -60,14 +60,14 @@ export const CHART_CONFIG: ChartConfiguration = {
           color: 'rgba(33, 37, 41, 0.3)',
           tickColor: 'rgba(33, 37, 41, 0.3)',
           tickBorderDash: [2],
-          tickBorderDashOffset: 2
-        }
+          tickBorderDashOffset: 2,
+        },
       },
       y: {
         display: true,
         title: {
           display: false,
-          text: 'Value'
+          text: 'Value',
         },
         grid: {
           borderDash: [2],
@@ -76,9 +76,9 @@ export const CHART_CONFIG: ChartConfiguration = {
           color: 'rgba(33, 37, 41, 0.2)',
           tickColor: 'rgba(33, 37, 41, 0.15)',
           tickBorderDash: [2],
-          tickBorderDashOffset: 2
-        }
-      }
-    }
-  }
+          tickBorderDashOffset: 2,
+        },
+      },
+    },
+  },
 };

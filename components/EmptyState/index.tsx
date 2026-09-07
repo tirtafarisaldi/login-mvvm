@@ -5,7 +5,7 @@ import { colors } from 'styles/theme/constants';
 const EmptyState = ({
   imageSrc,
   title,
-  description
+  description,
 }: {
   imageSrc: string;
   title: string;
@@ -13,8 +13,19 @@ const EmptyState = ({
 }) => {
   return (
     <div className="flex items-center justify-center flex-col mt-12">
-      <Image src={imageSrc} width="253" height="138" alt="empty-state" unoptimized />
-      <Text variant="headingLargeBlack" color={colors.darkWillow} mb="8px" mt="8px">
+      <Image
+        src={imageSrc}
+        width="253"
+        height="138"
+        alt="empty-state"
+        unoptimized
+      />
+      <Text
+        variant="headingLargeBlack"
+        color={colors.darkWillow}
+        mb="8px"
+        mt="8px"
+      >
         {title}
       </Text>
       <Text variant="bodySmallRegular" color={colors.tarnishedSilver}>

@@ -1,4 +1,11 @@
-import { background, Box, Button, Flex, Tooltip, useOutsideClick } from '@chakra-ui/react';
+import {
+  background,
+  Box,
+  Button,
+  Flex,
+  Tooltip,
+  useOutsideClick,
+} from '@chakra-ui/react';
 import type { FC, ReactNode } from 'react';
 import React, { useState } from 'react';
 import Select, { components } from 'react-select';
@@ -23,7 +30,7 @@ const customStyles = (size: string, isTopPlaceholder: boolean) => {
       marginTop: '0px',
       marginBottom: '0px',
       overflow: 'hidden',
-      boxShadow: 'inset 0 1px 0 transparent'
+      boxShadow: 'inset 0 1px 0 transparent',
     }),
     control: (provided: any) => ({
       ...provided,
@@ -35,7 +42,7 @@ const customStyles = (size: string, isTopPlaceholder: boolean) => {
       borderRadius: 8,
       background: 'none',
       outline: `2px solid ${colors.flashWhite}`,
-      flexDirection: 'row-reverse'
+      flexDirection: 'row-reverse',
     }),
     input: (provided: any, state: any) => ({
       ...provided,
@@ -51,24 +58,24 @@ const customStyles = (size: string, isTopPlaceholder: boolean) => {
       boxShadow: 'none',
       outline: state.isFocused ? 'none' : 'none',
       '&:after': {
-        content: "''"
+        content: "''",
       },
       '&:focus': {
-        fontSize: '16px !important'
-      }
+        fontSize: '16px !important',
+      },
     }),
     singleValue: (provided: any) => ({
       ...provided,
       lineHeight: '24px',
-      ...(isTopPlaceholder ? { paddingTop: '16px' } : {})
+      ...(isTopPlaceholder ? { paddingTop: '16px' } : {}),
     }),
     container: (provided: any) => ({
-      ...provided
+      ...provided,
     }),
     valueContainer: (provided: any) => ({
       ...provided,
       height: '100%',
-      overflow: 'visible'
+      overflow: 'visible',
     }),
     placeholder: (provided: any, state: any) => ({
       ...provided,
@@ -76,12 +83,16 @@ const customStyles = (size: string, isTopPlaceholder: boolean) => {
         ? {
             position: 'absolute',
             color:
-              state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+              state.hasValue ||
+              state.selectProps.menuIsOpen ||
+              state.selectProps.inputValue
                 ? colors.tarnishedSilver
                 : colors.silverCharm,
             top:
               // eslint-disable-next-line no-nested-ternary
-              state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+              state.hasValue ||
+              state.selectProps.menuIsOpen ||
+              state.selectProps.inputValue
                 ? size === 'small'
                   ? '6px'
                   : '8px'
@@ -89,36 +100,38 @@ const customStyles = (size: string, isTopPlaceholder: boolean) => {
             transition: 'top 0.1s, font-size 0.1s',
             fontSize:
               // eslint-disable-next-line no-nested-ternary
-              state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+              state.hasValue ||
+              state.selectProps.menuIsOpen ||
+              state.selectProps.inputValue
                 ? 11
                 : size === 'small'
-                ? 14
-                : 16
+                  ? 14
+                  : 16,
           }
         : {
             color: colors.silverCharm,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          })
+            whiteSpace: 'nowrap',
+          }),
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,
-      display: 'none'
+      display: 'none',
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       '&:hover': {
         backgroundColor: state.isFocused ? colors.maryRose : '#E5E9EC',
-        color: state.isFocused ? colors.ottomanRed : '#14171A'
+        color: state.isFocused ? colors.ottomanRed : '#14171A',
       },
       fontSize: '14px',
       fontWeight: '700',
       color: state.isSelected ? '#14171A' : state.isDisabled ? '' : '#14171A',
       backgroundColor: '#FFFFFF',
       cursor: state.isDisabled ? 'not-allowed' : 'default',
-      padding: '12px 16px 12px 16px'
-    })
+      padding: '12px 16px 12px 16px',
+    }),
   };
 
   return style;
@@ -131,9 +144,18 @@ const CustomNoOptionsMessage = (
 ) => {
   return (
     <components.NoOptionsMessage {...props}>
-      <Flex justifyContent={'center'} alignItems={'center'} padding={'12px'} direction={'column'}>
+      <Flex
+        justifyContent={'center'}
+        alignItems={'center'}
+        padding={'12px'}
+        direction={'column'}
+      >
         {loading ? (
-          <Text variant="paragraphSmallRegular" flexWrap={'wrap'} maxW={'208px'}>
+          <Text
+            variant="paragraphSmallRegular"
+            flexWrap={'wrap'}
+            maxW={'208px'}
+          >
             Sedang memuat.......
           </Text>
         ) : (
@@ -180,7 +202,7 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
   const ref = React.useRef<HTMLInputElement>(null);
   useOutsideClick({
     ref,
-    handler: () => setIsOpen(false)
+    handler: () => setIsOpen(false),
   });
 
   const toggleOpen = () => {
@@ -205,7 +227,7 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
   const Dropdown = ({
     children,
     isOpenDropdown,
-    target
+    target,
   }: {
     children: ReactNode;
     isOpenDropdown: boolean;
@@ -238,7 +260,12 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
   );
 
   const filterOption = (option: any, inputValue: string): boolean =>
-    (option.label.toString().toLowerCase().match(inputValue.toLocaleLowerCase()) || []).length > 0;
+    (
+      option.label
+        .toString()
+        .toLowerCase()
+        .match(inputValue.toLocaleLowerCase()) || []
+    ).length > 0;
 
   return (
     <>
@@ -279,7 +306,11 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
               <Text variant="captionRegular" color={colors.tarnishedSilver}>
                 <div style={{ display: 'flex' }}>
                   {name}
-                  {required ? <div style={{ color: 'red', fontSize: '12px' }}>*</div> : ''}
+                  {required ? (
+                    <div style={{ color: 'red', fontSize: '12px' }}>*</div>
+                  ) : (
+                    ''
+                  )}
                   {tooltipLabel && (
                     <Tooltip
                       label={tooltipLabel}
@@ -300,7 +331,12 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
                         bgColor={'transparent'}
                         marginLeft={'4px'}
                       >
-                        <Info width={16} height={16} fill={colors.tarnishedSilver} isLine />
+                        <Info
+                          width={16}
+                          height={16}
+                          fill={colors.tarnishedSilver}
+                          isLine
+                        />
                       </Flex>
                     </Tooltip>
                   )}
@@ -308,7 +344,9 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
               </Text>
               <Text
                 variant="bodySmallRegular"
-                color={selectedOption?.label ? colors.bastille : colors.silverCharm}
+                color={
+                  selectedOption?.label ? colors.bastille : colors.silverCharm
+                }
               >
                 {selectedOption?.label || placeholderTarget}
               </Text>
@@ -364,7 +402,8 @@ const DropdownSearch: FC<DropdownSearchProps> = ({
             components={{
               Control: (props) => CustomControl(props),
               DropdownIndicator: CustomDropdownIndicator,
-              NoOptionsMessage: (props) => CustomNoOptionsMessage(props, keyName || '', loading)
+              NoOptionsMessage: (props) =>
+                CustomNoOptionsMessage(props, keyName || '', loading),
             }}
             {...otherProps}
           />

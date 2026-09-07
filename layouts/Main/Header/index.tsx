@@ -3,7 +3,14 @@ import type { HeaderProps } from './types';
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, MenuButton, MenuList, MenuItem, Box, Flex } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Box,
+  Flex,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { When } from 'react-if';
 

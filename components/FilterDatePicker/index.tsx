@@ -18,7 +18,7 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
   endDate,
   setEndDate,
   applyFilterEvent,
-  position = 'left'
+  position = 'left',
 }) => {
   const router = useRouter();
 
@@ -34,8 +34,8 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
         setTempEndDate(new Date());
 
         break;
-      case 'yesterday':
-        let today = new Date();
+      case 'yesterday': {
+        const today = new Date();
         let yesterday = new Date(today);
 
         yesterday = new Date(yesterday.setDate(today.getDate() - 1));
@@ -44,6 +44,7 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
         setTempEndDate(yesterday);
 
         break;
+      }
       case 'last week':
         setTempStartDate(subDays(new Date(), 6));
         setTempEndDate(new Date());
@@ -127,7 +128,10 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
       if (queryStartDate && queryEndDate) {
         // set default dropdown filter to today when query string activity_start_date & activity_end_date equal with current date
         if (
-          isEqual(startOfDay(new Date(queryStartDate)), startOfDay(new Date())) &&
+          isEqual(
+            startOfDay(new Date(queryStartDate)),
+            startOfDay(new Date())
+          ) &&
           isEqual(startOfDay(new Date(queryEndDate)), startOfDay(new Date()))
         ) {
           setFilterDateSelectedPopup('today');
@@ -194,7 +198,9 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
 
       if (setDateFilter) {
         const formInputDate =
-          formatFilterDate(tempStartDate) + ' - ' + formatFilterDate(tempEndDate);
+          formatFilterDate(tempStartDate) +
+          ' - ' +
+          formatFilterDate(tempEndDate);
         setDateFilter(formInputDate);
       }
 
@@ -224,8 +230,16 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
 
   useEffect(() => {
     if (!router.isReady) return;
-    dropdownFilterSelectedHandler(queryStartDate as string, queryEndDate as string);
-  }, [dropdownFilterSelectedHandler, queryEndDate, queryStartDate, router.isReady]);
+    dropdownFilterSelectedHandler(
+      queryStartDate as string,
+      queryEndDate as string
+    );
+  }, [
+    dropdownFilterSelectedHandler,
+    queryEndDate,
+    queryStartDate,
+    router.isReady,
+  ]);
 
   return (
     <>
@@ -296,7 +310,9 @@ const FilterDatePicker: FC<FilterDatePickerProps> = ({
             </div>
           </div>
           <div className="flex justify-between border-t border-t-calla_lily px-4 py-6">
-            <span className="text-size14 leading-17px text-tarnished_silver">Filter Date</span>
+            <span className="text-size14 leading-17px text-tarnished_silver">
+              Filter Date
+            </span>
             <div>
               <span
                 onClick={cancelFilterDate}

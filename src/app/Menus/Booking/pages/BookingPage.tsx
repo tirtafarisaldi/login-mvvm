@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { AddIcon, DeleteIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import {
   Box,

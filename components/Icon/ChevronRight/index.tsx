@@ -1,7 +1,12 @@
 import type { IconProps } from 'common-types';
 
 const ChevronRight = ({ width = 24, height = 24, fill }: IconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 24 24">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+  >
     <g id="ic_chevron_down" transform="translate(0 24) rotate(-90)">
       <g id="Surface">
         <g id="Artboard">

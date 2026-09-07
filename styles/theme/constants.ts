@@ -27,7 +27,7 @@ export const colors = {
   white: '#FFF',
   bastille: '#2C2E31',
   dairyMade: '#F6B741',
-  greenish: '#3DA267'
+  greenish: '#3DA267',
 };
 
 export const breakpoints = {
@@ -36,5 +36,5 @@ export const breakpoints = {
   lg: '960px',
   xl: '1200px',
   '2xl': '1536px',
-  sm2: '525px'
+  sm2: '525px',
 };

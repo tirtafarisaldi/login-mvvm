@@ -2,13 +2,19 @@ import type { FC } from 'react';
 import type { UserPaginationProps } from './types';
 import { number } from 'utility/number';
 
-const UserPagination: FC<UserPaginationProps> = ({ page, event, hidden, pageName }) => {
+const UserPagination: FC<UserPaginationProps> = ({
+  page,
+  event,
+  hidden,
+  pageName,
+}) => {
   const renderPages = () => {
-    var pages = [];
-    var endPage = page.total > 5 ? 5 : page.total;
-    var startPage = 1;
+    const pages = [];
+    let endPage = page.total > 5 ? 5 : page.total;
+    let startPage = 1;
 
-    var lastPageListCount = page.total_data % 10 == 0 ? 10 : page.total_data % 10;
+    const lastPageListCount =
+      page.total_data % 10 == 0 ? 10 : page.total_data % 10;
     page.total_last_page_data = lastPageListCount;
 
     // previous button
@@ -109,7 +115,10 @@ const UserPagination: FC<UserPaginationProps> = ({ page, event, hidden, pageName
 
   return (
     <>
-      <div hidden={hidden} className="py-2 lg:flex lg:justify-between space-x-1 block">
+      <div
+        hidden={hidden}
+        className="py-2 lg:flex lg:justify-between space-x-1 block"
+      >
         <div className="md:flex md:items-center block text-sm text-gray-500 lg:mb-0 mb-2">
           <div className="mr-2 md:mb-0 mb-2">Showing</div>
           <div className="md:flex md:flex-wrap md:items-center md:justify-center block">
@@ -117,12 +126,16 @@ const UserPagination: FC<UserPaginationProps> = ({ page, event, hidden, pageName
               {page.total_data == 0
                 ? 0
                 : page.current < page.total
-                ? '1 - 10'
-                : '1 - ' + (page.total_last_page_data ? page.total_last_page_data : '')}
+                  ? '1 - 10'
+                  : '1 - ' +
+                    (page.total_last_page_data
+                      ? page.total_last_page_data
+                      : '')}
               <i className="ml-2 text-xs fas fa-chevron-down"></i>
             </div>
             <div className="inline-block">
-              of <span className="font-bold">{number(page.total_data)}</span> users
+              of <span className="font-bold">{number(page.total_data)}</span>{' '}
+              users
             </div>
           </div>
         </div>

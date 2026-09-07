@@ -1,7 +1,9 @@
 import type { ReactElement, ReactNode, InputHTMLAttributes } from 'react';
 
-export interface FormInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'onChange'> {
+export interface FormInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'size' | 'onChange'
+> {
   label: string;
   size: 'small' | 'large';
   icon?: ReactElement;

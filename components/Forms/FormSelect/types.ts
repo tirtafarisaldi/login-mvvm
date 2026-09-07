@@ -1,5 +1,9 @@
 import type { Size } from 'common-types';
-import type { ChangeEventHandler, ReactNode, SelectHTMLAttributes } from 'react';
+import type {
+  ChangeEventHandler,
+  ReactNode,
+  SelectHTMLAttributes,
+} from 'react';
 
 export type Value = string | number | readonly string[] | undefined;
 
@@ -8,7 +12,10 @@ export type Option = {
   label: string;
 };
 
-export interface FormSelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
+export interface FormSelectProps extends Omit<
+  SelectHTMLAttributes<HTMLSelectElement>,
+  'size'
+> {
   selectedOption: Value;
   setSelectedOption: ChangeEventHandler<HTMLSelectElement>;
   options: Option[];

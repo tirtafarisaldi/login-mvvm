@@ -14,13 +14,19 @@ const indonesianMonth = [
   'September',
   'Oktober',
   'November',
-  'Desember'
+  'Desember',
 ];
 
 export const indonesianDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
 
-  return date.getDate() + ' ' + indonesianMonth[date.getMonth()] + ' ' + date.getFullYear();
+  return (
+    date.getDate() +
+    ' ' +
+    indonesianMonth[date.getMonth()] +
+    ' ' +
+    date.getFullYear()
+  );
 };
 
 export const formatDateId = (dateKey?: string): string => {

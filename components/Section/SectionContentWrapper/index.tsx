@@ -9,7 +9,9 @@ const SectionContentWrapper: FC<SectionContentWrapperProps> = ({
   return (
     <div
       {...otherProps}
-      className={'bg-white py-6 rounded-lg' + (mergeClass ? ` ${mergeClass}` : '')}
+      className={
+        'bg-white py-6 rounded-lg' + (mergeClass ? ` ${mergeClass}` : '')
+      }
     >
       {children}
     </div>

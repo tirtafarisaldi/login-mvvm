@@ -3,7 +3,12 @@ import type { OTPCountdownBtnProps } from './types';
 import { useEffect, useState, useCallback } from 'react';
 import { useDebounce } from 'hooks/useDebounce';
 
-const OTPCountdownBtn: FC<OTPCountdownBtnProps> = ({ text, otp, hidden, disabled = false }) => {
+const OTPCountdownBtn: FC<OTPCountdownBtnProps> = ({
+  text,
+  otp,
+  hidden,
+  disabled = false,
+}) => {
   const debounce = useDebounce();
   const [[hrs, mins, secs], setTime] = useState([0, 0, 0]);
   const [errMsg] = useState('');
@@ -46,11 +51,17 @@ const OTPCountdownBtn: FC<OTPCountdownBtnProps> = ({ text, otp, hidden, disabled
               .toString()
               .padStart(2, '0')}`}
       </button>
-      <p className="text-xs px-3 py-2 mt-1 bg-red-100 text-red-600 rounded-md" hidden={!errMsg}>
+      <p
+        className="text-xs px-3 py-2 mt-1 bg-red-100 text-red-600 rounded-md"
+        hidden={!errMsg}
+      >
         {errMsg}
       </p>
 
-      <p className="text-xs px-3 py-2 mt-1 bg-green-100 text-green-600 rounded-md" hidden={!msg}>
+      <p
+        className="text-xs px-3 py-2 mt-1 bg-green-100 text-green-600 rounded-md"
+        hidden={!msg}
+      >
         {msg}
       </p>
     </>

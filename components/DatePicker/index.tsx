@@ -51,13 +51,14 @@ const DatePicker: FC<DatePickerProps> = ({
   disabled,
   isClear,
   variant,
-  required
+  required,
 }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [filterDateSelectedPopup, setFilterDateSelectedPopup] = useState<FilterOption>();
+  const [filterDateSelectedPopup, setFilterDateSelectedPopup] =
+    useState<FilterOption>();
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const [isAllDates, setIsAllDates] = useState<boolean>(false);
   const [tempStartDate, setTempStartDate] = useState<Date | null>(null);
@@ -78,7 +79,10 @@ const DatePicker: FC<DatePickerProps> = ({
       if (queryStartDate && queryEndDate) {
         // set default dropdown filter to today when query string activity_start_date & activity_end_date equal with current date
         if (
-          isEqual(startOfDay(new Date(queryStartDate)), startOfDay(new Date())) &&
+          isEqual(
+            startOfDay(new Date(queryStartDate)),
+            startOfDay(new Date())
+          ) &&
           isEqual(startOfDay(new Date(queryEndDate)), startOfDay(new Date()))
         ) {
           setFilterDateSelectedPopup('today');
@@ -126,7 +130,7 @@ const DatePicker: FC<DatePickerProps> = ({
 
   const applyFilterDate = () => {
     if (isButtonDisabled) return;
-    if (!!setFilteredItem) setFilteredItem(filterDateSelectedPopup);
+    if (setFilteredItem) setFilteredItem(filterDateSelectedPopup);
 
     if (selectsRange) {
       setStartDate(tempStartDate);
@@ -151,7 +155,9 @@ const DatePicker: FC<DatePickerProps> = ({
         if (isAllDates) {
           setDateFilter('all');
         } else {
-          const formInputDate = indonesianDate(toTimestamp(formatFilterDate(tempStartDate)));
+          const formInputDate = indonesianDate(
+            toTimestamp(formatFilterDate(tempStartDate))
+          );
           setDateFilter(formInputDate || '-');
         }
       }
@@ -256,16 +262,24 @@ const DatePicker: FC<DatePickerProps> = ({
     minDate,
     selectsRange,
     tempEndDate,
-    tempStartDate
+    tempStartDate,
   ]);
 
   useEffect(() => {
     if (!router.isReady) return;
-    dropdownFilterSelectedHandler(queryStartDate as string, queryEndDate as string);
-  }, [dropdownFilterSelectedHandler, queryEndDate, queryStartDate, router.isReady]);
+    dropdownFilterSelectedHandler(
+      queryStartDate as string,
+      queryEndDate as string
+    );
+  }, [
+    dropdownFilterSelectedHandler,
+    queryEndDate,
+    queryStartDate,
+    router.isReady,
+  ]);
 
   useEffect(() => {
-    if (!!handleConfirm) handleConfirm();
+    if (handleConfirm) handleConfirm();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
 
@@ -277,7 +291,7 @@ const DatePicker: FC<DatePickerProps> = ({
   const ref = useRef<HTMLInputElement>(null);
   useOutsideClick({
     ref,
-    handler: () => setIsOpen(false)
+    handler: () => setIsOpen(false),
   });
 
   useEffect(() => {
@@ -312,15 +326,25 @@ const DatePicker: FC<DatePickerProps> = ({
               />
             )}
             <Box minW={width ? width : '320px'}>
-              <Box mx="26px" borderBottom={`solid 1px ${colors.callaLily}`} py="12px">
+              <Box
+                mx="26px"
+                borderBottom={`solid 1px ${colors.callaLily}`}
+                py="12px"
+              >
                 {infoComponent && infoComponent}
-                <Text variant="headlineBold" color={colors.darkWillow} mb="10px">
+                <Text
+                  variant="headlineBold"
+                  color={colors.darkWillow}
+                  mb="10px"
+                >
                   SELECT DATE
                 </Text>
                 <Flex justify="space-between" minH="24px">
                   <When
                     condition={
-                      isAllDates && filterItems && filterItems.some((item) => item.key === 'all')
+                      isAllDates &&
+                      filterItems &&
+                      filterItems.some((item) => item.key === 'all')
                     }
                   >
                     <Text variant="headingSmallBlack" color={colors.darkWillow}>
@@ -329,7 +353,9 @@ const DatePicker: FC<DatePickerProps> = ({
                   </When>
                   <When condition={!!tempStartDate}>
                     <Text variant="headingSmallBlack" color={colors.darkWillow}>
-                      {indonesianDate(toTimestamp(formatFilterDate(tempStartDate)))}
+                      {indonesianDate(
+                        toTimestamp(formatFilterDate(tempStartDate))
+                      )}
                     </Text>
                   </When>
                   <When condition={!!tempEndDate}>
@@ -337,7 +363,9 @@ const DatePicker: FC<DatePickerProps> = ({
                       <Minus />
                     </Text>
                     <Text variant="headingSmallBlack" color={colors.darkWillow}>
-                      {indonesianDate(toTimestamp(formatFilterDate(tempEndDate)))}
+                      {indonesianDate(
+                        toTimestamp(formatFilterDate(tempEndDate))
+                      )}
                     </Text>
                   </When>
                 </Flex>
@@ -347,12 +375,15 @@ const DatePicker: FC<DatePickerProps> = ({
                   {isOpen && (
                     <DatePickerWrapper
                       isDateRange={
-                        formatFilterDate(tempStartDate) !== formatFilterDate(tempEndDate)
+                        formatFilterDate(tempStartDate) !==
+                        formatFilterDate(tempEndDate)
                       }
                     >
                       <ReactDatePicker
                         renderCustomHeader={(props: any) => {
-                          return <CustomHeader setMonthDate={setMonth} {...props} />;
+                          return (
+                            <CustomHeader setMonthDate={setMonth} {...props} />
+                          );
                         }}
                         renderDayContents={(_dayOfMonth, date) =>
                           date ? <CustomDay date={date} /> : null
@@ -382,7 +413,7 @@ const DatePicker: FC<DatePickerProps> = ({
           <div
             className="flex justify-end border-t border-t-calla_lily px-4 py-6"
             style={{
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Text
@@ -411,7 +442,7 @@ const DatePicker: FC<DatePickerProps> = ({
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                padding: '8px'
+                padding: '8px',
               }}
               disabled={isButtonDisabled}
               onClick={applyFilterDate}
@@ -438,7 +469,7 @@ const DatePicker: FC<DatePickerProps> = ({
         style={{
           color: colors.bastille,
           width: containerWidth ? containerWidth : '100%',
-          cursor: disabled ? 'not-allowed' : 'pointer'
+          cursor: disabled ? 'not-allowed' : 'pointer',
         }}
         disabled={disabled}
         required={required}

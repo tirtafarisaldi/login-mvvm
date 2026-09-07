@@ -9,7 +9,7 @@ const CancelConfirmation = ({
   isOpen,
   onClose,
   handleCancel,
-  loading
+  loading,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -36,11 +36,17 @@ const CancelConfirmation = ({
             unoptimized
           />
         </div>
-        <Text variant="headingLargeBlack" color={colors.darkWillow} mb="8px" mt="8px">
+        <Text
+          variant="headingLargeBlack"
+          color={colors.darkWillow}
+          mb="8px"
+          mt="8px"
+        >
           Yakin ingin batalkan menu campaign berjalan?
         </Text>
         <Text variant="bodySmallRegular" color={colors.tarnishedSilver}>
-          Menu campaign tidak bisa diaktifkan lagi dan kamu harus mulai dari awal.
+          Menu campaign tidak bisa diaktifkan lagi dan kamu harus mulai dari
+          awal.
         </Text>
         <div className="flex mt-6 gap-2 w-full justify-ce">
           <Button
@@ -54,7 +60,7 @@ const CancelConfirmation = ({
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
           <Button
@@ -80,7 +86,7 @@ const CancelConfirmation = ({
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
         </div>

@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useCallback,
   Dispatch,
-  SetStateAction
+  SetStateAction,
 } from 'react';
 import Text from 'components/Typography/Text';
 import { colors } from 'styles/theme/constants';
@@ -15,7 +15,7 @@ import Image from 'next/image';
 
 const ErrorServer = ({
   error,
-  setError
+  setError,
 }: {
   error: boolean;
   setError?: Dispatch<SetStateAction<boolean>>;
@@ -54,7 +54,12 @@ const ErrorServer = ({
             unoptimized
           />
         </div>
-        <Text variant="headingLargeBlack" color={colors.darkWillow} mb="8px" mt="8px">
+        <Text
+          variant="headingLargeBlack"
+          color={colors.darkWillow}
+          mb="8px"
+          mt="8px"
+        >
           Maaf, ada sedikit kesalahan teknis
         </Text>
         <Text variant="bodySmallRegular" color={colors.tarnishedSilver}>
@@ -72,7 +77,7 @@ const ErrorServer = ({
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
           <Button
@@ -91,7 +96,7 @@ const ErrorServer = ({
               height: '48px',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           />
         </div>

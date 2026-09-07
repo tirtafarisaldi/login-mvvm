@@ -1,8 +1,4 @@
-import {
-  AddIcon,
-  AttachmentIcon,
-  DeleteIcon,
-} from '@chakra-ui/icons';
+import { AddIcon, AttachmentIcon, DeleteIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -126,8 +122,7 @@ export default function BookingFormModal({
   );
 
   useEffect(() => {
-    if (isOpen)
-      setValues({ ...emptyValues(), borrower: borrowerName });
+    if (isOpen) setValues({ ...emptyValues(), borrower: borrowerName });
   }, [isOpen, borrowerName]);
 
   const update = (patch: Partial<BookingFormValues>): void =>

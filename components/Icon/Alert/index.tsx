@@ -21,7 +21,11 @@ const Alert = ({ width = 24, height = 24, fill }: IconProps) => (
           />
         </g>
       </g>
-      <g id="Group_10682" data-name="Group 10682" transform="translate(-21.5 33.5)">
+      <g
+        id="Group_10682"
+        data-name="Group 10682"
+        transform="translate(-21.5 33.5)"
+      >
         <path
           id="Path_9313"
           data-name="Path 9313"

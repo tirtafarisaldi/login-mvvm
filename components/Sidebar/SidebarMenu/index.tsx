@@ -5,7 +5,12 @@ import SidebarItem from 'components/Sidebar/SidebarMenuItem';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { colors } from 'styles/theme/constants';
 
-const SidebarMenu: FC<SidebarMenuProps> = ({ items, depthStep, depth, expanded }) => {
+const SidebarMenu: FC<SidebarMenuProps> = ({
+  items,
+  depthStep,
+  depth,
+  expanded,
+}) => {
   return (
     <div className="sidebar">
       {!items.length ? (

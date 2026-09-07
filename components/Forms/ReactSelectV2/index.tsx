@@ -18,7 +18,7 @@ const customStyles = (size: Size) => {
       borderRadius: 8,
       background: '#F2F4F6',
       outline: 'none',
-      boxShadow: 'none'
+      boxShadow: 'none',
     }),
     input: (provided: any, state: any) => ({
       ...provided,
@@ -32,65 +32,71 @@ const customStyles = (size: Size) => {
       borderRadius: 8,
       borderColor: 'none',
       boxShadow: 'none',
-      outline: state.isFocused ? 'none' : 'none'
+      outline: state.isFocused ? 'none' : 'none',
     }),
     singleValue: (provided: any) => ({
       ...provided,
       lineHeight: '24px',
       zIndex: 0,
-      paddingTop: size === 'small' ? '16px' : '20px'
+      paddingTop: size === 'small' ? '16px' : '20px',
     }),
     container: (provided: any) => ({
-      ...provided
+      ...provided,
     }),
     valueContainer: (provided: any) => ({
       ...provided,
       height: '100%',
       overflow: 'visible',
       paddingTop: 0,
-      paddingBottom: 0
+      paddingBottom: 0,
     }),
     placeholder: (provided: any, state: any) => ({
       ...provided,
       position: 'absolute',
       zIndex: 1,
       color:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? '#797D7F'
           : '#ADB1B4',
       top:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? size === 'small'
             ? '6px'
             : '8px'
           : 'translate(50%, 50%)',
       transition: 'top 0.1s, font-size 0.1s',
       fontSize:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? 11
           : size === 'small'
-          ? 14
-          : 16
+            ? 14
+            : 16,
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,
-      display: 'none'
+      display: 'none',
     }),
     menu: (provided: any) => ({
       ...provided,
-      zIndex: 2
+      zIndex: 2,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       '&:hover': {
         backgroundColor: state.isSelected ? '#E5E9EC' : '#E5E9EC',
-        color: state.isSelected ? '#14171A' : '#14171A'
+        color: state.isSelected ? '#14171A' : '#14171A',
       },
       fontSize: '14px',
       fontWeight: '700',
       color: state.isSelected ? '#14171A' : '#14171A',
-      backgroundColor: '#FFFFFF'
-    })
+      backgroundColor: '#FFFFFF',
+    }),
   };
 
   return style;
@@ -138,7 +144,7 @@ const ReactSelectV2: FC<ReactSelectV2Props> = ({
           styles={customStyles(size)}
           options={options}
           components={{
-            ValueContainer: CustomValueContainer
+            ValueContainer: CustomValueContainer,
           }}
           {...otherProps}
         />

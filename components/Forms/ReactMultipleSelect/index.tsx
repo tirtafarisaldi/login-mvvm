@@ -22,7 +22,7 @@ const customStyles = (size: Size) => {
       background: state.isDisabled ? colors.callaLily : '#F2F4F6',
       cursor: state.isDisabled ? 'not-allowed' : 'default',
       outline: 'none',
-      boxShadow: 'none'
+      boxShadow: 'none',
     }),
     input: (provided: any, state: any) => ({
       ...provided,
@@ -36,66 +36,72 @@ const customStyles = (size: Size) => {
       borderRadius: 8,
       borderColor: 'none',
       boxShadow: 'none',
-      outline: state.isFocused ? 'none' : 'none'
+      outline: state.isFocused ? 'none' : 'none',
     }),
     singleValue: (provided: any) => ({
       ...provided,
       lineHeight: '24px',
       zIndex: 0,
-      paddingTop: size === 'small' ? '16px' : '20px'
+      paddingTop: size === 'small' ? '16px' : '20px',
     }),
     container: (provided: any) => ({
-      ...provided
+      ...provided,
     }),
     valueContainer: (provided: any) => ({
       ...provided,
       height: '100%',
       overflow: 'visible',
       paddingTop: 0,
-      paddingBottom: 0
+      paddingBottom: 0,
     }),
     placeholder: (provided: any, state: any) => ({
       ...provided,
       position: 'absolute',
       zIndex: 1,
       color:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? '#797D7F'
           : '#ADB1B4',
       top:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? size === 'small'
             ? '6px'
             : '8px'
           : 'translate(50%, 50%)',
       transition: 'top 0.1s, font-size 0.1s',
       fontSize:
-        state.hasValue || state.selectProps.menuIsOpen || state.selectProps.inputValue
+        state.hasValue ||
+        state.selectProps.menuIsOpen ||
+        state.selectProps.inputValue
           ? 11
           : size === 'small'
-          ? 14
-          : 16
+            ? 14
+            : 16,
     }),
     indicatorSeparator: (provided: any) => ({
       ...provided,
-      display: 'none'
+      display: 'none',
     }),
     menu: (provided: any) => ({
       ...provided,
-      zIndex: 2
+      zIndex: 2,
     }),
     option: (provided: any, state: any) => ({
       ...provided,
       ' label': {
         color: state.isDisabled ? colors.silverCharm : '#14171A',
-        cursor: state.isDisabled ? 'not-allowed' : 'default'
+        cursor: state.isDisabled ? 'not-allowed' : 'default',
       },
       ' [type="checkbox"]': {
-        cursor: state.isDisabled ? 'not-allowed' : 'default'
+        cursor: state.isDisabled ? 'not-allowed' : 'default',
       },
       '&:hover': {
         backgroundColor: state.isSelected ? '#E5E9EC' : '#E5E9EC',
-        color: state.isSelected ? '#14171A' : '#14171A'
+        color: state.isSelected ? '#14171A' : '#14171A',
       },
       cursor: state.isDisabled ? 'not-allowed' : 'default',
       display: 'flex',
@@ -111,20 +117,20 @@ const customStyles = (size: Size) => {
           color: state.isSelected ? colors.flashWhite : 'transparent',
           borderRadius: '4px',
           borderWidth: '2px',
-          borderColor: colors.callaLily
+          borderColor: colors.callaLily,
         },
         backgroundColor: state.isSelected ? colors.ottomanRed : '#FFFFFF',
         color: state.isSelected ? colors.flashWhite : 'transparent',
         borderRadius: '4px',
         borderWidth: '2px',
-        borderColor: colors.callaLily
-      }
+        borderColor: colors.callaLily,
+      },
     }),
     multiValue: (styles: any, { data }: { data: any }) => {
       return {
         ...styles,
         backgroundColor: colors.maryRose,
-        borderRadius: '6px'
+        borderRadius: '6px',
       };
     },
     multiValueLabel: (styles: any, { data }: { data: any }) => ({
@@ -132,7 +138,7 @@ const customStyles = (size: Size) => {
       color: colors.ottomanRed,
       font: 'Poppins',
       fontSize: '12px',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     }),
     multiValueRemove: (styles: any, { data }: { data: any }) => ({
       ...styles,
@@ -140,9 +146,9 @@ const customStyles = (size: Size) => {
       ':hover': {
         backgroundColor: colors.ottomanRed,
         color: colors.flashWhite,
-        borderRadius: '6px'
-      }
-    })
+        borderRadius: '6px',
+      },
+    }),
   };
 
   return style;
@@ -177,14 +183,23 @@ const CustomOption = (props: any) => {
     <div>
       <components.Option {...props}>
         <label>{props.label}</label>
-        <input type="checkbox" checked={props.isSelected} onChange={() => null} />{' '}
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => null}
+        />{' '}
       </components.Option>
     </div>
   );
 };
 
 const formatGroupLabel = (data: any) => (
-  <Text variant="headlineBold" color={colors.tarnishedSilver} textTransform={'uppercase'} mb="8px">
+  <Text
+    variant="headlineBold"
+    color={colors.tarnishedSilver}
+    textTransform={'uppercase'}
+    mb="8px"
+  >
     {data.label}
   </Text>
 );
@@ -202,7 +217,9 @@ const ReactMultipleSelect: FC<ReactSelectFilterProps> = ({
     <>
       <div
         className={`inline-block relative w-full ${
-          size === 'small' ? 'min-h-50px form-input-small' : 'min-h-56px form-input'
+          size === 'small'
+            ? 'min-h-50px form-input-small'
+            : 'min-h-56px form-input'
         }`}
       >
         <Select
@@ -218,7 +235,7 @@ const ReactMultipleSelect: FC<ReactSelectFilterProps> = ({
           hideSelectedOptions={false}
           components={{
             ValueContainer: CustomValueContainer,
-            Option: CustomOption
+            Option: CustomOption,
           }}
           formatGroupLabel={formatGroupLabel}
           {...otherProps}

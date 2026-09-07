@@ -29,7 +29,11 @@ const FormTextarea: FC<FormTextareaProps> = ({
         paddingY={'8px'}
         style={otherProps.style}
       >
-        <Text display={'flex'} variant="captionSmall" color={colors.tarnishedSilver}>
+        <Text
+          display={'flex'}
+          variant="captionSmall"
+          color={colors.tarnishedSilver}
+        >
           {label}
           {required && <div style={{ color: 'red', fontSize: '12px' }}>*</div>}
         </Text>
@@ -37,7 +41,7 @@ const FormTextarea: FC<FormTextareaProps> = ({
           _focus={{
             outline: 'none',
             border: 'none',
-            boxShadow: 'none'
+            boxShadow: 'none',
           }}
           width={'100%'}
           height={'100%'}
@@ -59,7 +63,7 @@ const FormTextarea: FC<FormTextareaProps> = ({
               fontSize: '10px',
               fontWeight: 400,
               lineHeight: '140%',
-              color: colors.silverCharm
+              color: colors.silverCharm,
             }}
           >
             {`${typeof value === 'string' ? (value ? value.length : 0) : 0}/${maxLength}`}

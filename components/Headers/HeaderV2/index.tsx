@@ -38,7 +38,10 @@ const HeaderV2: FC<HeaderV2Props> = ({ breadcrumb }) => {
         <div className="md:block hidden">
           {/* <UserDropdown /> */}
           <Menu autoSelect={false}>
-            <MenuButton as="a" className="text-blueGray-500 block cursor-pointer">
+            <MenuButton
+              as="a"
+              className="text-blueGray-500 block cursor-pointer"
+            >
               <div className="items-center flex">
                 <span className="w-10 h-10 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full"></span>
               </div>
