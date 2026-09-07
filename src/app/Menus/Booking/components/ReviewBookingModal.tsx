@@ -35,6 +35,7 @@ import BookingStatusBadge from './BookingStatusBadge';
 import { useGetBookingLetterViewModel } from '../viewModels/getBookingLetterViewModel';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
+import { formatDateId } from 'utility/date';
 
 interface ReviewBookingModalProps {
   booking: BookingModel | null;
@@ -97,7 +98,10 @@ export default function ReviewBookingModal({
       });
       return;
     }
-    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    if (
+      file.type !== 'application/pdf' &&
+      !file.name.toLowerCase().endsWith('.pdf')
+    ) {
       toast({
         status: 'warning',
         title: 'Format tidak didukung',
@@ -228,11 +232,7 @@ export default function ReviewBookingModal({
                   <Text fontSize="xs" color={theme.textMuted}>
                     Judul
                   </Text>
-                  <Text
-                    fontWeight="bold"
-                    fontSize="md"
-                    noOfLines={2}
-                  >
+                  <Text fontWeight="bold" fontSize="md" noOfLines={2}>
                     {booking.title || 'Tanpa judul'}
                   </Text>
                 </Box>
@@ -292,34 +292,32 @@ export default function ReviewBookingModal({
                     </Flex>
                   )
                 )}
-                <Flex justify="space-between">
+                <Flex justify="space-between" align="flex-start" gap={3}>
                   <Text color={theme.textMuted}>Tanggal</Text>
-                  <Text>
-                    {booking.type === 'equipment' && booking.end_date
-                      ? `${booking.date} – ${booking.end_date}`
-                      : booking.date}
+                  <Text textAlign="right">
+                    {booking.type === 'equipment' && booking.end_date &&
+                    booking.end_date !== booking.date
+                      ? `${formatDateId(booking.date)} – ${formatDateId(booking.end_date)}`
+                      : formatDateId(booking.date)}
                   </Text>
                 </Flex>
-                <Flex justify="space-between">
+                <Flex justify="space-between" align="flex-start" gap={3}>
                   <Text color={theme.textMuted}>Waktu</Text>
-                  <Text>
-                    {booking.type === 'room'
-                      ? `${booking.start_time} – ${booking.end_time}`
-                      : '—'}
-                  </Text>
+                  {booking.type === 'room' ? (
+                    <Text fontWeight="medium" textAlign="right">
+                      {booking.start_time} – {booking.end_time}
+                    </Text>
+                  ) : (
+                    <Text
+                      fontSize="sm"
+                      fontStyle="italic"
+                      color={theme.textMuted}
+                    >
+                      Tidak dijadwalkan
+                    </Text>
+                  )}
                 </Flex>
               </Stack>
-
-              {booking.title && (
-                <Box>
-                  <Text fontSize="xs" color={theme.textMuted}>
-                    Judul
-                  </Text>
-                  <Text fontSize="sm" mt={1}>
-                    {booking.title}
-                  </Text>
-                </Box>
-              )}
 
               {booking.note && (
                 <Box>
@@ -379,15 +377,11 @@ export default function ReviewBookingModal({
                         p={3.5}
                         borderRadius="2xl"
                         bg={
-                          mode === 'dark'
-                            ? 'rgba(59,130,246,0.1)'
-                            : 'blue.50'
+                          mode === 'dark' ? 'rgba(59,130,246,0.1)' : 'blue.50'
                         }
                         borderWidth="1px"
                         borderColor={
-                          mode === 'dark'
-                            ? 'rgba(59,130,246,0.3)'
-                            : 'blue.200'
+                          mode === 'dark' ? 'rgba(59,130,246,0.3)' : 'blue.200'
                         }
                       >
                         <Flex
@@ -398,9 +392,7 @@ export default function ReviewBookingModal({
                           alignItems="center"
                           justifyContent="center"
                           bg={
-                            mode === 'dark'
-                              ? 'rgba(59,130,246,0.2)'
-                              : 'white'
+                            mode === 'dark' ? 'rgba(59,130,246,0.2)' : 'white'
                           }
                           color="blue.500"
                         >
@@ -415,11 +407,7 @@ export default function ReviewBookingModal({
                           >
                             {selectedFile.name}
                           </Text>
-                          <Text
-                            fontSize="xs"
-                            color={theme.textMuted}
-                            mt={0.5}
-                          >
+                          <Text fontSize="xs" color={theme.textMuted} mt={0.5}>
                             {(selectedFile.size / 1024).toFixed(1)} KB · PDF
                           </Text>
                         </Box>
@@ -439,18 +427,21 @@ export default function ReviewBookingModal({
                         w="full"
                         mt={3}
                         color="white"
-                        bg={mode === 'dark' ? 'rgba(37,99,235,0.3)' : 'blue.600'}
+                        bg={
+                          mode === 'dark' ? 'rgba(37,99,235,0.3)' : 'blue.600'
+                        }
                         borderWidth="1px"
                         borderColor={
-                          mode === 'dark'
-                            ? 'rgba(59,130,246,0.5)'
-                            : 'blue.600'
+                          mode === 'dark' ? 'rgba(59,130,246,0.5)' : 'blue.600'
                         }
                         fontSize="sm"
                         borderRadius="full"
                         leftIcon={<CheckIcon />}
                         _hover={{
-                          bg: mode === 'dark' ? 'rgba(37,99,235,0.5)' : 'blue.700',
+                          bg:
+                            mode === 'dark'
+                              ? 'rgba(37,99,235,0.5)'
+                              : 'blue.700',
                           boxShadow: '0 0 16px rgba(59,130,246,0.25)',
                         }}
                         onClick={submitLetter}
@@ -573,7 +564,11 @@ export default function ReviewBookingModal({
                           >
                             Klik atau seret file ke sini
                           </Text>
-                          <Text fontSize="xs" color={theme.textSecondary} mt={1}>
+                          <Text
+                            fontSize="xs"
+                            color={theme.textSecondary}
+                            mt={1}
+                          >
                             <Text
                               as="span"
                               color="blue.400"

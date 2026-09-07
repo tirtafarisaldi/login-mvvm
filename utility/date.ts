@@ -23,6 +23,13 @@ export const indonesianDate = (timestamp: number) => {
   return date.getDate() + ' ' + indonesianMonth[date.getMonth()] + ' ' + date.getFullYear();
 };
 
+export const formatDateId = (dateKey?: string): string => {
+  if (!dateKey) return '—';
+  const [year, month, day] = dateKey.split('-').map(Number);
+  if (!year || !month || !day) return dateKey;
+  return `${day} ${indonesianMonth[month - 1]} ${year}`;
+};
+
 export const indonesianDateTime = (timestamp: number) => {
   if (timestamp === 0 || timestamp === null) return '-';
   const date = new Date(timestamp * 1000);

@@ -38,6 +38,7 @@ import ReviewBookingModal from '../components/ReviewBookingModal';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
 import { shortId } from 'utility/string';
+import { formatDateId } from 'utility/date';
 
 const baseFilterFields: FilterField[] = [
   {
@@ -258,25 +259,37 @@ export default function BookingPage() {
     },
     {
       header: 'Tanggal',
-      accessor: (item) => (
-        <Text color={theme.textSecondary}>
-          {item.type === 'room'
-            ? item.date
-            : item.end_date
-              ? `${item.date} – ${item.end_date}`
-              : item.date}
-        </Text>
-      ),
+      accessor: (item) => {
+        const formattedStart = formatDateId(item.date);
+        const formattedEnd = formatDateId(item.end_date);
+        return (
+          <Text color={theme.textSecondary}>
+            {item.type === 'room'
+              ? formattedStart
+              : item.end_date && formattedEnd !== formattedStart
+                ? `${formattedStart} – ${formattedEnd}`
+                : formattedStart}
+          </Text>
+        );
+      },
     },
     {
       header: 'Waktu',
-      accessor: (item) => (
-        <Text color={theme.textSecondary}>
-          {item.type === 'room' && item.start_time && item.end_time
-            ? `${item.start_time}–${item.end_time}`
-            : '—'}
-        </Text>
-      ),
+      accessor: (item) =>
+        item.type === 'room' && item.start_time && item.end_time ? (
+          <Text color={theme.textSecondary}>
+            {item.start_time}–{item.end_time}
+          </Text>
+        ) : (
+          <Text
+            fontSize="xs"
+            fontStyle="italic"
+            color={theme.textMuted}
+            opacity={0.85}
+          >
+            Tidak dijadwalkan
+          </Text>
+        ),
     },
     {
       header: 'Status',
