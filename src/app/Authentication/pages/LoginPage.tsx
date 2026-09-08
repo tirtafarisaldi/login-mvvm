@@ -208,7 +208,7 @@ export default function Login() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="start"
+        justifyContent={{ base: 'start', md: 'center' }}
         zIndex={1}
         mt={{ base: '120px', md: '0' }}
         initial={{ opacity: 0, y: 30 }}
