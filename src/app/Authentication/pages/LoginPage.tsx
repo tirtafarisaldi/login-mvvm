@@ -208,9 +208,9 @@ export default function Login() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="start"
         zIndex={1}
-        mt={{ base: '0', md: '0' }}
+        mt={{ base: '120px', md: '0' }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -223,20 +223,6 @@ export default function Login() {
           mb={10}
           opacity={0.9}
         />
-
-        <Heading
-          as="h2"
-          display={{ base: 'block', md: 'none' }}
-          fontSize="md"
-          fontWeight="semibold"
-          letterSpacing="0.08em"
-          textTransform="uppercase"
-          color="blue.200"
-          textAlign="center"
-          mb={3}
-        >
-          Sistem Informasi
-        </Heading>
 
         <Text
           fontSize={{ base: 'xs', md: 'sm' }}
