@@ -35,7 +35,7 @@ import BookingStatusBadge from './BookingStatusBadge';
 import { useGetBookingLetterViewModel } from '../viewModels/getBookingLetterViewModel';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
-import { formatDateId } from 'utility/date';
+import { formatDateId, formatDateRangeId } from 'utility/date';
 
 interface ReviewBookingModalProps {
   booking: BookingModel | null;
@@ -46,7 +46,6 @@ interface ReviewBookingModalProps {
   isAdmin: boolean;
   onUploadLetter?: (file: File) => Promise<void> | void;
   uploadingLetter?: boolean;
-  refreshing?: boolean;
 }
 
 export default function ReviewBookingModal({
@@ -58,7 +57,6 @@ export default function ReviewBookingModal({
   isAdmin,
   onUploadLetter,
   uploadingLetter = false,
-  refreshing = false,
 }: ReviewBookingModalProps) {
   const mode = useThemeStore((state) => state.mode);
   const theme = useThemeColors();
@@ -196,25 +194,7 @@ export default function ReviewBookingModal({
         borderRadius="2xl"
         mx={4}
       >
-        <ModalHeader fontSize="lg">
-          <Flex align="center" gap={3}>
-            <Text>Detail Peminjaman</Text>
-            {refreshing && (
-              <Flex align="center" gap={1.5}>
-                <Spinner
-                  size="sm"
-                  thickness="2px"
-                  speed="0.7s"
-                  color="blue.400"
-                  emptyColor="rgba(59,130,246,0.15)"
-                />
-                <Text fontSize="xs" fontWeight="normal" color={theme.textMuted}>
-                  Memuat…
-                </Text>
-              </Flex>
-            )}
-          </Flex>
-        </ModalHeader>
+        <ModalHeader fontSize="lg">Detail Peminjaman</ModalHeader>
         <ModalCloseButton
           color={theme.textSecondary}
           _hover={{
@@ -315,10 +295,8 @@ export default function ReviewBookingModal({
                 <Flex justify="space-between" align="flex-start" gap={3}>
                   <Text color={theme.textMuted}>Tanggal</Text>
                   <Text textAlign="right">
-                    {booking.type === 'equipment' &&
-                    booking.end_date &&
-                    booking.end_date !== booking.date
-                      ? `${formatDateId(booking.date)} – ${formatDateId(booking.end_date)}`
+                    {booking.type === 'equipment' && booking.end_date
+                      ? formatDateRangeId(booking.date, booking.end_date)
                       : formatDateId(booking.date)}
                   </Text>
                 </Flex>

@@ -39,7 +39,7 @@ import ReviewBookingModal from '../components/ReviewBookingModal';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
 import { shortId } from 'utility/string';
-import { formatDateId } from 'utility/date';
+import { formatDateId, formatDateRangeId } from 'utility/date';
 
 const baseFilterFields: FilterField[] = [
   {
@@ -158,21 +158,22 @@ export default function BookingPage() {
 
   const reviewModal = useDisclosure();
   const [reviewing, setReviewing] = useState<BookingModel | null>(null);
-  const [detailRefreshing, setDetailRefreshing] = useState(false);
+  const [loadingDetailId, setLoadingDetailId] = useState<string | null>(null);
 
   const openCreate = () => {
     formModal.onOpen();
   };
-  const openReview = (booking: BookingModel) => {
-    setReviewing(booking);
+  const openReview = async (booking: BookingModel) => {
+    setLoadingDetailId(booking.id);
+    try {
+      const latest = await getBookingById(booking.id);
+      setReviewing(latest);
+    } catch {
+      setReviewing(booking);
+    } finally {
+      setLoadingDetailId(null);
+    }
     reviewModal.onOpen();
-    setDetailRefreshing(true);
-    void getBookingById(booking.id)
-      .then((latest) => setReviewing(latest))
-      .catch(() => {
-        // tetap pakai data dari daftar jika fetch gagal
-      })
-      .finally(() => setDetailRefreshing(false));
   };
   const updateFilters = (key: string, value: string) => {
     setFilters((current) => ({
@@ -263,19 +264,13 @@ export default function BookingPage() {
     },
     {
       header: 'Tanggal',
-      accessor: (item) => {
-        const formattedStart = formatDateId(item.date);
-        const formattedEnd = formatDateId(item.end_date);
-        return (
-          <Text color={theme.textSecondary}>
-            {item.type === 'room'
-              ? formattedStart
-              : item.end_date && formattedEnd !== formattedStart
-                ? `${formattedStart} – ${formattedEnd}`
-                : formattedStart}
-          </Text>
-        );
-      },
+      accessor: (item) => (
+        <Text color={theme.textSecondary}>
+          {item.type === 'room'
+            ? formatDateId(item.date)
+            : formatDateRangeId(item.date, item.end_date)}
+        </Text>
+      ),
     },
     {
       header: 'Waktu',
@@ -310,6 +305,7 @@ export default function BookingPage() {
             color={mode === 'dark' ? undefined : 'blue.800'}
             size="xs"
             leftIcon={<InfoOutlineIcon />}
+            isLoading={loadingDetailId === item.id}
             onClick={() => openReview(item)}
           >
             Detail
@@ -488,7 +484,6 @@ export default function BookingPage() {
         isAdmin={isAdmin}
         onUploadLetter={uploadLetter}
         uploadingLetter={isUploadingLetter}
-        refreshing={detailRefreshing}
       />
     </Box>
   );

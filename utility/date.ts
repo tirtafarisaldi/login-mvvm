@@ -36,6 +36,28 @@ export const formatDateId = (dateKey?: string): string => {
   return `${day} ${indonesianMonth[month - 1]} ${year}`;
 };
 
+const indonesianDayMonth = (dateKey: string): string => {
+  const [, month, day] = dateKey.split('-').map(Number);
+  return `${day} ${indonesianMonth[month - 1]}`;
+};
+
+export const formatDateRangeId = (
+  startKey?: string,
+  endKey?: string
+): string => {
+  if (!startKey) return '—';
+  if (!endKey || startKey === endKey) return formatDateId(startKey);
+  const start = formatDateId(startKey);
+  const end = formatDateId(endKey);
+  if (startKey.slice(0, 7) === endKey.slice(0, 7)) {
+    return `${startKey.slice(8, 10)}–${end}`;
+  }
+  if (startKey.slice(0, 4) === endKey.slice(0, 4)) {
+    return `${indonesianDayMonth(startKey)} – ${end}`;
+  }
+  return `${start} – ${end}`;
+};
+
 export const indonesianDateTime = (timestamp: number) => {
   if (timestamp === 0 || timestamp === null) return '-';
   const date = new Date(timestamp * 1000);
