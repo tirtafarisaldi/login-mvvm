@@ -22,6 +22,7 @@ import {
   NumberDecrementStepper,
   Select,
   SimpleGrid,
+  Spinner,
   Text,
   Textarea,
   useDisclosure,
@@ -222,6 +223,7 @@ export default function InventoryPage() {
   const [selectedInventory, setSelectedInventory] =
     useState<InventoryModel | null>(null);
   const [previewImage, setPreviewImage] = useState<InventoryModel | null>(null);
+  const [imageReady, setImageReady] = useState(false);
   const [form, setForm] = useState<InventoryInput>(emptyInventory);
   const updateForm = (update: Partial<InventoryInput>) =>
     setForm({ ...form, ...update });
@@ -243,6 +245,7 @@ export default function InventoryPage() {
   };
   const openImage = (inventory: InventoryModel) => {
     setPreviewImage(inventory);
+    setImageReady(false);
     imageModal.onOpen();
   };
   const updateFilters = (key: string, value: string) => {
@@ -362,31 +365,36 @@ export default function InventoryPage() {
     },
     {
       header: 'Aksi',
-      accessor: (item) => (
-        <Flex justify="flex-start" gap={1}>
-          <Button
-            aria-label="Ubah inventaris"
-            variant="ghost"
-            color={theme.textPrimary}
-            _hover={{ bg: theme.hoverBg }}
-            fontSize="xs"
-            onClick={() => openEdit(item)}
-          >
-            <EditIcon />
-          </Button>
-          <Button
-            aria-label="Hapus inventaris"
-            variant="ghost"
-            color={mode === 'dark' ? 'red.200' : 'red.600'}
-            _hover={{ bg: 'red.500' }}
-            fontSize="xs"
-            isLoading={isDeleting}
-            onClick={() => remove(item)}
-          >
-            <DeleteIcon />
-          </Button>
-        </Flex>
-      ),
+      accessor: (item) =>
+        isAdmin ? (
+          <Flex justify="flex-start" gap={1}>
+            <Button
+              aria-label="Ubah inventaris"
+              variant="ghost"
+              color={theme.textPrimary}
+              _hover={{ bg: theme.hoverBg }}
+              fontSize="xs"
+              onClick={() => openEdit(item)}
+            >
+              <EditIcon />
+            </Button>
+            <Button
+              aria-label="Hapus inventaris"
+              variant="ghost"
+              color={mode === 'dark' ? 'red.200' : 'red.600'}
+              _hover={{ bg: 'red.500' }}
+              fontSize="xs"
+              isLoading={isDeleting}
+              onClick={() => remove(item)}
+            >
+              <DeleteIcon />
+            </Button>
+          </Flex>
+        ) : (
+          <Text fontSize="xs" color={theme.textMuted} fontStyle="italic">
+            Hanya admin
+          </Text>
+        ),
     },
   ];
 
@@ -504,27 +512,31 @@ export default function InventoryPage() {
                   Lihat Gambar
                 </Button>
                 <Box flex="1" />
-                <Button
-                  aria-label="Ubah inventaris"
-                  variant="ghost"
-                  color={theme.textPrimary}
-                  _hover={{ bg: theme.hoverBg }}
-                  size="sm"
-                  onClick={() => openEdit(item)}
-                >
-                  <EditIcon />
-                </Button>
-                <Button
-                  aria-label="Hapus inventaris"
-                  variant="ghost"
-                  color={mode === 'dark' ? 'red.200' : 'red.600'}
-                  _hover={{ bg: 'red.500' }}
-                  size="sm"
-                  isLoading={isDeleting}
-                  onClick={() => remove(item)}
-                >
-                  <DeleteIcon />
-                </Button>
+                {isAdmin && (
+                  <>
+                    <Button
+                      aria-label="Ubah inventaris"
+                      variant="ghost"
+                      color={theme.textPrimary}
+                      _hover={{ bg: theme.hoverBg }}
+                      size="sm"
+                      onClick={() => openEdit(item)}
+                    >
+                      <EditIcon />
+                    </Button>
+                    <Button
+                      aria-label="Hapus inventaris"
+                      variant="ghost"
+                      color={mode === 'dark' ? 'red.200' : 'red.600'}
+                      _hover={{ bg: 'red.500' }}
+                      size="sm"
+                      isLoading={isDeleting}
+                      onClick={() => remove(item)}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </>
+                )}
               </Flex>
             </>
           )}
@@ -787,14 +799,46 @@ export default function InventoryPage() {
             <ModalHeader fontSize="lg">{previewImage?.name}</ModalHeader>
             <ModalBody pb={6}>
               {previewImage?.image && (
-                <Image
-                  src={previewImage.image}
-                  alt={previewImage.name}
+                <Box
+                  position="relative"
                   w="full"
-                  maxH="70vh"
-                  objectFit="contain"
                   borderRadius="xl"
-                />
+                  overflow="hidden"
+                  bg={mode === 'dark' ? 'blackAlpha.400' : 'blackAlpha.50'}
+                >
+                  {!imageReady && (
+                    <Flex
+                      align="center"
+                      justify="center"
+                      direction="column"
+                      gap={3}
+                      minH="360px"
+                    >
+                      <Spinner
+                        size="xl"
+                        thickness="3px"
+                        speed="0.7s"
+                        color="blue.400"
+                        emptyColor="rgba(59,130,246,0.15)"
+                      />
+                      <Text fontSize="xs" color={theme.textMuted}>
+                        Memuat gambar…
+                      </Text>
+                    </Flex>
+                  )}
+                  <Image
+                    src={previewImage.image}
+                    alt={previewImage.name}
+                    w="full"
+                    maxH="70vh"
+                    objectFit="contain"
+                    borderRadius="xl"
+                    opacity={imageReady ? 1 : 0}
+                    transform={`scale(${imageReady ? 1 : 0.99})`}
+                    transition="opacity 0.4s ease, transform 0.4s ease"
+                    onLoad={() => setImageReady(true)}
+                  />
+                </Box>
               )}
             </ModalBody>
           </ModalContent>

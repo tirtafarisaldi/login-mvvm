@@ -159,7 +159,7 @@ export default function MenuLayout({
             md: 'none',
           }}
           transition={{ base: 'transform 200ms ease', md: 'none' }}
-          bg={mode === 'dark' ? '#191b20' : 'rgba(255,255,255,0.15)'}
+          bg={mode === 'dark' ? '#191b20' : 'rgba(255,255,255,5.15)'}
           backdropFilter="blur(14px)"
           boxShadow={
             mode === 'dark'
@@ -173,26 +173,6 @@ export default function MenuLayout({
           borderLeftRadius={{ base: 0, md: '2xl' }}
           flexShrink={0}
         >
-          <IconButton
-            aria-label={open ? 'Tutup menu' : 'Buka menu'}
-            icon={open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            size="sm"
-            position="absolute"
-            top="50%"
-            right="-16px"
-            zIndex={5}
-            transform="translateY(-50%)"
-            display={{ base: 'inline-flex', md: 'none' }}
-            borderRadius="full"
-            bg="rgba(59,130,246,0.25)"
-            color="white"
-            borderWidth="1px"
-            borderColor="rgba(59,130,246,0.5)"
-            boxShadow="0 0 14px rgba(59,130,246,0.35)"
-            _hover={{ bg: 'rgba(59,130,246,0.45)' }}
-            onClick={() => setOpen((current) => !current)}
-          />
-
           <Flex align="center" justify="space-between" gap={2} mb={6}>
             <Flex align="center" justify="flex-start" gap={3} minW={0}>
               <Flex
@@ -422,7 +402,7 @@ export default function MenuLayout({
             display={{ base: 'inline-flex', md: 'none' }}
             mb={5}
             position="sticky"
-            top={{ base: 0, md: 0 }}
+            // top={{ base: 0, md: 0 }}
             zIndex={2}
             borderRadius="full"
             bg="rgba(59,130,246,0.25)"

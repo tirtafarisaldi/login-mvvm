@@ -464,39 +464,56 @@ export default function SchedulePage() {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button
-              variant="ghost"
-              color={mode === 'dark' ? 'red.300' : 'red.600'}
-              fontSize="sm"
-              borderWidth="1px"
-              borderColor="rgba(255, 99, 132, 0.35)"
-              borderRadius="full"
-              isLoading={isDeleting}
-              leftIcon={<DeleteIcon />}
-              _hover={{
-                bg: 'rgba(255, 99, 132, 0.15)',
-                color: mode === 'dark' ? 'red.200' : 'red.700',
-              }}
-              onClick={() => {
-                void handleDelete();
-              }}
-            >
-              Hapus
-            </Button>
-            <Button
-              variant="ghost"
-              color={theme.textSecondary}
-              fontSize="sm"
-              borderWidth="1px"
-              borderColor={theme.panelBorder}
-              borderRadius="full"
-              ml={3}
-              leftIcon={<EditIcon />}
-              _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
-              onClick={openEdit}
-            >
-              Edit
-            </Button>
+            {isAdmin ? (
+              <>
+                <Button
+                  variant="ghost"
+                  color={mode === 'dark' ? 'red.300' : 'red.600'}
+                  fontSize="sm"
+                  borderWidth="1px"
+                  borderColor="rgba(255, 99, 132, 0.35)"
+                  borderRadius="full"
+                  isLoading={isDeleting}
+                  leftIcon={<DeleteIcon />}
+                  _hover={{
+                    bg: 'rgba(255, 99, 132, 0.15)',
+                    color: mode === 'dark' ? 'red.200' : 'red.700',
+                  }}
+                  onClick={() => {
+                    void handleDelete();
+                  }}
+                >
+                  Hapus
+                </Button>
+                <Button
+                  variant="ghost"
+                  color={theme.textSecondary}
+                  fontSize="sm"
+                  borderWidth="1px"
+                  borderColor={theme.panelBorder}
+                  borderRadius="full"
+                  ml={3}
+                  leftIcon={<EditIcon />}
+                  _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
+                  onClick={openEdit}
+                >
+                  Edit
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="ghost"
+                color={theme.textSecondary}
+                fontSize="sm"
+                borderWidth="1px"
+                borderColor={theme.panelBorder}
+                borderRadius="full"
+                _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
+                onClick={detailModal.onClose}
+              >
+                Tutup
+              </Button>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

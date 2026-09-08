@@ -121,7 +121,7 @@ export default function Login() {
       position="relative"
       overflow="hidden"
       px={{ base: 4, md: 8 }}
-      py={{ base: 8, md: 12 }}
+      py={{ base: 3, md: 12 }}
       fontFamily="'Poppins', sans-serif"
     >
       <svg
@@ -210,7 +210,7 @@ export default function Login() {
         alignItems="center"
         justifyContent="center"
         zIndex={1}
-        mt={{ base: '60px', md: '0' }}
+        mt={{ base: '0', md: '0' }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -223,6 +223,20 @@ export default function Login() {
           mb={10}
           opacity={0.9}
         />
+
+        <Heading
+          as="h2"
+          display={{ base: 'block', md: 'none' }}
+          fontSize="md"
+          fontWeight="semibold"
+          letterSpacing="0.08em"
+          textTransform="uppercase"
+          color="blue.200"
+          textAlign="center"
+          mb={3}
+        >
+          Sistem Informasi
+        </Heading>
 
         <Text
           fontSize={{ base: 'xs', md: 'sm' }}
