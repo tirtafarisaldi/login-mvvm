@@ -1,6 +1,17 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-// http instance used across the app; tokens stored in localStorage under 'accessToken'
+// http instance used across the app; access token disimpan hanya di memori
 import { QueryClient } from 'react-query';
+import {
+  clearAccessToken,
+  getAccessToken as getMemoryAccessToken,
+  setAccessToken as setMemoryAccessToken,
+} from './tokenStore';
+import {
+  clearAuthStorage,
+  getStoredRefreshToken,
+  setStoredAccessToken,
+  setStoredRefreshToken,
+} from './authStorage';
 
 type RetryableRequest = {
   _retry?: boolean;
@@ -12,14 +23,14 @@ type RetryableRequest = {
 const refreshTokenPath = process.env.nextApiRefreshTokenPath ?? '/token';
 let refreshRequest: Promise<unknown> | null = null;
 
-const getAccessToken = (payload: unknown): string | null => {
+const extractAccessToken = (payload: unknown): string | null => {
   if (typeof payload !== 'object' || payload === null) return null;
   const data = payload as Record<string, unknown>;
   const token = data.accessToken ?? data.access_token ?? data.token;
   if (typeof token === 'string' && token.length > 0) return token;
 
   return typeof data.data === 'object' && data.data !== null
-    ? getAccessToken(data.data)
+    ? extractAccessToken(data.data)
     : null;
 };
 
@@ -41,7 +52,8 @@ const isExpiredAccessTokenError = (error: unknown): boolean => {
 
 const notifyAutoLogout = () => {
   if (typeof window === 'undefined') return;
-  localStorage.removeItem('accessToken');
+  clearAccessToken();
+  clearAuthStorage();
   delete http.defaults.headers.common['Authorization'];
   window.dispatchEvent(new Event('auth-auto-logout'));
 };
@@ -51,8 +63,6 @@ const http = axios.create({
   headers: {
     'Content-type': 'application/json',
   },
-  // Refresh token yang HTTP-only tidak dapat dibaca JavaScript; browser akan
-  // mengirimkannya otomatis pada request ini.
   withCredentials: true,
 });
 
@@ -66,13 +76,9 @@ const refreshHttp = axios.create({
 
 http.interceptors.request.use((config) => {
   if (config.headers && !(config as RetryableRequest)._skipAuth) {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      if (accessToken) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`;
-      }
-    } catch (e) {
-      // Ignore storage errors silently
+    const accessToken = getMemoryAccessToken();
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
   }
   return config;
@@ -106,20 +112,30 @@ http.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        const refreshToken = await getStoredRefreshToken();
+        if (!refreshToken) throw new Error('Refresh token tidak ditemukan.');
+
         refreshRequest ??= refreshHttp
-          .get(refreshTokenPath)
+          .get(refreshTokenPath, {
+            headers: { 'x-refresh-token': refreshToken },
+          })
           .then((response) => response.data);
         const refreshResponse = await refreshRequest;
-        const accessToken = getAccessToken(refreshResponse);
+        const accessToken = extractAccessToken(refreshResponse);
 
         if (!accessToken) throw new Error('Access token tidak ditemukan.');
 
-        localStorage.setItem('accessToken', accessToken);
+        setMemoryAccessToken(accessToken);
+        void setStoredAccessToken(accessToken);
         http.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         originalRequest.headers = {
           ...originalRequest.headers,
           Authorization: `Bearer ${accessToken}`,
         };
+        const refreshPayload = refreshResponse as { refreshToken?: string };
+        if (refreshPayload?.refreshToken) {
+          void setStoredRefreshToken(refreshPayload.refreshToken);
+        }
         return http(originalRequest as AxiosRequestConfig);
       } catch {
         notifyAutoLogout();

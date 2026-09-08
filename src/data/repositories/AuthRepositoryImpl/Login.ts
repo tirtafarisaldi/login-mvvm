@@ -2,6 +2,8 @@ import * as AuthDataSource from '../../sources/AuthDataSource';
 import http from 'service/http';
 import { getAccessToken } from './getAccessToken';
 import type { AuthUser } from 'service/types';
+import { setStoredAccessToken, setStoredUser } from 'service/authStorage';
+import { setAccessToken } from 'service/tokenStore';
 
 export const useLogin = () => {
   const loginBySSO = () => {
@@ -15,29 +17,19 @@ export const useLogin = () => {
 
     const userData = (response as { user?: Partial<AuthUser> })?.user;
     if (userData && (userData.name || userData.email)) {
-      try {
-        localStorage.setItem(
-          'authUser',
-          JSON.stringify({
-            name: userData.name || '',
-            email: userData.email || '',
-            role: userData.role === 'admin' ? 'admin' : 'user',
-          })
-        );
-      } catch (e) {
-        // ignore storage errors
-      }
+      void setStoredUser({
+        name: userData.name || '',
+        email: userData.email || '',
+        role: userData.role === 'admin' ? 'admin' : 'user',
+      });
     }
 
     if (token) {
-      try {
-        localStorage.setItem('accessToken', token);
-        // set default header for subsequent requests
-        http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        window.dispatchEvent(new Event('auth-change'));
-      } catch (e) {
-        // ignore storage errors
-      }
+      setAccessToken(token);
+      void setStoredAccessToken(token);
+      // set default header for subsequent requests
+      http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      window.dispatchEvent(new Event('auth-change'));
     }
 
     return response;

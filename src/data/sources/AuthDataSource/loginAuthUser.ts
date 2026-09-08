@@ -3,8 +3,9 @@ import http from 'service/http';
 export const loginBySSO = () => {
   // Arahkan browser (full navigation, bukan fetch) ke endpoint CAS backend.
   // Backend meneruskan redirect ke login.pens.ac.id/cas lalu kembali lagi ke
-  // frontend lengkap dengan token. Endpoint melewati proxy /api (yang otomatis
-  // menambahkan x-api-key), sehingga cukup navigasi biasa.
+  // frontend membawa kode sekali pakai (?code=...). Kode ditukar ke access
+  // token oleh AuthProvider saat bootstrap. Endpoint melewati proxy /api (yang
+  // otomatis menambahkan x-api-key), sehingga cukup navigasi biasa.
   if (typeof window !== 'undefined') {
     window.location.href = '/api/auth/cas/login';
   }

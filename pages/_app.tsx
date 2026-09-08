@@ -112,6 +112,11 @@ function MyApp({ Component, pageProps }: AppPropsWithDehydratedState) {
         <ChakraProvider theme={theme}>
           <AuthProvider>
             <Head>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `(function(){try{var u=new URL(location.href);var code=u.searchParams.get('code')||'';if(code){window.__authCode=code;}if(code||u.searchParams.get('error')){u.searchParams.delete('code');u.searchParams.delete('error');history.replaceState(null,'',u.toString());}}catch(e){}})();`,
+                }}
+              />
               <meta
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"

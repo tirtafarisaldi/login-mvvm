@@ -1,6 +1,8 @@
 import * as AuthDataSource from '../../sources/AuthDataSource';
 import http from 'service/http';
 import { getAccessToken } from './getAccessToken';
+import { setStoredAccessToken } from 'service/authStorage';
+import { setAccessToken } from 'service/tokenStore';
 
 export const useRegister = () => {
   const registerByEmail = async (
@@ -18,13 +20,10 @@ export const useRegister = () => {
 
     const token = getAccessToken(response);
     if (token) {
-      try {
-        localStorage.setItem('accessToken', token);
-        http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        window.dispatchEvent(new Event('auth-change'));
-      } catch (e) {
-        // ignore storage errors
-      }
+      setAccessToken(token);
+      void setStoredAccessToken(token);
+      http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      window.dispatchEvent(new Event('auth-change'));
     }
 
     return response;

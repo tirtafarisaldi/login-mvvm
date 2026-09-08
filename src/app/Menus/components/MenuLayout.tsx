@@ -31,6 +31,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useAuth } from 'service/auth';
+import { clearAccessToken } from 'service/tokenStore';
+import { clearAuthStorage } from 'service/authStorage';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, type ReactNode } from 'react';
@@ -101,10 +103,10 @@ export default function MenuLayout({
   const handleConfirmLogout = async () => {
     setConfirming(true);
     // Bersihkan sesi lokal sebelum navigasi penuh ke logout CAS.
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('authUser');
+    clearAccessToken();
+    clearAuthStorage();
     // Tandai bahwa user baru saja logout agar bootstrap AuthProvider
-    // tidak mengambil ulang token dari CAS cookie.
+    // tidak mengambil ulang token dari refresh token yang tersimpan.
     sessionStorage.setItem('just_logged_out', 'true');
     // Tidak dispatch auth-change di sini untuk menghindari race condition:
     // refreshAuth akan set isAuthenticated=false → withProtected redirect
