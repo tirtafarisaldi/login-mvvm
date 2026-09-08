@@ -273,7 +273,7 @@ export default function BookingFormModal({
                 isReadOnly
                 cursor="default"
                 placeholder="Nama peminjam"
-                isDisabled={isAdmin}
+                isDisabled
               />
             </FormControl>
 

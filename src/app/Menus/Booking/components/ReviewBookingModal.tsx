@@ -46,6 +46,7 @@ interface ReviewBookingModalProps {
   isAdmin: boolean;
   onUploadLetter?: (file: File) => Promise<void> | void;
   uploadingLetter?: boolean;
+  refreshing?: boolean;
 }
 
 export default function ReviewBookingModal({
@@ -57,6 +58,7 @@ export default function ReviewBookingModal({
   isAdmin,
   onUploadLetter,
   uploadingLetter = false,
+  refreshing = false,
 }: ReviewBookingModalProps) {
   const mode = useThemeStore((state) => state.mode);
   const theme = useThemeColors();
@@ -194,7 +196,25 @@ export default function ReviewBookingModal({
         borderRadius="2xl"
         mx={4}
       >
-        <ModalHeader fontSize="lg">Detail Peminjaman</ModalHeader>
+        <ModalHeader fontSize="lg">
+          <Flex align="center" gap={3}>
+            <Text>Detail Peminjaman</Text>
+            {refreshing && (
+              <Flex align="center" gap={1.5}>
+                <Spinner
+                  size="sm"
+                  thickness="2px"
+                  speed="0.7s"
+                  color="blue.400"
+                  emptyColor="rgba(59,130,246,0.15)"
+                />
+                <Text fontSize="xs" fontWeight="normal" color={theme.textMuted}>
+                  Memuat…
+                </Text>
+              </Flex>
+            )}
+          </Flex>
+        </ModalHeader>
         <ModalCloseButton
           color={theme.textSecondary}
           _hover={{

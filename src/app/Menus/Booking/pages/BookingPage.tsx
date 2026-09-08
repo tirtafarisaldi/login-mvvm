@@ -158,18 +158,21 @@ export default function BookingPage() {
 
   const reviewModal = useDisclosure();
   const [reviewing, setReviewing] = useState<BookingModel | null>(null);
+  const [detailRefreshing, setDetailRefreshing] = useState(false);
 
   const openCreate = () => {
     formModal.onOpen();
   };
-  const openReview = async (booking: BookingModel) => {
-    try {
-      const latest = await getBookingById(booking.id);
-      setReviewing(latest);
-    } catch {
-      setReviewing(booking);
-    }
+  const openReview = (booking: BookingModel) => {
+    setReviewing(booking);
     reviewModal.onOpen();
+    setDetailRefreshing(true);
+    void getBookingById(booking.id)
+      .then((latest) => setReviewing(latest))
+      .catch(() => {
+        // tetap pakai data dari daftar jika fetch gagal
+      })
+      .finally(() => setDetailRefreshing(false));
   };
   const updateFilters = (key: string, value: string) => {
     setFilters((current) => ({
@@ -485,6 +488,7 @@ export default function BookingPage() {
         isAdmin={isAdmin}
         onUploadLetter={uploadLetter}
         uploadingLetter={isUploadingLetter}
+        refreshing={detailRefreshing}
       />
     </Box>
   );
