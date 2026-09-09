@@ -180,7 +180,7 @@ export const useHomeViewModel = (): HomeViewModel => {
       label: inventory.name,
       value: `${inventory.stock} item`,
       meta: 'Dipinjam',
-      tone: 'warning' as const,
+      tone: 'warning',
     })
   );
 

@@ -1,15 +1,15 @@
 import {
+  BsCheckCircleFill,
+  BsExclamationTriangleFill,
+  BsInfoCircleFill,
+  BsXCircleFill,
   FaHandshake,
-  FiAlertTriangle,
   FiArrowRight,
   FiCalendar,
-  FiCheckCircle,
   FiClock,
   FiInbox,
-  FiInfo,
   FiPackage,
   FiUsers,
-  FiXCircle,
   type AppIcon,
 } from '../../Menus/store/appIcons';
 import {
@@ -54,10 +54,10 @@ const TONE_ICON: Record<
   DashboardNotification['tone'],
   { icon: AppIcon; color: string }
 > = {
-  info: { icon: FiInfo, color: 'blue.300' },
-  success: { icon: FiCheckCircle, color: 'green.300' },
-  warning: { icon: FiAlertTriangle, color: 'yellow.300' },
-  danger: { icon: FiXCircle, color: 'red.300' },
+  info: { icon: BsInfoCircleFill, color: 'blue.500' },
+  success: { icon: BsCheckCircleFill, color: 'green.500' },
+  warning: { icon: BsExclamationTriangleFill, color: 'yellow.500' },
+  danger: { icon: BsXCircleFill, color: 'red.500' },
 };
 
 const dateFormatter = new Intl.DateTimeFormat('id-ID', {
@@ -413,9 +413,11 @@ export default function HomePage() {
                   borderRadius="full"
                   bg={isAdmin ? 'blue.400' : 'green.400'}
                   boxShadow={
-                    isAdmin
-                      ? '0 0 10px rgba(59,130,246,0.8)'
-                      : '0 0 10px rgba(52,211,153,0.8)'
+                    mode === 'dark'
+                      ? isAdmin
+                        ? '0 0 10px rgba(59,130,246,0.8)'
+                        : '0 0 10px rgba(52,211,153,0.8)'
+                      : 'none'
                   }
                 />
               </Flex>
@@ -505,9 +507,21 @@ export default function HomePage() {
                           align="center"
                           justify="center"
                           borderRadius="lg"
-                          bg={iconBoxBg}
+                          bg={
+                            mode === 'dark'
+                              ? iconBoxBg
+                              : tone.color === 'blue.500'
+                                ? 'blue.50'
+                                : tone.color === 'green.500'
+                                  ? 'green.50'
+                                  : tone.color === 'yellow.500'
+                                    ? 'yellow.50'
+                                    : 'red.50'
+                          }
                           borderWidth="1px"
-                          borderColor={iconBoxBorder}
+                          borderColor={
+                            mode === 'dark' ? iconBoxBorder : 'transparent'
+                          }
                           color={tone.color}
                         >
                           <Icon as={tone.icon} boxSize={4} />

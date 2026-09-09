@@ -1,7 +1,12 @@
 import type { ComponentType, CSSProperties } from 'react';
 import { FaHandshake as FaHandshakeBase } from 'react-icons/fa';
 import {
-  FiAlertTriangle as FiAlertTriangleBase,
+  BsCheckCircleFill as BsCheckCircleFillBase,
+  BsExclamationTriangleFill as BsExclamationTriangleFillBase,
+  BsInfoCircleFill as BsInfoCircleFillBase,
+  BsXCircleFill as BsXCircleFillBase,
+} from 'react-icons/bs';
+import {
   FiArrowLeft as FiArrowLeftBase,
   FiArrowRight as FiArrowRightBase,
   FiCalendar as FiCalendarBase,
@@ -12,7 +17,6 @@ import {
   FiEye as FiEyeBase,
   FiGrid as FiGridBase,
   FiInbox as FiInboxBase,
-  FiInfo as FiInfoBase,
   FiMenu as FiMenuBase,
   FiMoon as FiMoonBase,
   FiPackage as FiPackageBase,
@@ -23,7 +27,6 @@ import {
   FiUpload as FiUploadBase,
   FiUsers as FiUsersBase,
   FiX as FiXBase,
-  FiXCircle as FiXCircleBase,
 } from 'react-icons/fi';
 
 export interface AppIconProps {
@@ -39,7 +42,6 @@ export type AppIcon = ComponentType<AppIconProps>;
 const toAppIcon = <T>(base: T): AppIcon => base as unknown as AppIcon;
 
 export const FaHandshake: AppIcon = toAppIcon(FaHandshakeBase);
-export const FiAlertTriangle: AppIcon = toAppIcon(FiAlertTriangleBase);
 export const FiArrowLeft: AppIcon = toAppIcon(FiArrowLeftBase);
 export const FiArrowRight: AppIcon = toAppIcon(FiArrowRightBase);
 export const FiCalendar: AppIcon = toAppIcon(FiCalendarBase);
@@ -50,7 +52,6 @@ export const FiEdit2: AppIcon = toAppIcon(FiEdit2Base);
 export const FiEye: AppIcon = toAppIcon(FiEyeBase);
 export const FiGrid: AppIcon = toAppIcon(FiGridBase);
 export const FiInbox: AppIcon = toAppIcon(FiInboxBase);
-export const FiInfo: AppIcon = toAppIcon(FiInfoBase);
 export const FiMenu: AppIcon = toAppIcon(FiMenuBase);
 export const FiMoon: AppIcon = toAppIcon(FiMoonBase);
 export const FiPackage: AppIcon = toAppIcon(FiPackageBase);
@@ -61,4 +62,10 @@ export const FiTrash2: AppIcon = toAppIcon(FiTrash2Base);
 export const FiUpload: AppIcon = toAppIcon(FiUploadBase);
 export const FiUsers: AppIcon = toAppIcon(FiUsersBase);
 export const FiX: AppIcon = toAppIcon(FiXBase);
-export const FiXCircle: AppIcon = toAppIcon(FiXCircleBase);
+
+export const BsCheckCircleFill: AppIcon = toAppIcon(BsCheckCircleFillBase);
+export const BsExclamationTriangleFill: AppIcon = toAppIcon(
+  BsExclamationTriangleFillBase
+);
+export const BsInfoCircleFill: AppIcon = toAppIcon(BsInfoCircleFillBase);
+export const BsXCircleFill: AppIcon = toAppIcon(BsXCircleFillBase);
