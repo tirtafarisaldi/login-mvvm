@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { AddIcon, DeleteIcon, InfoOutlineIcon } from '@chakra-ui/icons';
+import { FiEye, FiPlus, FiTrash2 } from '../../store/appIcons';
 import {
   Box,
   Button,
@@ -304,7 +304,7 @@ export default function BookingPage() {
             colorScheme="blue"
             color={mode === 'dark' ? undefined : 'blue.800'}
             size="xs"
-            leftIcon={<InfoOutlineIcon />}
+            leftIcon={<FiEye />}
             isLoading={loadingDetailId === item.id}
             onClick={() => openReview(item)}
           >
@@ -320,7 +320,7 @@ export default function BookingPage() {
               isLoading={isDeleting}
               onClick={() => remove(item)}
             >
-              <DeleteIcon />
+              <FiTrash2 />
             </Button>
           )}
         </Flex>
@@ -369,7 +369,7 @@ export default function BookingPage() {
             boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
           }}
           _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
-          leftIcon={<AddIcon />}
+          leftIcon={<FiPlus />}
           onClick={openCreate}
         >
           {isAdmin ? 'Tambah Peminjaman' : 'Ajukan Peminjaman'}
@@ -437,7 +437,7 @@ export default function BookingPage() {
                 colorScheme="blue"
                 color={mode === 'dark' ? undefined : 'blue.800'}
                 size="xs"
-                leftIcon={<InfoOutlineIcon />}
+                leftIcon={<FiEye />}
                 onClick={() => openReview(item)}
               >
                 Detail
@@ -450,7 +450,7 @@ export default function BookingPage() {
                   isLoading={isDeleting}
                   onClick={() => remove(item)}
                 >
-                  <DeleteIcon />
+                  <FiTrash2 />
                 </Button>
               )}
             </Flex>

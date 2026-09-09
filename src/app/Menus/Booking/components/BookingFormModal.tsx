@@ -1,4 +1,4 @@
-import { AddIcon, AttachmentIcon, DeleteIcon } from '@chakra-ui/icons';
+import { FiPaperclip, FiPlus, FiTrash2 } from '../../store/appIcons';
 import {
   Box,
   Button,
@@ -473,7 +473,7 @@ export default function BookingFormModal({
             backdropFilter="blur(12px)"
             fontSize="sm"
             borderRadius="full"
-            leftIcon={<AttachmentIcon />}
+            leftIcon={<FiPaperclip />}
             _hover={{
               bg: themeMode === 'dark' ? 'rgba(37, 99, 235, 0.45)' : 'blue.700',
               borderColor:
@@ -640,7 +640,7 @@ function EquipmentSelect({
               : '0 2px 8px rgba(37, 99, 235, 0.35)'
           }
           fontWeight="semibold"
-          leftIcon={<AddIcon boxSize={3} />}
+          leftIcon={<FiPlus size={14} />}
           isDisabled={!selectedId || loading}
           _hover={{
             bg: themeMode === 'dark' ? 'rgba(59, 130, 246, 0.6)' : 'blue.700',
@@ -726,7 +726,7 @@ function EquipmentSelect({
                       }}
                       onClick={() => removeItem(sel.inventory_id)}
                     >
-                      <DeleteIcon />
+                      <FiTrash2 />
                     </Button>
                   </Flex>
                 );

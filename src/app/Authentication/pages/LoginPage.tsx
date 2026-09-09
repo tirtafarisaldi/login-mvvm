@@ -291,9 +291,9 @@ export default function Login() {
             }}
             _active={{ bg: 'rgba(37, 99, 235, 0.65)' }}
             isLoading={loginLoading}
-            loadingText="Mengarahkan ke SSO..."
+            loadingText="Mengarahkan ke SSO PENS..."
           >
-            Masuk dengan SSO
+            Masuk melalui SSO PENS
           </Button>
         </Box>
       </MotionBox>
@@ -313,7 +313,7 @@ export default function Login() {
           <Spinner size="xl" color="blue.300" thickness="3px" />
           <VStack spacing={1}>
             <Text color="white" fontSize="md" fontWeight="semibold">
-              Mengarahkan ke SSO...
+              Mengarahkan ke SSO PENS...
             </Text>
             <Text color="whiteAlpha.500" fontSize="xs">
               Mohon tunggu sebentar

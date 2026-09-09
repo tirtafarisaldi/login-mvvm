@@ -1,4 +1,4 @@
-import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { FiEdit2, FiPlus, FiTrash2 } from '../../store/appIcons';
 import {
   Badge,
   Box,
@@ -376,7 +376,7 @@ export default function InventoryPage() {
               fontSize="xs"
               onClick={() => openEdit(item)}
             >
-              <EditIcon />
+              <FiEdit2 />
             </Button>
             <Button
               aria-label="Hapus inventaris"
@@ -387,7 +387,7 @@ export default function InventoryPage() {
               isLoading={isDeleting}
               onClick={() => remove(item)}
             >
-              <DeleteIcon />
+              <FiTrash2 />
             </Button>
           </Flex>
         ) : (
@@ -441,7 +441,7 @@ export default function InventoryPage() {
                 boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
               }}
               _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
-              leftIcon={<AddIcon />}
+              leftIcon={<FiPlus />}
               onClick={openCreate}
             >
               Tambah Peralatan
@@ -522,7 +522,7 @@ export default function InventoryPage() {
                       size="sm"
                       onClick={() => openEdit(item)}
                     >
-                      <EditIcon />
+                      <FiEdit2 />
                     </Button>
                     <Button
                       aria-label="Hapus inventaris"
@@ -533,7 +533,7 @@ export default function InventoryPage() {
                       isLoading={isDeleting}
                       onClick={() => remove(item)}
                     >
-                      <DeleteIcon />
+                      <FiTrash2 />
                     </Button>
                   </>
                 )}

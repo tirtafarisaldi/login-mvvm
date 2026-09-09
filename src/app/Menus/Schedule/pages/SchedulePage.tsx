@@ -1,10 +1,10 @@
 import {
-  AddIcon,
-  DeleteIcon,
-  EditIcon,
-  InfoIcon,
-  TimeIcon,
-} from '@chakra-ui/icons';
+  FiClock,
+  FiEdit2,
+  FiEye,
+  FiPlus,
+  FiTrash2,
+} from '../../store/appIcons';
 import {
   Box,
   Button,
@@ -305,7 +305,7 @@ export default function SchedulePage() {
               boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)',
             }}
             _active={{ bg: 'rgba(37, 99, 235, 0.6)' }}
-            leftIcon={<AddIcon />}
+            leftIcon={<FiPlus />}
             onClick={createModal.onOpen}
           >
             Tambah Jadwal
@@ -382,7 +382,7 @@ export default function SchedulePage() {
                     }
                     color={mode === 'dark' ? 'blue.300' : 'blue.600'}
                   >
-                    <TimeIcon boxSize={4} />
+                    <FiClock size={18} />
                   </Flex>
                   <Box>
                     <Text color={theme.textSecondary} fontSize="xs">
@@ -407,7 +407,7 @@ export default function SchedulePage() {
                     }
                     color={mode === 'dark' ? 'blue.300' : 'blue.600'}
                   >
-                    <InfoIcon boxSize={4} />
+                    <FiEye size={18} />
                   </Flex>
                   <Box>
                     <Text color={theme.textSecondary} fontSize="xs">
@@ -430,7 +430,7 @@ export default function SchedulePage() {
                     }
                     color={mode === 'dark' ? 'blue.300' : 'blue.600'}
                   >
-                    <InfoIcon boxSize={4} />
+                    <FiEye size={18} />
                   </Flex>
                   <Box>
                     <Text color={theme.textSecondary} fontSize="xs">
@@ -450,7 +450,7 @@ export default function SchedulePage() {
                       bg="rgba(255,255,255,0.08)"
                       color="blue.300"
                     >
-                      <InfoIcon boxSize={4} />
+                      <FiEye size={18} />
                     </Flex>
                     <Box>
                       <Text color={theme.textSecondary} fontSize="xs">
@@ -474,7 +474,7 @@ export default function SchedulePage() {
                   borderColor="rgba(255, 99, 132, 0.35)"
                   borderRadius="full"
                   isLoading={isDeleting}
-                  leftIcon={<DeleteIcon />}
+                  leftIcon={<FiTrash2 />}
                   _hover={{
                     bg: 'rgba(255, 99, 132, 0.15)',
                     color: mode === 'dark' ? 'red.200' : 'red.700',
@@ -493,7 +493,7 @@ export default function SchedulePage() {
                   borderColor={theme.panelBorder}
                   borderRadius="full"
                   ml={3}
-                  leftIcon={<EditIcon />}
+                  leftIcon={<FiEdit2 />}
                   _hover={{ bg: theme.hoverBg, color: theme.textPrimary }}
                   onClick={openEdit}
                 >

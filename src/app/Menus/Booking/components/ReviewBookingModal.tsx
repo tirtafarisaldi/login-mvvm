@@ -1,11 +1,11 @@
 import {
-  ArrowUpIcon,
-  AttachmentIcon,
-  CheckIcon,
-  CheckCircleIcon,
-  CloseIcon,
-  ViewIcon,
-} from '@chakra-ui/icons';
+  FiCheck,
+  FiCheckCircle,
+  FiEye,
+  FiPaperclip,
+  FiUpload,
+  FiX,
+} from '../../store/appIcons';
 import {
   Box,
   Button,
@@ -347,7 +347,7 @@ export default function ReviewBookingModal({
                   <Button
                     size="sm"
                     variant="ghost"
-                    leftIcon={<ViewIcon />}
+                    leftIcon={<FiEye />}
                     colorScheme="blue"
                     borderRadius="full"
                     flexShrink={0}
@@ -395,7 +395,7 @@ export default function ReviewBookingModal({
                           }
                           color="blue.500"
                         >
-                          <AttachmentIcon boxSize={5} />
+                          <FiPaperclip size={22} />
                         </Flex>
                         <Box minW={0} flex={1}>
                           <Text
@@ -417,7 +417,7 @@ export default function ReviewBookingModal({
                           borderRadius="full"
                           flexShrink={0}
                           onClick={resetSelectedFile}
-                          leftIcon={<CloseIcon boxSize={3} />}
+                          leftIcon={<FiX size={14} />}
                         >
                           Ganti
                         </Button>
@@ -435,7 +435,7 @@ export default function ReviewBookingModal({
                         }
                         fontSize="sm"
                         borderRadius="full"
-                        leftIcon={<CheckIcon />}
+                        leftIcon={<FiCheck />}
                         _hover={{
                           bg:
                             mode === 'dark'
@@ -553,7 +553,7 @@ export default function ReviewBookingModal({
                               }
                               color={dragging ? 'blue.400' : 'blue.500'}
                             >
-                              <ArrowUpIcon boxSize={6} />
+                              <FiUpload size={24} />
                             </Flex>
                           </Flex>
                           <Text
@@ -600,7 +600,7 @@ export default function ReviewBookingModal({
                 }
                 fontSize="sm"
                 borderRadius="full"
-                leftIcon={<CheckIcon />}
+                leftIcon={<FiCheck />}
                 isLoading={deciding}
                 _hover={{
                   bg: mode === 'dark' ? 'rgba(34,197,94,0.45)' : 'green.700',
@@ -671,7 +671,7 @@ export default function ReviewBookingModal({
                   borderColor="red.500"
                   fontSize="sm"
                   borderRadius="full"
-                  leftIcon={<CloseIcon />}
+                  leftIcon={<FiX />}
                   isLoading={deciding}
                   _hover={{ bg: 'red.600' }}
                   onClick={reject}
@@ -693,7 +693,7 @@ export default function ReviewBookingModal({
               }
               fontSize="sm"
               borderRadius="full"
-              leftIcon={<CheckCircleIcon />}
+              leftIcon={<FiCheckCircle />}
               isLoading={deciding}
               _hover={{
                 bg: mode === 'dark' ? 'rgba(20,184,166,0.45)' : 'teal.700',

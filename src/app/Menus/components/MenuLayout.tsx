@@ -1,15 +1,14 @@
 import {
-  ArrowBackIcon,
-  CalendarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  HamburgerIcon,
-  InfoIcon,
-  MoonIcon,
-  RepeatIcon,
-  SunIcon,
-  ViewIcon,
-} from '@chakra-ui/icons';
+  FaHandshake,
+  FiArrowLeft,
+  FiCalendar,
+  FiGrid,
+  FiMenu,
+  FiMoon,
+  FiPackage,
+  FiSun,
+  type AppIcon,
+} from '../store/appIcons';
 import {
   Box,
   Button,
@@ -44,23 +43,23 @@ import MenuLoadingScreen from './MenuLoadingScreen';
 const menuItems: Array<{
   label: string;
   href?: string;
-  icon: typeof ViewIcon;
+  icon: AppIcon;
 }> = [
-  { label: 'Overview', href: '/', icon: ViewIcon },
+  { label: 'Overview', href: '/', icon: FiGrid },
   {
     label: 'Inventaris Alat',
     href: '/inventory',
-    icon: InfoIcon,
+    icon: FiPackage,
   },
   {
     label: 'Peminjaman',
     href: '/booking',
-    icon: RepeatIcon,
+    icon: FaHandshake,
   },
   {
     label: 'Jadwal Studio',
     href: '/schedule',
-    icon: CalendarIcon,
+    icon: FiCalendar,
   },
 ];
 
@@ -219,7 +218,7 @@ export default function MenuLayout({
             </Flex>
             <IconButton
               aria-label="Ganti tema"
-              icon={mode === 'dark' ? <SunIcon /> : <MoonIcon />}
+              icon={mode === 'dark' ? <FiSun /> : <FiMoon />}
               variant="ghost"
               size="sm"
               borderRadius="full"
@@ -360,7 +359,7 @@ export default function MenuLayout({
                 color: theme.textPrimary,
                 borderColor: 'rgba(220, 38, 38, 0.6)',
               }}
-              leftIcon={<ArrowBackIcon />}
+              leftIcon={<FiArrowLeft />}
               onClick={onOpen}
               w="full"
               borderRadius="full"
@@ -397,7 +396,7 @@ export default function MenuLayout({
         >
           <IconButton
             aria-label="Buka menu"
-            icon={<HamburgerIcon />}
+            icon={<FiMenu />}
             size="sm"
             display={{ base: 'inline-flex', md: 'none' }}
             mb={5}
