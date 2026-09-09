@@ -93,6 +93,14 @@ export default function HomePage() {
   const mode = useThemeStore((state) => state.mode);
   const theme = useThemeColors();
   const today = dateFormatter.format(new Date());
+  const roleLabelMap: Record<string, string> = {
+    admin: 'Admin Dashboard',
+    staff: 'Staff Dashboard',
+    dosen: 'Dosen Dashboard',
+    mahasiswa: 'Mahasiswa Dashboard',
+  };
+  const roleLabel =
+    (user?.role ? roleLabelMap[user.role] : undefined) ?? 'User Dashboard';
   const isAdmin = user?.role === 'admin';
 
   const iconBoxBg =
@@ -134,7 +142,7 @@ export default function HomePage() {
               color="white"
               fontWeight="bold"
             >
-              {isAdmin ? 'Admin Dashboard' : 'User Dashboard'}
+              {roleLabel}
             </Tag>
             {isAdmin && pendingCount > 0 && (
               <Tag

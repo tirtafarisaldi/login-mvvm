@@ -246,6 +246,12 @@ export default function ReviewBookingModal({
                   <Text color={theme.textMuted}>Peminjam</Text>
                   <Text fontWeight="medium">{booking.borrower}</Text>
                 </Flex>
+                {booking.dosen_pj && (
+                  <Flex justify="space-between">
+                    <Text color={theme.textMuted}>Dosen Penanggung Jawab</Text>
+                    <Text fontWeight="medium">{booking.dosen_pj}</Text>
+                  </Flex>
+                )}
                 <Flex justify="space-between">
                   <Text color={theme.textMuted}>Jenis</Text>
                   <Text>{TYPE_LABELS[booking.type]}</Text>
@@ -323,7 +329,7 @@ export default function ReviewBookingModal({
                   <Text fontSize="xs" color={theme.textMuted}>
                     Keterangan
                   </Text>
-                  <Text fontSize="sm" mt={1}>
+                  <Text fontSize="sm" mt={1} whiteSpace="pre-wrap">
                     {booking.note}
                   </Text>
                 </Box>

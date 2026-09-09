@@ -19,6 +19,7 @@ export interface IBookingItem {
 export interface IBooking {
   id: string;
   borrower: string;
+  dosen_pj?: string;
   type: BookingType;
   letter_file?: string;
   title?: string;
@@ -41,6 +42,7 @@ export interface BookingItemInput {
 
 export interface BookingInput {
   borrower: string;
+  dosen_pj?: string;
   type: BookingType;
   letter_file?: string;
   title?: string;
@@ -71,6 +73,7 @@ export interface IBookingPaginationResponse extends IPaginationResponse {
 
 export class BookingModel extends BaseModel {
   borrower: string;
+  dosen_pj?: string;
   type: BookingType;
   letter_file?: string;
   title?: string;
@@ -88,6 +91,7 @@ export class BookingModel extends BaseModel {
   constructor(data: IBooking) {
     super(data.id);
     this.borrower = data.borrower;
+    this.dosen_pj = data.dosen_pj;
     this.type = data.type;
     this.letter_file = data.letter_file;
     this.title = data.title;

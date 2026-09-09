@@ -72,6 +72,7 @@ const toInput = (values: BookingFormValues): BookingPayload => {
   const isRoom = values.type === 'room';
   return {
     borrower: values.borrower.trim(),
+    dosen_pj: values.dosen_pj?.trim() || undefined,
     type: values.type,
     title: values.title.trim() || undefined,
     items:
@@ -201,6 +202,7 @@ export default function BookingPage() {
     if (!reviewing) return;
     const input: BookingPayload = {
       borrower: reviewing.borrower,
+      dosen_pj: reviewing.dosen_pj,
       type: reviewing.type,
       letter: file,
       items: reviewing.items?.map((item) => ({

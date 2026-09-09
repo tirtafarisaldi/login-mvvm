@@ -2,7 +2,7 @@ import { IPaginationResponse, Pagination } from '../vo/Pagination';
 import { GeneralStatus, Status } from '../vo/Status';
 import { BaseModel } from './BaseModel';
 
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'admin' | 'staff' | 'dosen' | 'mahasiswa';
 
 export interface IUser {
   uuid: string;

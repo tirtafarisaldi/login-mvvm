@@ -52,12 +52,29 @@ import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
 import { shortId } from 'utility/string';
 
-const categories = ['Kamera', 'Audio', 'Pencahayaan', 'Aksesori', 'Properti'];
+const categories = [
+  'Kamera',
+  'Lensa',
+  'PC / Workstation',
+  'Monitor, TV & Display',
+  'Switcher, Converter & Video Processing',
+  'Mixer Audio',
+  'Speaker & Monitor Audio',
+  'Microphone',
+  'Audio Processor',
+  'Lighting',
+  'Broadcast & Streaming',
+  'Support',
+  'Network',
+  'Cable',
+  'Barang Habis',
+  'Furniture & Props',
+];
 const locations = [
-  'Lemari Kamera',
-  'Ruang Audio',
-  'Gudang Peralatan',
-  'Ruang Studio',
+  'Studio Pertunjukan',
+  'Ruang Dosen',
+  'Lemari Ruang Dosen',
+  'Gudang',
 ];
 const filterFields: FilterField[] = [
   { key: 'name', label: 'Cari nama barang' },

@@ -1,7 +1,9 @@
+import type { UserRole } from 'src/domain/models/UserModel';
+
 export type AuthUser = {
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: UserRole;
 };
 
 export interface AuthContextValue {

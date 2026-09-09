@@ -76,7 +76,6 @@ export default function MenuLayout({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { logout } = useLogout();
   const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
   const mode = useThemeStore((state) => state.mode);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const hasHydrated = useThemeStore((state) => state.hasHydrated);
@@ -90,14 +89,15 @@ export default function MenuLayout({
       .map((part) => part[0]?.toUpperCase() ?? '')
       .join('') || 'U';
 
-  const roleColor =
-    mode === 'dark'
-      ? isAdmin
-        ? '#fde68a'
-        : '#7dd3fc'
-      : isAdmin
-        ? '#b45309'
-        : '#0369a1';
+  const roleColorMap: Record<string, { dark: string; light: string }> = {
+    admin: { dark: '#fde68a', light: '#b45309' },
+    staff: { dark: '#67e8f9', light: '#0e7490' },
+    dosen: { dark: '#c4b5fd', light: '#6d28d9' },
+    mahasiswa: { dark: '#7dd3fc', light: '#0369a1' },
+  };
+  const role = (user?.role ?? 'mahasiswa') as string;
+  const roleStyle = roleColorMap[role] ?? roleColorMap.mahasiswa;
+  const roleColor = mode === 'dark' ? roleStyle.dark : roleStyle.light;
 
   const handleConfirmLogout = async () => {
     setConfirming(true);

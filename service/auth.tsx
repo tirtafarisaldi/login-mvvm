@@ -13,6 +13,7 @@ import { shallow } from 'zustand/shallow';
 
 import useLoadedInIframeStore from 'hooks/useLoadedInIframeStore';
 import type { AuthContextValue, AuthUser } from './types';
+import { resolveRole } from 'utility/role';
 import { useCheckUser } from 'src/data/repositories/UserRepositoryImpl';
 import {
   clearAuthStorage,
@@ -43,7 +44,7 @@ const normalizeUser = (data: unknown): AuthUser | null => {
   return {
     name: partial.name || 'Pengguna',
     email: partial.email || '',
-    role: partial.role === 'admin' ? 'admin' : 'user',
+    role: resolveRole(partial.role, partial.email),
   };
 };
 
@@ -215,7 +216,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const nextUser: AuthUser = {
         name: checkUserData.name || 'Pengguna',
         email: checkUserData.email || '',
-        role: checkUserData.role === 'admin' ? 'admin' : 'user',
+        role: resolveRole(checkUserData.role, checkUserData.email),
       };
       setUser(nextUser);
       setIsAuthenticated(true);

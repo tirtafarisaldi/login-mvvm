@@ -10,6 +10,7 @@ export const toBookingFormData = (input: BookingPayload): FormData => {
     }
   };
   append('borrower', input.borrower);
+  append('dosen_pj', input.dosen_pj);
   append('type', input.type);
   if (input.items && input.items.length > 0) {
     append('items', JSON.stringify(input.items));

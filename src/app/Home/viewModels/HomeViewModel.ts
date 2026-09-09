@@ -109,11 +109,11 @@ const statusTone = (status: string): DashboardNotification['tone'] => {
 
 const statusText = (status: string): string => {
   const map: Record<string, string> = {
-    pending: 'Menunggu persetujuan',
-    reviewing: 'Sedang ditinjau',
-    approved: 'Disetujui',
-    rejected: 'Ditolak',
-    completed: 'Selesai',
+    pending: 'pending',
+    reviewing: 'reviewing',
+    approved: 'approved',
+    rejected: 'rejected',
+    completed: 'completed',
   };
   return map[status] ?? 'Update terkini';
 };

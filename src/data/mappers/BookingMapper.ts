@@ -76,6 +76,10 @@ export const mapToBookingModel = (
   const booking: IBooking = {
     id: asString(raw.id ?? raw.uuid ?? raw.booking_id),
     borrower: asString(raw.borrower ?? raw.borrower_name ?? raw.peminjam),
+    dosen_pj:
+      typeof raw.dosen_pj === 'string' && raw.dosen_pj.length > 0
+        ? raw.dosen_pj
+        : undefined,
     type: getType(raw.type),
     letter_file:
       typeof raw.letter_file === 'string' && raw.letter_file.length > 0

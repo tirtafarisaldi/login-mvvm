@@ -1,4 +1,4 @@
-import { FiPaperclip, FiPlus, FiTrash2 } from '../../store/appIcons';
+import { FiCheck, FiPaperclip, FiPlus, FiTrash2 } from '../../store/appIcons';
 import {
   Box,
   Button,
@@ -40,6 +40,7 @@ import type {
 
 export interface BookingFormValues {
   borrower: string;
+  dosen_pj: string;
   type: BookingType;
   title: string;
   items: BookingItemInput[];
@@ -80,8 +81,18 @@ export const REPEAT_LABELS: Array<{ value: BookingRepeat; label: string }> = [
   { value: 'monthly', label: 'Setiap bulan' },
 ];
 
+// Template keterangan yang sopan untuk pengajuan kepada Kepala Laboratorium.
+export const NOTE_TEMPLATE =
+  'Dengan hormat,\n\n' +
+  'Saya yang bertanda tangan di bawah ini mengajukan permohonan peminjaman ' +
+  'peralatan/ruangan Studio Pertunjukan untuk kebutuhan kegiatan.\n\n' +
+  '.....................................................................................\n\n' +
+  'Demikian pengajuan ini saya sampaikan. Atas perhatian dan persetujuan ' +
+  'Kepala Laboratorium Studio Pertunjukan, saya ucapkan terima kasih.';
+
 const emptyValues = (): BookingFormValues => ({
   borrower: '',
+  dosen_pj: '',
   type: 'equipment',
   title: '',
   items: [],
@@ -91,7 +102,7 @@ const emptyValues = (): BookingFormValues => ({
   end_time: '10:00',
   repeat: 'none',
   repeat_end: '',
-  note: '',
+  note: NOTE_TEMPLATE,
 });
 
 export default function BookingFormModal({
@@ -108,6 +119,7 @@ export default function BookingFormModal({
   const inputBg = themeMode === 'dark' ? 'whiteAlpha.100' : 'white';
   const inputBorder = themeMode === 'dark' ? 'whiteAlpha.300' : 'gray.300';
   const borrowerName = user?.role === 'admin' ? 'Admin' : (user?.name ?? '');
+  const isMahasiswa = user?.role === 'mahasiswa';
   const [values, setValues] = useState<BookingFormValues>(() => ({
     ...emptyValues(),
     borrower: borrowerName,
@@ -188,6 +200,35 @@ export default function BookingFormModal({
         status: 'warning',
         title: 'Form belum lengkap',
         description: 'Lengkapi nama peminjam dan tanggal booking.',
+        position: 'top',
+      });
+      return;
+    }
+    if (isMahasiswa && !values.dosen_pj.trim()) {
+      toast({
+        status: 'warning',
+        title: 'Dosen Penanggung Jawab wajib diisi',
+        description: 'Mahasiswa wajib mencantumkan dosen penanggung jawab.',
+        position: 'top',
+      });
+      return;
+    }
+    if (!values.note.trim()) {
+      toast({
+        status: 'warning',
+        title: 'Keterangan wajib diisi',
+        description:
+          'Tuliskan keterangan pengajuan, gunakan template bila perlu.',
+        position: 'top',
+      });
+      return;
+    }
+    if (values.note.trim() === NOTE_TEMPLATE.trim()) {
+      toast({
+        status: 'warning',
+        title: 'Keterangan masih berupa template',
+        description:
+          'Silakan sesuaikan keterangan dengan kebutuhan pengajuan Anda sebelum mengirim.',
         position: 'top',
       });
       return;
@@ -276,6 +317,31 @@ export default function BookingFormModal({
                 isDisabled
               />
             </FormControl>
+
+            {isMahasiswa && (
+              <FormControl isRequired>
+                <FormLabel fontSize="xs" letterSpacing="wide">
+                  <Flex align="center" gap={1} wrap="wrap">
+                    Dosen Penanggung Jawab
+                    <Flex align="center" color="green.400">
+                      <FiCheck size={14} />
+                      <Text as="span" fontSize="xs" fontWeight="medium" ml={1}>
+                        Wajib diisi
+                      </Text>
+                    </Flex>
+                  </Flex>
+                </FormLabel>
+                <Input
+                  size="sm"
+                  value={values.dosen_pj}
+                  bg={inputBg}
+                  borderColor={inputBorder}
+                  borderRadius="xl"
+                  onChange={(event) => update({ dosen_pj: event.target.value })}
+                  placeholder="Nama Dosen Penanggung Jawab"
+                />
+              </FormControl>
+            )}
 
             <FormControl isRequired>
               <FormLabel fontSize="xs" letterSpacing="wide">
@@ -430,7 +496,7 @@ export default function BookingFormModal({
               </>
             )}
 
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel fontSize="xs" letterSpacing="wide">
                 Keterangan
               </FormLabel>
@@ -441,8 +507,13 @@ export default function BookingFormModal({
                 borderColor={inputBorder}
                 borderRadius="xl"
                 onChange={(event) => update({ note: event.target.value })}
-                placeholder="Catatan booking…"
+                placeholder="Tuliskan keterangan pengajuan secara sopan, mis. ucapan terima kasih kepada Kepala Laboratorium…"
+                rows={4}
               />
+              <Text color="blue.300" fontSize="xs" mt={1}>
+                Wajib diisi dan disesuaikan dengan kebutuhan pengajuan Anda —
+                jangan kirim keterangan template apa adanya.
+              </Text>
             </FormControl>
           </Stack>
         </ModalBody>

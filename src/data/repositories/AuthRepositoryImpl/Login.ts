@@ -2,6 +2,7 @@ import * as AuthDataSource from '../../sources/AuthDataSource';
 import http from 'service/http';
 import { getAccessToken } from './getAccessToken';
 import type { AuthUser } from 'service/types';
+import { resolveRole } from 'utility/role';
 import { setStoredAccessToken, setStoredUser } from 'service/authStorage';
 import { setAccessToken } from 'service/tokenStore';
 
@@ -20,7 +21,7 @@ export const useLogin = () => {
       void setStoredUser({
         name: userData.name || '',
         email: userData.email || '',
-        role: userData.role === 'admin' ? 'admin' : 'user',
+        role: resolveRole(userData.role, userData.email),
       });
     }
 
