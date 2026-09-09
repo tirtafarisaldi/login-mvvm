@@ -180,6 +180,7 @@ export default function ReviewBookingModal({
         onClose();
       }}
       size="md"
+      variant="detail"
       motionPreset="none"
       isCentered
     >
@@ -195,6 +196,7 @@ export default function ReviewBookingModal({
         boxShadow="0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,0.08)"
         borderRadius="2xl"
         mx={4}
+        my="30px"
       >
         <ModalHeader fontSize="lg">Detail Peminjaman</ModalHeader>
         <ModalCloseButton
@@ -206,8 +208,8 @@ export default function ReviewBookingModal({
         />
 
         {booking && (
-          <ModalBody py={6}>
-            <Stack spacing={3}>
+          <ModalBody>
+            <Stack spacing={5}>
               {booking.reason_rejected && booking.status === 'rejected' && (
                 <Box
                   p={3}
@@ -243,7 +245,7 @@ export default function ReviewBookingModal({
 
               <Divider borderColor={theme.panelBorder} />
 
-              <Stack spacing={2} fontSize="sm">
+              <Stack spacing={3} fontSize="sm">
                 <Flex justify="space-between">
                   <Text color={theme.textMuted}>Peminjam</Text>
                   <Text fontWeight="medium">{booking.borrower}</Text>
@@ -300,6 +302,11 @@ export default function ReviewBookingModal({
                     </Flex>
                   )
                 )}
+              </Stack>
+
+              <Divider borderColor={theme.panelBorder} />
+
+              <Stack spacing={3} fontSize="sm">
                 {booking.type === 'equipment' ? (
                   <Flex gap={3} wrap="wrap">
                     <Box flex="1 1 45%" minW="140px">
@@ -356,269 +363,296 @@ export default function ReviewBookingModal({
               </Stack>
 
               {booking.note && (
-                <Box>
-                  <Text fontSize="xs" color={theme.textMuted}>
-                    Keterangan
-                  </Text>
-                  <Text fontSize="sm" mt={1} whiteSpace="pre-wrap">
-                    {booking.note}
-                  </Text>
-                </Box>
+                <>
+                  <Divider borderColor={theme.panelBorder} />
+                  <Box
+                    p={3}
+                    borderRadius="xl"
+                    borderWidth="1px"
+                    borderColor={theme.panelBorder}
+                    bg={mode === 'dark' ? 'whiteAlpha.50' : 'gray.50'}
+                  >
+                    <Text
+                      fontSize="xs"
+                      fontWeight="bold"
+                      color={theme.textMuted}
+                    >
+                      Keterangan
+                    </Text>
+                    <Text fontSize="sm" mt={2} whiteSpace="pre-wrap">
+                      {booking.note}
+                    </Text>
+                  </Box>
+                </>
               )}
 
-              <Flex justify="space-between" align="center" gap={3}>
-                <Box minW={0}>
-                  <Text fontSize="xs" color={theme.textMuted}>
-                    Surat Booking
-                  </Text>
-                  <Text
-                    fontSize="sm"
-                    mt={1}
-                    noOfLines={1}
-                    color={theme.textSecondary}
-                  >
-                    {booking.letter_file ?? 'Tidak ada surat'}
-                  </Text>
-                </Box>
-                {booking.letter_file && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    leftIcon={<FiEye />}
-                    colorScheme="blue"
-                    borderRadius="full"
-                    flexShrink={0}
-                    onClick={openLetter}
-                    isLoading={opening}
-                  >
-                    Buka
-                  </Button>
-                )}
-              </Flex>
+              {booking.letter_file && (
+                <>
+                  <Divider borderColor={theme.panelBorder} />
+                  <Flex justify="space-between" align="center" gap={3}>
+                    <Box minW={0}>
+                      <Text fontSize="xs" color={theme.textMuted}>
+                        Surat Booking
+                      </Text>
+                      <Text
+                        fontSize="sm"
+                        mt={1}
+                        noOfLines={1}
+                        color={theme.textSecondary}
+                      >
+                        {booking.letter_file}
+                      </Text>
+                    </Box>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      leftIcon={<FiEye />}
+                      colorScheme="blue"
+                      borderRadius="full"
+                      flexShrink={0}
+                      onClick={openLetter}
+                      isLoading={opening}
+                    >
+                      Buka
+                    </Button>
+                  </Flex>
+                </>
+              )}
 
               {canUploadLetter && (
-                <Box>
-                  <input
-                    ref={letterInputRef}
-                    type="file"
-                    accept=".pdf"
-                    hidden
-                    onChange={handleLetterFile}
-                  />
-                  {selectedFile && !uploadingLetter ? (
-                    <>
-                      <Flex
-                        align="center"
-                        gap={3}
-                        p={3.5}
-                        borderRadius="2xl"
-                        bg={
-                          mode === 'dark' ? 'rgba(59,130,246,0.1)' : 'blue.50'
-                        }
-                        borderWidth="1px"
-                        borderColor={
-                          mode === 'dark' ? 'rgba(59,130,246,0.3)' : 'blue.200'
-                        }
-                      >
+                <>
+                  <Divider borderColor={theme.panelBorder} />
+                  <Box>
+                    <input
+                      ref={letterInputRef}
+                      type="file"
+                      accept=".pdf"
+                      hidden
+                      onChange={handleLetterFile}
+                    />
+                    {selectedFile && !uploadingLetter ? (
+                      <>
                         <Flex
-                          w={11}
-                          h={11}
-                          flexShrink={0}
-                          borderRadius="lg"
-                          alignItems="center"
-                          justifyContent="center"
+                          align="center"
+                          gap={3}
+                          p={3.5}
+                          borderRadius="2xl"
                           bg={
-                            mode === 'dark' ? 'rgba(59,130,246,0.2)' : 'white'
+                            mode === 'dark' ? 'rgba(59,130,246,0.1)' : 'blue.50'
                           }
-                          color="blue.500"
-                        >
-                          <FiPaperclip size={22} />
-                        </Flex>
-                        <Box minW={0} flex={1}>
-                          <Text
-                            fontWeight="semibold"
-                            fontSize="sm"
-                            color={theme.textPrimary}
-                            noOfLines={1}
-                          >
-                            {selectedFile.name}
-                          </Text>
-                          <Text fontSize="xs" color={theme.textMuted} mt={0.5}>
-                            {(selectedFile.size / 1024).toFixed(1)} KB · PDF
-                          </Text>
-                        </Box>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          colorScheme="blue"
-                          borderRadius="full"
-                          flexShrink={0}
-                          onClick={resetSelectedFile}
-                          leftIcon={<FiX size={14} />}
-                        >
-                          Ganti
-                        </Button>
-                      </Flex>
-                      <Button
-                        w="full"
-                        mt={3}
-                        color="white"
-                        bg={
-                          mode === 'dark' ? 'rgba(37,99,235,0.3)' : 'blue.600'
-                        }
-                        borderWidth="1px"
-                        borderColor={
-                          mode === 'dark' ? 'rgba(59,130,246,0.5)' : 'blue.600'
-                        }
-                        fontSize="sm"
-                        borderRadius="full"
-                        leftIcon={<FiCheck />}
-                        _hover={{
-                          bg:
+                          borderWidth="1px"
+                          borderColor={
                             mode === 'dark'
-                              ? 'rgba(37,99,235,0.5)'
-                              : 'blue.700',
-                          boxShadow: '0 0 16px rgba(59,130,246,0.25)',
-                        }}
-                        onClick={submitLetter}
-                      >
-                        Submit Surat
-                      </Button>
-                    </>
-                  ) : (
-                    <Box
-                      role="button"
-                      tabIndex={0}
-                      cursor={uploadingLetter ? 'default' : 'pointer'}
-                      onClick={() => {
-                        if (!uploadingLetter) letterInputRef.current?.click();
-                      }}
-                      onKeyDown={(event) => {
-                        if (
-                          !uploadingLetter &&
-                          (event.key === 'Enter' || event.key === ' ')
-                        ) {
-                          letterInputRef.current?.click();
-                        }
-                      }}
-                      onDrop={handleDrop}
-                      onDragOver={(event) => {
-                        event.preventDefault();
-                        if (!uploadingLetter) setDragging(true);
-                      }}
-                      onDragLeave={() => setDragging(false)}
-                      borderWidth="2px"
-                      borderStyle="dashed"
-                      borderColor={
-                        uploadingLetter
-                          ? theme.panelBorder
-                          : dragging
-                            ? 'blue.400'
-                            : mode === 'dark'
-                              ? 'rgba(255,255,255,0.16)'
-                              : 'gray.300'
-                      }
-                      borderRadius="2xl"
-                      p={6}
-                      textAlign="center"
-                      bg={
-                        uploadingLetter
-                          ? mode === 'dark'
-                            ? 'rgba(59,130,246,0.08)'
-                            : 'blue.50'
-                          : dragging
-                            ? mode === 'dark'
-                              ? 'rgba(59,130,246,0.16)'
-                              : 'blue.50'
-                            : mode === 'dark'
-                              ? 'rgba(255,255,255,0.03)'
-                              : 'gray.50'
-                      }
-                      transition="all 0.18s"
-                      _hover={
-                        uploadingLetter
-                          ? undefined
-                          : {
-                              borderColor: 'blue.400',
-                              bg:
-                                mode === 'dark'
-                                  ? 'rgba(59,130,246,0.1)'
-                                  : 'blue.50',
+                              ? 'rgba(59,130,246,0.3)'
+                              : 'blue.200'
+                          }
+                        >
+                          <Flex
+                            w={11}
+                            h={11}
+                            flexShrink={0}
+                            borderRadius="lg"
+                            alignItems="center"
+                            justifyContent="center"
+                            bg={
+                              mode === 'dark' ? 'rgba(59,130,246,0.2)' : 'white'
                             }
-                      }
-                    >
-                      {uploadingLetter ? (
-                        <>
-                          <Flex justify="center" mb={2}>
-                            <Spinner
-                              thickness="3px"
-                              size="lg"
-                              speed="0.7s"
-                              color="blue.400"
-                            />
+                            color="blue.500"
+                          >
+                            <FiPaperclip size={22} />
                           </Flex>
-                          <Text
-                            fontSize="sm"
-                            fontWeight="semibold"
-                            color={theme.textPrimary}
-                          >
-                            Mengunggah surat…
-                          </Text>
-                          <Text fontSize="xs" color={theme.textMuted} mt={1}>
-                            File sedang diproses
-                          </Text>
-                        </>
-                      ) : (
-                        <>
-                          <Flex justify="center" mb={3}>
-                            <Flex
-                              w={12}
-                              h={12}
-                              borderRadius="2xl"
-                              alignItems="center"
-                              justifyContent="center"
-                              bg={
-                                mode === 'dark'
-                                  ? 'rgba(59,130,246,0.16)'
-                                  : 'blue.50'
-                              }
-                              borderWidth="1px"
-                              borderColor={
-                                mode === 'dark'
-                                  ? 'rgba(59,130,246,0.35)'
-                                  : 'blue.200'
-                              }
-                              color={dragging ? 'blue.400' : 'blue.500'}
-                            >
-                              <FiUpload size={24} />
-                            </Flex>
-                          </Flex>
-                          <Text
-                            fontSize="sm"
-                            fontWeight="semibold"
-                            color={theme.textPrimary}
-                          >
-                            Klik atau seret file ke sini
-                          </Text>
-                          <Text
-                            fontSize="xs"
-                            color={theme.textSecondary}
-                            mt={1}
-                          >
+                          <Box minW={0} flex={1}>
                             <Text
-                              as="span"
-                              color="blue.400"
-                              fontWeight="medium"
+                              fontWeight="semibold"
+                              fontSize="sm"
+                              color={theme.textPrimary}
+                              noOfLines={1}
                             >
-                              Pilih file
-                            </Text>{' '}
-                            atau letakkan surat di sini — PDF, maks. 2 MB
-                          </Text>
-                        </>
-                      )}
-                    </Box>
-                  )}
-                </Box>
+                              {selectedFile.name}
+                            </Text>
+                            <Text
+                              fontSize="xs"
+                              color={theme.textMuted}
+                              mt={0.5}
+                            >
+                              {(selectedFile.size / 1024).toFixed(1)} KB · PDF
+                            </Text>
+                          </Box>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            colorScheme="blue"
+                            borderRadius="full"
+                            flexShrink={0}
+                            onClick={resetSelectedFile}
+                            leftIcon={<FiX size={14} />}
+                          >
+                            Ganti
+                          </Button>
+                        </Flex>
+                        <Button
+                          w="full"
+                          mt={3}
+                          color="white"
+                          bg={
+                            mode === 'dark' ? 'rgba(37,99,235,0.3)' : 'blue.600'
+                          }
+                          borderWidth="1px"
+                          borderColor={
+                            mode === 'dark'
+                              ? 'rgba(59,130,246,0.5)'
+                              : 'blue.600'
+                          }
+                          fontSize="sm"
+                          borderRadius="full"
+                          leftIcon={<FiCheck />}
+                          _hover={{
+                            bg:
+                              mode === 'dark'
+                                ? 'rgba(37,99,235,0.5)'
+                                : 'blue.700',
+                            boxShadow: '0 0 16px rgba(59,130,246,0.25)',
+                          }}
+                          onClick={submitLetter}
+                        >
+                          Submit Surat
+                        </Button>
+                      </>
+                    ) : (
+                      <Box
+                        role="button"
+                        tabIndex={0}
+                        cursor={uploadingLetter ? 'default' : 'pointer'}
+                        onClick={() => {
+                          if (!uploadingLetter) letterInputRef.current?.click();
+                        }}
+                        onKeyDown={(event) => {
+                          if (
+                            !uploadingLetter &&
+                            (event.key === 'Enter' || event.key === ' ')
+                          ) {
+                            letterInputRef.current?.click();
+                          }
+                        }}
+                        onDrop={handleDrop}
+                        onDragOver={(event) => {
+                          event.preventDefault();
+                          if (!uploadingLetter) setDragging(true);
+                        }}
+                        onDragLeave={() => setDragging(false)}
+                        borderWidth="2px"
+                        borderStyle="dashed"
+                        borderColor={
+                          uploadingLetter
+                            ? theme.panelBorder
+                            : dragging
+                              ? 'blue.400'
+                              : mode === 'dark'
+                                ? 'rgba(255,255,255,0.16)'
+                                : 'gray.300'
+                        }
+                        borderRadius="2xl"
+                        p={6}
+                        textAlign="center"
+                        bg={
+                          uploadingLetter
+                            ? mode === 'dark'
+                              ? 'rgba(59,130,246,0.08)'
+                              : 'blue.50'
+                            : dragging
+                              ? mode === 'dark'
+                                ? 'rgba(59,130,246,0.16)'
+                                : 'blue.50'
+                              : mode === 'dark'
+                                ? 'rgba(255,255,255,0.03)'
+                                : 'gray.50'
+                        }
+                        transition="all 0.18s"
+                        _hover={
+                          uploadingLetter
+                            ? undefined
+                            : {
+                                borderColor: 'blue.400',
+                                bg:
+                                  mode === 'dark'
+                                    ? 'rgba(59,130,246,0.1)'
+                                    : 'blue.50',
+                              }
+                        }
+                      >
+                        {uploadingLetter ? (
+                          <>
+                            <Flex justify="center" mb={2}>
+                              <Spinner
+                                thickness="3px"
+                                size="lg"
+                                speed="0.7s"
+                                color="blue.400"
+                              />
+                            </Flex>
+                            <Text
+                              fontSize="sm"
+                              fontWeight="semibold"
+                              color={theme.textPrimary}
+                            >
+                              Mengunggah surat…
+                            </Text>
+                            <Text fontSize="xs" color={theme.textMuted} mt={1}>
+                              File sedang diproses
+                            </Text>
+                          </>
+                        ) : (
+                          <>
+                            <Flex justify="center" mb={3}>
+                              <Flex
+                                w={12}
+                                h={12}
+                                borderRadius="2xl"
+                                alignItems="center"
+                                justifyContent="center"
+                                bg={
+                                  mode === 'dark'
+                                    ? 'rgba(59,130,246,0.16)'
+                                    : 'blue.50'
+                                }
+                                borderWidth="1px"
+                                borderColor={
+                                  mode === 'dark'
+                                    ? 'rgba(59,130,246,0.35)'
+                                    : 'blue.200'
+                                }
+                                color={dragging ? 'blue.400' : 'blue.500'}
+                              >
+                                <FiUpload size={24} />
+                              </Flex>
+                            </Flex>
+                            <Text
+                              fontSize="sm"
+                              fontWeight="semibold"
+                              color={theme.textPrimary}
+                            >
+                              Klik atau seret file ke sini
+                            </Text>
+                            <Text
+                              fontSize="xs"
+                              color={theme.textSecondary}
+                              mt={1}
+                            >
+                              <Text
+                                as="span"
+                                color="blue.400"
+                                fontWeight="medium"
+                              >
+                                Pilih file
+                              </Text>{' '}
+                              atau letakkan surat di sini — PDF, maks. 2 MB
+                            </Text>
+                          </>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                </>
               )}
             </Stack>
           </ModalBody>

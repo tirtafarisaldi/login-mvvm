@@ -24,6 +24,18 @@ const theme = extendTheme({
             justifyContent: 'flex-end',
           },
         },
+        detail: {
+          content: {
+            mt: '30px',
+            mb: '30px',
+          },
+          body: {
+            py: 6,
+          },
+          footer: {
+            gap: 3,
+          },
+        },
       },
     },
     Input: {
