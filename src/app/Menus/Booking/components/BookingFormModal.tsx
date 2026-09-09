@@ -251,11 +251,11 @@ export default function BookingFormModal({
       });
       return;
     }
-    if (values.type === 'room' && (!values.start_time || !values.end_time)) {
+    if (!values.start_time || !values.end_time) {
       toast({
         status: 'warning',
         title: 'Waktu belum lengkap',
-        description: 'Isi waktu mulai dan selesai booking ruangan.',
+        description: 'Isi waktu peminjaman dan pengembalian.',
         position: 'top',
       });
       return;
@@ -396,28 +396,50 @@ export default function BookingFormModal({
             )}
 
             {values.type === 'equipment' ? (
-              <Flex gap={3} direction={{ base: 'column', sm: 'row' }}>
-                <FormControl isRequired>
-                  <FormLabel fontSize="xs" letterSpacing="wide">
-                    Tanggal Peminjaman
-                  </FormLabel>
-                  <DatePickerField
-                    value={values.date}
-                    onChange={(date) => update({ date })}
-                    min={toDateKey(new Date())}
-                  />
-                </FormControl>
-                <FormControl isRequired>
-                  <FormLabel fontSize="xs" letterSpacing="wide">
-                    Tanggal Selesai
-                  </FormLabel>
-                  <DatePickerField
-                    value={values.end_date}
-                    onChange={(end_date) => update({ end_date })}
-                    min={values.date || toDateKey(new Date())}
-                  />
-                </FormControl>
-              </Flex>
+              <>
+                <Flex gap={3} direction={{ base: 'column', sm: 'row' }}>
+                  <FormControl isRequired flex={1}>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Tanggal Peminjaman
+                    </FormLabel>
+                    <DatePickerField
+                      value={values.date}
+                      onChange={(date) => update({ date })}
+                      min={toDateKey(new Date())}
+                    />
+                  </FormControl>
+                  <FormControl isRequired flex={1}>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Waktu Peminjaman
+                    </FormLabel>
+                    <TimePickerField
+                      value={values.start_time}
+                      onChange={(start_time) => update({ start_time })}
+                    />
+                  </FormControl>
+                </Flex>
+                <Flex gap={3} direction={{ base: 'column', sm: 'row' }}>
+                  <FormControl isRequired flex={1}>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Tanggal Pengembalian
+                    </FormLabel>
+                    <DatePickerField
+                      value={values.end_date}
+                      onChange={(end_date) => update({ end_date })}
+                      min={values.date || toDateKey(new Date())}
+                    />
+                  </FormControl>
+                  <FormControl isRequired flex={1}>
+                    <FormLabel fontSize="xs" letterSpacing="wide">
+                      Waktu Pengembalian
+                    </FormLabel>
+                    <TimePickerField
+                      value={values.end_time}
+                      onChange={(end_time) => update({ end_time })}
+                    />
+                  </FormControl>
+                </Flex>
+              </>
             ) : (
               <>
                 <FormControl isRequired>
@@ -512,9 +534,9 @@ export default function BookingFormModal({
                 placeholder="Tuliskan keterangan pengajuan secara sopan, mis. ucapan terima kasih kepada Kepala Laboratorium…"
                 rows={4}
               />
-              <Text color="blue.300" fontSize="xs" mt={1}>
-                Wajib diisi dan disesuaikan dengan kebutuhan pengajuan Anda —
-                jangan kirim keterangan template apa adanya.
+              <Text color="blue.300" fontSize="10px" mt={1} lineHeight="short">
+                Wajib diisi — sesuaikan dengan kebutuhan, jangan kirim template
+                apa adanya.
               </Text>
             </FormControl>
           </Stack>

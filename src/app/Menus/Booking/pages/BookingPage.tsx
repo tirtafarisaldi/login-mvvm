@@ -81,8 +81,8 @@ const toInput = (values: BookingFormValues): BookingPayload => {
         : undefined,
     date: values.date,
     end_date: values.type === 'equipment' ? values.end_date : undefined,
-    start_time: isRoom ? values.start_time : undefined,
-    end_time: isRoom ? values.end_time : undefined,
+    start_time: values.start_time || undefined,
+    end_time: values.end_time || undefined,
     repeat: isRoom ? values.repeat : undefined,
     repeat_end: isRoom && values.repeat_end ? values.repeat_end : undefined,
     note: values.note.trim() || undefined,
@@ -277,7 +277,7 @@ export default function BookingPage() {
     {
       header: 'Waktu',
       accessor: (item) =>
-        item.type === 'room' && item.start_time && item.end_time ? (
+        item.start_time && item.end_time ? (
           <Text color={theme.textSecondary}>
             {item.start_time}–{item.end_time}
           </Text>
@@ -288,7 +288,7 @@ export default function BookingPage() {
             color={theme.textMuted}
             opacity={0.85}
           >
-            Tidak dijadwalkan
+            —
           </Text>
         ),
     },

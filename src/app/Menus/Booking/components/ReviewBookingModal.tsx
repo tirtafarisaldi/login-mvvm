@@ -35,7 +35,7 @@ import BookingStatusBadge from './BookingStatusBadge';
 import { useGetBookingLetterViewModel } from '../viewModels/getBookingLetterViewModel';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useThemeColors } from '../../store/themeColors';
-import { formatDateId, formatDateRangeId } from 'utility/date';
+import { formatDateId } from 'utility/date';
 
 interface ReviewBookingModalProps {
   booking: BookingModel | null;
@@ -206,7 +206,7 @@ export default function ReviewBookingModal({
         />
 
         {booking && (
-          <ModalBody>
+          <ModalBody py={6}>
             <Stack spacing={3}>
               {booking.reason_rejected && booking.status === 'rejected' && (
                 <Box
@@ -300,30 +300,59 @@ export default function ReviewBookingModal({
                     </Flex>
                   )
                 )}
-                <Flex justify="space-between" align="flex-start" gap={3}>
-                  <Text color={theme.textMuted}>Tanggal</Text>
-                  <Text textAlign="right">
-                    {booking.type === 'equipment' && booking.end_date
-                      ? formatDateRangeId(booking.date, booking.end_date)
-                      : formatDateId(booking.date)}
-                  </Text>
-                </Flex>
-                <Flex justify="space-between" align="flex-start" gap={3}>
-                  <Text color={theme.textMuted}>Waktu</Text>
-                  {booking.type === 'room' ? (
-                    <Text fontWeight="medium" textAlign="right">
-                      {booking.start_time} – {booking.end_time}
-                    </Text>
-                  ) : (
-                    <Text
-                      fontSize="sm"
-                      fontStyle="italic"
-                      color={theme.textMuted}
-                    >
-                      Tidak dijadwalkan
-                    </Text>
-                  )}
-                </Flex>
+                {booking.type === 'equipment' ? (
+                  <Flex gap={3} wrap="wrap">
+                    <Box flex="1 1 45%" minW="140px">
+                      <Text fontSize="xs" color={theme.textMuted}>
+                        Tgl. Peminjaman
+                      </Text>
+                      <Text fontSize="sm" fontWeight="medium" mt={0.5}>
+                        {formatDateId(booking.date)}
+                      </Text>
+                    </Box>
+                    <Box flex="1 1 45%" minW="140px">
+                      <Text fontSize="xs" color={theme.textMuted}>
+                        Waktu Pinjam
+                      </Text>
+                      <Text fontSize="sm" fontWeight="medium" mt={0.5}>
+                        {booking.start_time ?? '—'}
+                      </Text>
+                    </Box>
+                    <Box flex="1 1 45%" minW="140px">
+                      <Text fontSize="xs" color={theme.textMuted}>
+                        Tgl. Pengembalian
+                      </Text>
+                      <Text fontSize="sm" fontWeight="medium" mt={0.5}>
+                        {booking.end_date
+                          ? formatDateId(booking.end_date)
+                          : '—'}
+                      </Text>
+                    </Box>
+                    <Box flex="1 1 45%" minW="140px">
+                      <Text fontSize="xs" color={theme.textMuted}>
+                        Waktu Kembali
+                      </Text>
+                      <Text fontSize="sm" fontWeight="medium" mt={0.5}>
+                        {booking.end_time ?? '—'}
+                      </Text>
+                    </Box>
+                  </Flex>
+                ) : (
+                  <>
+                    <Flex justify="space-between" align="flex-start" gap={3}>
+                      <Text color={theme.textMuted}>Tanggal</Text>
+                      <Text textAlign="right">
+                        {formatDateId(booking.date)}
+                      </Text>
+                    </Flex>
+                    <Flex justify="space-between" align="flex-start" gap={3}>
+                      <Text color={theme.textMuted}>Waktu</Text>
+                      <Text fontWeight="medium" textAlign="right">
+                        {booking.start_time} – {booking.end_time}
+                      </Text>
+                    </Flex>
+                  </>
+                )}
               </Stack>
 
               {booking.note && (
@@ -523,7 +552,7 @@ export default function ReviewBookingModal({
                           <Flex justify="center" mb={2}>
                             <Spinner
                               thickness="3px"
-                              size="md"
+                              size="lg"
                               speed="0.7s"
                               color="blue.400"
                             />

@@ -88,7 +88,7 @@ export default function DataTablePagination({
               transition="all 0.2s"
               bg={
                 page === currentPage
-                  ? 'linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #1d4ed8 100%)'
+                  ? 'blue.500'
                   : mode === 'dark'
                     ? 'rgba(255,255,255,0.08)'
                     : 'white'
@@ -116,7 +116,7 @@ export default function DataTablePagination({
                 transform: 'translateY(-1px)',
                 bg:
                   page === currentPage
-                    ? 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)'
+                    ? 'blue.600'
                     : mode === 'dark'
                       ? 'rgba(59,130,246,0.22)'
                       : 'blue.50',
@@ -139,7 +139,7 @@ export default function DataTablePagination({
               }}
               _active={{
                 transform: 'translateY(0)',
-                bg: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                bg: 'blue.700',
               }}
               onClick={() => onPageChange(page)}
             >
