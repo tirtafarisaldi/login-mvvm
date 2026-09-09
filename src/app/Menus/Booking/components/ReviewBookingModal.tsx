@@ -185,7 +185,9 @@ export default function ReviewBookingModal({
     >
       <ModalOverlay backdropFilter="blur(8px)" bg="blackAlpha.700" />
       <ModalContent
-        bg={mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'}
+        bg={
+          mode === 'dark' ? 'rgba(15, 23, 42, 0.96)' : 'rgba(255,255,255,0.97)'
+        }
         backdropFilter="blur(16px)"
         color={theme.textPrimary}
         borderWidth="1px"

@@ -158,16 +158,18 @@ export default function MenuLayout({
             md: 'none',
           }}
           transition={{ base: 'transform 200ms ease', md: 'none' }}
-          bg={mode === 'dark' ? '#191b20' : 'rgba(255,255,255,5.15)'}
+          bg={
+            mode === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255,255,255,5.15)'
+          }
           backdropFilter="blur(14px)"
           boxShadow={
             mode === 'dark'
-              ? 'inset 0 1px 0 rgba(255,255,255,0.06)'
+              ? 'inset 0 1px 0 rgba(148,163,184,0.14), 0 8px 30px rgba(15,23,42,0.24)'
               : 'inset 0 1px 0 rgba(255,255,255,0.9)'
           }
           borderRightWidth="1px"
           borderRightColor={
-            mode === 'dark' ? 'rgba(255,255,255,0.10)' : 'rgba(15,23,42,0.10)'
+            mode === 'dark' ? 'rgba(148,163,184,0.12)' : 'rgba(15,23,42,0.10)'
           }
           borderLeftRadius={{ base: 0, md: '2xl' }}
           flexShrink={0}
@@ -388,7 +390,9 @@ export default function MenuLayout({
           p={{ base: 5, md: 10 }}
           pb={{ base: 5, md: 10 }}
           overflow="auto"
-          bg={mode === 'dark' ? 'rgba(0,0,0,0.62)' : 'rgba(255,255,255,0.55)'}
+          bg={
+            mode === 'dark' ? 'rgba(15, 23, 42, 0.6)' : 'rgba(255,255,255,0.55)'
+          }
           borderRightRadius={{ base: 0, md: '2xl' }}
           color={theme.textPrimary}
           zIndex={1}
@@ -521,7 +525,11 @@ export default function MenuLayout({
       <Modal isOpen={isOpen} onClose={onClose} motionPreset="none" isCentered>
         <ModalOverlay bg="rgba(0,0,0,0.65)" backdropFilter="blur(2px)" />
         <ModalContent
-          bg={mode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.95)'}
+          bg={
+            mode === 'dark'
+              ? 'rgba(15, 23, 42, 0.96)'
+              : 'rgba(255,255,255,0.95)'
+          }
           backdropFilter="blur(16px)"
           borderWidth="1px"
           borderColor={theme.panelBorder}

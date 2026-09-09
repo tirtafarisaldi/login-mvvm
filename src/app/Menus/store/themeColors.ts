@@ -21,24 +21,24 @@ export interface ThemeColors {
 }
 
 const dark: ThemeColors = {
-  pageBg: 'rgba(25, 27, 32, 0.85)',
+  pageBg: 'rgba(17, 24, 39, 0.92)',
   pageBgImage: 'none',
-  panelBg: 'rgba(0,0,0,0.30)',
-  panelBorder: 'rgba(255,255,255,0.12)',
+  panelBg: 'rgba(15, 23, 42, 0.7)',
+  panelBorder: 'rgba(148, 163, 184, 0.18)',
   panelShadow:
-    '0 30px 60px rgba(0,0,0,0.65), 0 8px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(255,255,255,0.05)',
-  cardBg: 'rgba(0,0,0,0.55)',
-  cardBorder: 'rgba(255,255,255,0.08)',
+    '0 26px 50px rgba(15,23,42,0.42), 0 10px 22px rgba(30,41,59,0.26), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(148,163,184,0.06)',
+  cardBg: 'rgba(15, 23, 42, 0.72)',
+  cardBorder: 'rgba(148, 163, 184, 0.18)',
   inputBg: 'whiteAlpha.100',
   inputBorder: 'whiteAlpha.300',
   textPrimary: 'white',
-  textSecondary: 'whiteAlpha.700',
-  textMuted: 'whiteAlpha.500',
-  surfaceStrong: 'rgba(0,0,0,0.50)',
-  overlayBg: 'rgba(0,0,0,0.60)',
-  chipBg: 'rgba(255,255,255,0.14)',
+  textSecondary: 'rgb(226, 232, 240)',
+  textMuted: 'rgb(186, 198, 218)',
+  surfaceStrong: 'rgba(15, 23, 42, 0.82)',
+  overlayBg: 'rgba(15, 23, 42, 0.58)',
+  chipBg: 'rgba(148, 163, 184, 0.12)',
   todayChipBg: 'blue.600',
-  hoverBg: 'rgba(255,255,255,0.07)',
+  hoverBg: 'rgba(148, 163, 184, 0.08)',
 };
 
 const light: ThemeColors = {

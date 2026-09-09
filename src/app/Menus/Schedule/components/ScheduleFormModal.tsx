@@ -206,7 +206,9 @@ export default function ScheduleFormModal({
           submit();
         }}
         bg={
-          themeMode === 'dark' ? 'rgba(8,10,14,0.85)' : 'rgba(255,255,255,0.97)'
+          themeMode === 'dark'
+            ? 'rgba(15, 23, 42, 0.96)'
+            : 'rgba(255,255,255,0.97)'
         }
         color={theme.textPrimary}
         borderWidth="1px"
