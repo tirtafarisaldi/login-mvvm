@@ -25,10 +25,6 @@ const theme = extendTheme({
           },
         },
         detail: {
-          content: {
-            mt: '30px',
-            mb: '30px',
-          },
           body: {
             py: 6,
           },
