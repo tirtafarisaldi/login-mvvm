@@ -15,9 +15,6 @@ import {
   ModalOverlay,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Select,
   Stack,
   Text,
@@ -705,16 +702,6 @@ function EquipmentSelect({
               borderRadius="xl"
               _hover={{ borderColor: 'blue.300' }}
             />
-            <NumberInputStepper>
-              <NumberIncrementStepper
-                _active={{ bg: 'blue.100' }}
-                bg={themeMode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
-              />
-              <NumberDecrementStepper
-                _active={{ bg: 'blue.100' }}
-                bg={themeMode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'}
-              />
-            </NumberInputStepper>
           </NumberInput>
         </FormControl>
 

@@ -17,9 +17,6 @@ import {
   ModalOverlay,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Select,
   SimpleGrid,
   Spinner,
@@ -242,11 +239,13 @@ export default function InventoryPage() {
   const [previewImage, setPreviewImage] = useState<InventoryModel | null>(null);
   const [imageReady, setImageReady] = useState(false);
   const [form, setForm] = useState<InventoryInput>(emptyInventory);
+  const [stockText, setStockText] = useState('0');
   const updateForm = (update: Partial<InventoryInput>) =>
     setForm({ ...form, ...update });
   const openCreate = () => {
     setSelectedInventory(null);
     setForm(emptyInventory);
+    setStockText('0');
     formModal.onOpen();
   };
   const openEdit = async (inventory: InventoryModel) => {
@@ -254,9 +253,11 @@ export default function InventoryPage() {
       const latest = await getInventoryById(inventory.id);
       setSelectedInventory(latest);
       setForm(toInput(latest));
+      setStockText(String(latest.stock));
     } catch {
       setSelectedInventory(inventory);
       setForm(toInput(inventory));
+      setStockText(String(inventory.stock));
     }
     formModal.onOpen();
   };
@@ -637,11 +638,16 @@ export default function InventoryPage() {
                   </FormLabel>
                   <NumberInput
                     size="sm"
-                    value={form.stock}
+                    value={stockText}
                     min={0}
                     clampValueOnBlur={false}
-                    onChange={(_, num) => {
-                      if (Number.isInteger(num)) updateForm({ stock: num });
+                    onChange={(valueAsString) => {
+                      setStockText(valueAsString);
+                      const parsed = Number(valueAsString);
+                      updateForm({
+                        stock:
+                          Number.isInteger(parsed) && parsed >= 0 ? parsed : 0,
+                      });
                     }}
                     bg={inputBg}
                     borderColor={inputBorder}
@@ -653,20 +659,6 @@ export default function InventoryPage() {
                       borderRadius="xl"
                       _hover={{ borderColor: 'blue.300' }}
                     />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper
-                        _active={{ bg: 'blue.100' }}
-                        bg={
-                          mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'
-                        }
-                      />
-                      <NumberDecrementStepper
-                        _active={{ bg: 'blue.100' }}
-                        bg={
-                          mode === 'dark' ? 'whiteAlpha.100' : 'blackAlpha.50'
-                        }
-                      />
-                    </NumberInputStepper>
                   </NumberInput>
                 </FormControl>
                 <FormControl isRequired>
