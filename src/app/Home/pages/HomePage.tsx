@@ -382,6 +382,10 @@ export default function HomePage() {
                     ))}
                   </Stack>
                 </Flex>
+              ) : statsLoading ? (
+                <Text fontSize="sm" color={theme.textSecondary}>
+                  Memuat statistik peminjaman…
+                </Text>
               ) : (
                 <Text fontSize="sm" color={theme.textSecondary}>
                   {isAdmin

@@ -40,10 +40,20 @@ function AppContent({
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
   const [isRouteChanging, setIsRouteChanging] = useState(false);
+  const [hasCompletedInitialRoute, setHasCompletedInitialRoute] =
+    useState(false);
 
   useEffect(() => {
-    const onStart = () => setIsRouteChanging(true);
-    const onDone = () => setIsRouteChanging(false);
+    // Lewati overlay loading pada navigasi pertama (mis. setelah login) supaya
+    // dashboard & statistik langsung terlihat walau datanya masih dimuat.
+    const onStart = () => {
+      if (!hasCompletedInitialRoute) return;
+      setIsRouteChanging(true);
+    };
+    const onDone = () => {
+      setHasCompletedInitialRoute(true);
+      setIsRouteChanging(false);
+    };
     router.events.on('routeChangeStart', onStart);
     router.events.on('routeChangeComplete', onDone);
     router.events.on('routeChangeError', onDone);
@@ -52,7 +62,7 @@ function AppContent({
       router.events.off('routeChangeComplete', onDone);
       router.events.off('routeChangeError', onDone);
     };
-  }, [router.events]);
+  }, [router.events, hasCompletedInitialRoute]);
 
   const isProtectedRoute = menuRoutes.includes(router.pathname);
 

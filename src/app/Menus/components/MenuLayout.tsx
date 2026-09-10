@@ -118,6 +118,104 @@ export default function MenuLayout({
     }
   };
 
+  const routeLoadingOverlay =
+    isLoading && !confirming ? (
+      <Flex
+        position="absolute"
+        top={0}
+        bottom={0}
+        left={{ base: 0, md: '236px' }}
+        right={0}
+        zIndex={10}
+        align="center"
+        justify="center"
+        bg={mode === 'dark' ? 'rgba(5,6,8,0.45)' : 'rgba(255,255,255,0.45)'}
+        backdropFilter="blur(6px)"
+      >
+        <Flex
+          align="center"
+          gap={4}
+          px={6}
+          py={5}
+          borderRadius="2xl"
+          bg={mode === 'dark' ? 'rgba(16,19,26,0.7)' : 'rgba(255,255,255,0.75)'}
+          borderWidth="1px"
+          borderColor={
+            mode === 'dark' ? 'rgba(96,165,250,0.25)' : 'rgba(37,99,235,0.2)'
+          }
+          boxShadow={
+            mode === 'dark'
+              ? '0 8px 32px rgba(0,0,0,0.4)'
+              : '0 8px 32px rgba(37,99,235,0.14)'
+          }
+          backdropFilter="blur(16px)"
+        >
+          <Box position="relative" w={9} h={9}>
+            <Box
+              position="absolute"
+              inset={0}
+              borderRadius="full"
+              borderWidth="3px"
+              borderColor={
+                mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100'
+              }
+            />
+            <Box
+              position="absolute"
+              inset={0}
+              borderRadius="full"
+              borderWidth="3px"
+              borderColor="transparent"
+              borderTopColor={mode === 'dark' ? '#60a5fa' : '#2563eb'}
+              borderRightColor={mode === 'dark' ? '#60a5fa' : '#2563eb'}
+              sx={{
+                '@keyframes spin360': {
+                  to: { transform: 'rotate(360deg)' },
+                },
+                animation: 'spin360 0.9s linear infinite',
+              }}
+            />
+          </Box>
+          <Box>
+            <Text
+              color={mode === 'dark' ? 'blue.100' : 'slate.700'}
+              fontSize="sm"
+              fontWeight="semibold"
+              fontFamily="poppins"
+            >
+              Memuat…
+            </Text>
+            <Box
+              mt={1.5}
+              h="3px"
+              w="140px"
+              borderRadius="full"
+              overflow="hidden"
+              bg={mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100'}
+            >
+              <Box
+                h="full"
+                borderRadius="full"
+                width="40%"
+                background={
+                  mode === 'dark'
+                    ? 'linear-gradient(90deg, transparent, #60a5fa, transparent)'
+                    : 'linear-gradient(90deg, transparent, #2563eb, transparent)'
+                }
+                sx={{
+                  '@keyframes slideShimmer': {
+                    '0%': { transform: 'translateX(-110%)' },
+                    '100%': { transform: 'translateX(360%)' },
+                  },
+                  animation: 'slideShimmer 1.1s ease-in-out infinite',
+                }}
+              />
+            </Box>
+          </Box>
+        </Flex>
+      </Flex>
+    ) : null;
+
   return (
     <Flex
       data-theme={mode}
@@ -135,7 +233,10 @@ export default function MenuLayout({
         position="absolute"
         inset={{ base: 0, md: 10 }}
         borderRadius="2xl"
-        borderWidth="1px"
+        borderTopWidth={0}
+        borderBottomWidth={0}
+        borderLeftWidth="1px"
+        borderRightWidth="1px"
         borderColor={theme.panelBorder}
         bg={theme.panelBg}
         boxShadow={theme.panelShadow}
@@ -159,12 +260,14 @@ export default function MenuLayout({
           }}
           transition={{ base: 'transform 200ms ease', md: 'none' }}
           bg={
-            mode === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255,255,255,5.15)'
+            mode === 'dark'
+              ? 'linear-gradient(180deg, rgba(15,23,42,0.82), rgba(15,23,42,0.72))'
+              : 'rgba(255,255,255,5.15)'
           }
           backdropFilter="blur(14px)"
           boxShadow={
             mode === 'dark'
-              ? 'inset 0 1px 0 rgba(148,163,184,0.14), 0 8px 30px rgba(15,23,42,0.24)'
+              ? 'inset 0 1px 0 rgba(148,163,184,0.14), inset 0 -1px 0 rgba(148,163,184,0.07), 0 8px 30px rgba(15,23,42,0.24)'
               : 'inset 0 1px 0 rgba(255,255,255,0.9)'
           }
           borderRightWidth="1px"
@@ -391,7 +494,9 @@ export default function MenuLayout({
           pb={{ base: 5, md: 10 }}
           overflow="auto"
           bg={
-            mode === 'dark' ? 'rgba(15, 23, 42, 0.6)' : 'rgba(255,255,255,0.55)'
+            mode === 'dark'
+              ? 'rgba(15, 23, 42, 0.18)'
+              : 'rgba(255,255,255,0.55)'
           }
           borderRightRadius={{ base: 0, md: '2xl' }}
           color={theme.textPrimary}
@@ -417,109 +522,9 @@ export default function MenuLayout({
             onClick={() => setOpen(true)}
           />
           {children}
-          {isLoading && !confirming && (
-            <Box
-              position="absolute"
-              inset={0}
-              zIndex={10}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              bg={
-                mode === 'dark' ? 'rgba(5,6,8,0.45)' : 'rgba(255,255,255,0.45)'
-              }
-              backdropFilter="blur(6px)"
-            >
-              <Flex
-                align="center"
-                gap={4}
-                px={6}
-                py={5}
-                borderRadius="2xl"
-                bg={
-                  mode === 'dark'
-                    ? 'rgba(16,19,26,0.7)'
-                    : 'rgba(255,255,255,0.75)'
-                }
-                borderWidth="1px"
-                borderColor={
-                  mode === 'dark'
-                    ? 'rgba(96,165,250,0.25)'
-                    : 'rgba(37,99,235,0.2)'
-                }
-                boxShadow={
-                  mode === 'dark'
-                    ? '0 8px 32px rgba(0,0,0,0.4)'
-                    : '0 8px 32px rgba(37,99,235,0.14)'
-                }
-                backdropFilter="blur(16px)"
-              >
-                <Box position="relative" w={9} h={9}>
-                  <Box
-                    position="absolute"
-                    inset={0}
-                    borderRadius="full"
-                    borderWidth="3px"
-                    borderColor={
-                      mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100'
-                    }
-                  />
-                  <Box
-                    position="absolute"
-                    inset={0}
-                    borderRadius="full"
-                    borderWidth="3px"
-                    borderColor="transparent"
-                    borderTopColor={mode === 'dark' ? '#60a5fa' : '#2563eb'}
-                    borderRightColor={mode === 'dark' ? '#60a5fa' : '#2563eb'}
-                    sx={{
-                      '@keyframes spin360': {
-                        to: { transform: 'rotate(360deg)' },
-                      },
-                      animation: 'spin360 0.9s linear infinite',
-                    }}
-                  />
-                </Box>
-                <Box>
-                  <Text
-                    color={mode === 'dark' ? 'blue.100' : 'slate.700'}
-                    fontSize="sm"
-                    fontWeight="semibold"
-                    fontFamily="poppins"
-                  >
-                    Memuat…
-                  </Text>
-                  <Box
-                    mt={1.5}
-                    h="3px"
-                    w="140px"
-                    borderRadius="full"
-                    overflow="hidden"
-                    bg={mode === 'dark' ? 'whiteAlpha.200' : 'blackAlpha.100'}
-                  >
-                    <Box
-                      h="full"
-                      borderRadius="full"
-                      width="40%"
-                      background={
-                        mode === 'dark'
-                          ? 'linear-gradient(90deg, transparent, #60a5fa, transparent)'
-                          : 'linear-gradient(90deg, transparent, #2563eb, transparent)'
-                      }
-                      sx={{
-                        '@keyframes slideShimmer': {
-                          '0%': { transform: 'translateX(-110%)' },
-                          '100%': { transform: 'translateX(360%)' },
-                        },
-                        animation: 'slideShimmer 1.1s ease-in-out infinite',
-                      }}
-                    />
-                  </Box>
-                </Box>
-              </Flex>
-            </Box>
-          )}
         </Box>
+
+        {routeLoadingOverlay}
       </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose} motionPreset="none" isCentered>

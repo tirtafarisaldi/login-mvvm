@@ -21,14 +21,15 @@ export interface ThemeColors {
 }
 
 const dark: ThemeColors = {
-  pageBg: 'rgba(17, 24, 39, 0.92)',
-  pageBgImage: 'none',
-  panelBg: 'rgba(15, 23, 42, 0.7)',
-  panelBorder: 'rgba(148, 163, 184, 0.18)',
+  pageBg: 'rgba(11, 15, 24, 0.96)',
+  pageBgImage:
+    'linear-gradient(135deg, rgba(32, 42, 58, 0.82), rgba(59, 78, 103, 0.72) 42%, rgba(20, 27, 38, 0.88))',
+  panelBg: 'rgba(15, 23, 42, 0.75)',
+  panelBorder: 'rgba(148, 163, 184, 0.16)',
   panelShadow:
-    '0 26px 50px rgba(15,23,42,0.42), 0 10px 22px rgba(30,41,59,0.26), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(148,163,184,0.06)',
-  cardBg: 'rgba(15, 23, 42, 0.72)',
-  cardBorder: 'rgba(148, 163, 184, 0.18)',
+    '0 26px 60px rgba(2,6,12,0.28), 0 10px 22px rgba(15,23,42,0.18), inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(148,163,184,0.05)',
+  cardBg: 'rgba(17, 24, 39, 0.8)',
+  cardBorder: 'rgba(148, 163, 184, 0.16)',
   inputBg: 'whiteAlpha.100',
   inputBorder: 'whiteAlpha.300',
   textPrimary: 'white',
